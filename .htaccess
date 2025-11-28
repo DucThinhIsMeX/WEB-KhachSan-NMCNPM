@@ -1,0 +1,11 @@
+RewriteEngine On
+RewriteBase /
+
+# Bảo vệ database
+<Files "hotel.db">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Trang mặc định
+DirectoryIndex index.php

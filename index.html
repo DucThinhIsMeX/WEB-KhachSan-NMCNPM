@@ -5,12 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hệ thống Quản lý Khách sạn</title>
     <link rel="stylesheet" href="src/assets/css/style.css">
+    <link rel="stylesheet" href="src/assets/css/form.css">
 </head>
 <body>
     <div class="container">
-        <header id="header"></header>
+        <header id="header">
+            <div class="header">
+                <div class="logo">
+                    <h2>🏨 Quản lý Khách sạn</h2>
+                </div>
+                <nav class="nav-menu">
+                    <ul>
+                        <li><a href="#" onclick="loadPage('dashboard'); return false;">Trang chủ</a></li>
+                        <li><a href="#" id="userInfo">Xin chào, Admin</a></li>
+                        <li><a href="#" id="logout">Đăng xuất</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        
         <div class="main-content">
-            <aside id="sidebar"></aside>
+            <aside id="sidebar">
+                <div class="sidebar">
+                    <ul class="menu">
+                        <li class="menu-item">
+                            <a href="#" onclick="loadPage('phong/danh-sach'); return false;">
+                                <span class="icon">🏠</span>
+                                <span>Quản lý Phòng</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#" onclick="loadPage('phieu-thue/danh-sach'); return false;">
+                                <span class="icon">📝</span>
+                                <span>Phiếu Thuê Phòng</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#" onclick="loadPage('phieu-thue/tra-cuu'); return false;">
+                                <span class="icon">🔍</span>
+                                <span>Tra cứu Phòng</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#" onclick="loadPage('hoa-don/danh-sach'); return false;">
+                                <span class="icon">💰</span>
+                                <span>Hóa đơn Thanh toán</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#" onclick="loadPage('bao-cao/bao-cao-thang'); return false;">
+                                <span class="icon">📊</span>
+                                <span>Báo cáo Tháng</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#" onclick="loadPage('tham-so/quan-ly-tham-so'); return false;">
+                                <span class="icon">⚙️</span>
+                                <span>Quản lý Tham số</span>
+                            </a>
+                        </li>
+                        <li class="menu-item" style="border-top: 1px solid #2c3e50; margin-top: 1rem; padding-top: 1rem;">
+                            <a href="#" onclick="loadPage('dev-tools'); return false;">
+                                <span class="icon">🛠️</span>
+                                <span>Dev Tools</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+            
             <main id="content">
                 <h1>Chào mừng đến với Hệ thống Quản lý Khách sạn</h1>
                 <div class="dashboard">
@@ -30,6 +93,35 @@
             </main>
         </div>
     </div>
+
+    <!-- Load tất cả Models -->
+    <script src="src/models/ThamSo.js"></script>
+    <script src="src/models/Phong.js"></script>
+    <script src="src/models/KhachHang.js"></script>
+    <script src="src/models/PhieuThue.js"></script>
+    <script src="src/models/HoaDon.js"></script>
+
+    <!-- Load tất cả Services -->
+    <script src="src/services/PhongService.js"></script>
+    <script src="src/services/PhieuThueService.js"></script>
+    <script src="src/services/HoaDonService.js"></script>
+    <script src="src/services/BaoCaoService.js"></script>
+
+    <!-- Load tất cả Controllers -->
+    <script src="src/controllers/PhongController.js"></script>
+    <script src="src/controllers/PhieuThueController.js"></script>
+    <script src="src/controllers/HoaDonController.js"></script>
+    <script src="src/controllers/BaoCaoController.js"></script>
+    <script src="src/controllers/ThamSoController.js"></script>
+
+    <!-- Load Utilities -->
+    <script src="src/assets/js/validation.js"></script>
+    <script src="config/database.js"></script>
+
+    <!-- Load Sample Data -->
+    <script src="src/assets/js/sample-data.js"></script>
+
+    <!-- Load Main App -->
     <script src="src/assets/js/main.js"></script>
 </body>
 </html>

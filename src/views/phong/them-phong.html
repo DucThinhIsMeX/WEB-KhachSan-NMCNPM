@@ -1,0 +1,40 @@
+<div class="page-header">
+    <h2>Thêm Phòng Mới</h2>
+</div>
+
+<form id="formThemPhong" class="form-container">
+    <div class="form-group">
+        <label for="maPhong">Mã Phòng <span class="required">*</span></label>
+        <input type="text" id="maPhong" name="maPhong" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="tenPhong">Tên Phòng <span class="required">*</span></label>
+        <input type="text" id="tenPhong" name="tenPhong" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="loaiPhong">Loại Phòng <span class="required">*</span></label>
+        <select id="loaiPhong" name="loaiPhong" class="form-control" required>
+            <option value="">-- Chọn loại phòng --</option>
+            <option value="A">Loại A (150,000 VNĐ)</option>
+            <option value="B">Loại B (170,000 VNĐ)</option>
+            <option value="C">Loại C (200,000 VNĐ)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="donGia">Đơn Giá <span class="required">*</span></label>
+        <input type="number" id="donGia" name="donGia" class="form-control" readonly>
+    </div>
+
+    <div class="form-group">
+        <label for="ghiChu">Ghi Chú</label>
+        <textarea id="ghiChu" name="ghiChu" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <button type="button" class="btn btn-secondary" id="btnHuy">Hủy</button>
+    </div>
+</form>

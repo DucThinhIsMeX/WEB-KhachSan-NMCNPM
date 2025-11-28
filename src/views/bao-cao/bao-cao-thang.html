@@ -1,0 +1,57 @@
+<div class="page-header">
+    <h2>Báo Cáo Doanh Thu Tháng (BM5)</h2>
+</div>
+
+<div class="filter-section">
+    <div class="form-row">
+        <div class="form-group">
+            <label for="thangBaoCao">Chọn Tháng</label>
+            <input type="month" id="thangBaoCao" class="form-control">
+        </div>
+        <button class="btn btn-primary" id="btnXemBaoCao">Xem Báo Cáo</button>
+        <button class="btn btn-secondary" id="btnXuatBaoCao">Xuất PDF</button>
+    </div>
+</div>
+
+<div id="baoCaoContent" class="report-container">
+    <div class="report-header">
+        <h3>KHÁCH SẠN ABC</h3>
+        <h4>BÁO CÁO DOANH THU THÁNG <span id="titleThang"></span></h4>
+    </div>
+
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th>Loại Phòng</th>
+                <th>Doanh Thu (VNĐ)</th>
+                <th>Tỷ Lệ (%)</th>
+            </tr>
+        </thead>
+        <tbody id="tbodyBaoCao">
+            <tr>
+                <td>Loại A</td>
+                <td class="text-right" id="doanhThuA">0</td>
+                <td class="text-right" id="tyLeA">0%</td>
+            </tr>
+            <tr>
+                <td>Loại B</td>
+                <td class="text-right" id="doanhThuB">0</td>
+                <td class="text-right" id="tyLeB">0%</td>
+            </tr>
+            <tr>
+                <td>Loại C</td>
+                <td class="text-right" id="doanhThuC">0</td>
+                <td class="text-right" id="tyLeC">0%</td>
+            </tr>
+            <tr class="total-row">
+                <td><strong>Tổng Cộng</strong></td>
+                <td class="text-right" id="tongDoanhThu"><strong>0</strong></td>
+                <td class="text-right"><strong>100%</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div id="chartContainer" class="chart-container">
+        <canvas id="doanhThuChart"></canvas>
+    </div>
+</div>

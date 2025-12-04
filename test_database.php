@@ -50,8 +50,8 @@ echo "<!DOCTYPE html>
 </head>
 <body>
 <div class='nav-buttons'>
-    <a href='index.php' class='nav-btn'>🏠 Trang chủ</a>
-    <a href='admin/index.php' class='nav-btn admin'>🔐 Admin</a>
+    <a href='http://localhost:5500' class='nav-btn'>🏠 Trang chủ</a>
+    <a href='http://localhost:8000' class='nav-btn admin'>🔐 Admin</a>
 </div>
 <div class='container'>";
 
@@ -183,8 +183,8 @@ echo "</tbody></table>";
 echo "<h3 style='color: green; text-align: center; margin-top: 40px;'>✓ Database hoạt động hoàn hảo!</h3>";
 
 echo "<div style='text-align: center; margin-top: 30px;'>
-    <a href='index.php' class='nav-btn' style='display: inline-block; margin: 10px;'>🏠 Về trang khách hàng</a>
-    <a href='admin/index.php' class='nav-btn admin' style='display: inline-block; margin: 10px;'>🔐 Vào trang Admin</a>
+    <a href='http://localhost:5500' class='nav-btn' style='display: inline-block; margin: 10px;'>🏠 Về trang khách hàng</a>
+    <a href='http://localhost:8000' class='nav-btn admin' style='display: inline-block; margin: 10px;'>🔐 Vào trang Admin</a>
     <a href='database/reset.php' class='nav-btn' style='display: inline-block; margin: 10px; background: #ffc107; color: #000;'>🔄 Reset Database</a>
 </div>";
 

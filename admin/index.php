@@ -40,7 +40,7 @@
 </head>
 <body>
     <!-- Nút chuyển sang trang khách -->
-    <a href="http://localhost:8000" class="customer-link" target="_blank">
+    <a href="http://localhost:5500" class="customer-link" target="_blank">
         <span>🌐</span>
         <span>Trang khách hàng</span>
     </a>
@@ -121,7 +121,7 @@
         </main>
 
         <footer>
-            <p>&copy; 2024 Hệ thống Quản lý Khách sạn - Admin Panel (Port 5500)</p>
+            <p>&copy; 2024 Hệ thống Quản lý Khách sạn - Admin Panel (Port 8000)</p>
         </footer>
     </div>
 </body>

@@ -97,8 +97,8 @@ $phongsTrong = $phongController->traCuuPhong($loaiPhongFilter, 'Trống');
     </style>
 </head>
 <body>
-    <!-- Nút Admin link đến port 5500 -->
-    <a href="http://localhost:5500" class="admin-link" target="_blank">
+    <!-- Nút Admin link đến port 8000 -->
+    <a href="http://localhost:8000" class="admin-link" target="_blank">
         <span>🔐</span>
         <span>Quản trị</span>
     </a>

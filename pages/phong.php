@@ -31,14 +31,14 @@ $phongs = $controller->getAllPhong();
         <header>
             <h1>🏨 Quản lý Phòng <span style="background: #dc3545; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.7em;">ADMIN</span></h1>
             <nav>
-                <a href="http://localhost:5500">Dashboard</a>
+                <a href="http://localhost:8000">Dashboard</a>
                 <a href="phong.php">Quản lý Phòng</a>
                 <a href="khachhang.php">Khách hàng</a>
                 <a href="phieuthue.php">Phiếu thuê</a>
                 <a href="hoadon.php">Hóa đơn</a>
                 <a href="baocao.php">Báo cáo</a>
                 <a href="thamso.php">Tham số</a>
-                <a href="http://localhost:8000" target="_blank" style="background: #28a745;">🌐 Trang khách</a>
+                <a href="http://localhost:5500" target="_blank" style="background: #28a745;">🌐 Trang khách</a>
             </nav>
         </header>
 

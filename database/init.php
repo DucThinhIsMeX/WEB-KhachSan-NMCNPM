@@ -1,11 +1,63 @@
-<?php
+php database/init.php<?php
 require_once __DIR__ . '/../config/database.php';
+
+echo "<!DOCTYPE html>
+<html lang='vi'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Khởi tạo Database</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            padding: 40px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container { 
+            max-width: 800px; 
+            background: white; 
+            padding: 40px; 
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1, h2, h3 { color: #667eea; }
+        .success { color: #28a745; font-weight: bold; }
+        .error { color: #dc3545; font-weight: bold; }
+        .step { 
+            padding: 15px; 
+            margin: 10px 0; 
+            background: #f8f9fa; 
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 20px 10px 0 0;
+            font-weight: bold;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn-success { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); }
+    </style>
+</head>
+<body>
+<div class='container'>";
+
+echo "<h1>🔧 Khởi tạo Database Khách sạn</h1>";
 
 $database = new Database();
 $db = $database->connect();
 
 try {
     // Xóa các bảng cũ nếu tồn tại (để reset database)
+    echo "<div class='step'>🗑️ Xóa các bảng cũ (nếu có)...</div>";
     $db->exec("DROP TABLE IF EXISTS CHITIET_BAOCAO");
     $db->exec("DROP TABLE IF EXISTS BAOCAO_DOANHTHU");
     $db->exec("DROP TABLE IF EXISTS CHITIET_HOADON");
@@ -17,14 +69,14 @@ try {
     $db->exec("DROP TABLE IF EXISTS LOAIPHONG");
     $db->exec("DROP TABLE IF EXISTS THAMSO");
 
-    // 1. Bảng LOAIPHONG (Quản lý Loại Phòng)
+    echo "<div class='step'>📋 Tạo bảng LOAIPHONG...</div>";
     $db->exec("CREATE TABLE LOAIPHONG (
         MaLoaiPhong INTEGER PRIMARY KEY AUTOINCREMENT,
         TenLoai TEXT NOT NULL UNIQUE,
         DonGiaCoBan REAL NOT NULL CHECK(DonGiaCoBan > 0)
     )");
 
-    // 2. Bảng PHONG (Quản lý Phòng)
+    echo "<div class='step'>📋 Tạo bảng PHONG...</div>";
     $db->exec("CREATE TABLE PHONG (
         MaPhong INTEGER PRIMARY KEY AUTOINCREMENT,
         SoPhong TEXT NOT NULL UNIQUE,
@@ -34,7 +86,7 @@ try {
         FOREIGN KEY (MaLoaiPhong) REFERENCES LOAIPHONG(MaLoaiPhong) ON DELETE RESTRICT ON UPDATE CASCADE
     )");
 
-    // 3. Bảng KHACHHANG (Quản lý Khách hàng)
+    echo "<div class='step'>📋 Tạo bảng KHACHHANG...</div>";
     $db->exec("CREATE TABLE KHACHHANG (
         MaKhachHang INTEGER PRIMARY KEY AUTOINCREMENT,
         TenKhach TEXT NOT NULL,
@@ -43,7 +95,7 @@ try {
         DiaChi TEXT
     )");
 
-    // 4. Bảng PHIEUTHUE (Quản lý Phiếu Thuê)
+    echo "<div class='step'>📋 Tạo bảng PHIEUTHUE...</div>";
     $db->exec("CREATE TABLE PHIEUTHUE (
         MaPhieuThue INTEGER PRIMARY KEY AUTOINCREMENT,
         MaPhong INTEGER NOT NULL,
@@ -52,7 +104,7 @@ try {
         FOREIGN KEY (MaPhong) REFERENCES PHONG(MaPhong) ON DELETE RESTRICT ON UPDATE CASCADE
     )");
 
-    // 5. Bảng CHITIET_THUE (Chi tiết Phiếu Thuê - Quan hệ n-n)
+    echo "<div class='step'>📋 Tạo bảng CHITIET_THUE...</div>";
     $db->exec("CREATE TABLE CHITIET_THUE (
         MaPhieuThue INTEGER NOT NULL,
         MaKhachHang INTEGER NOT NULL,
@@ -61,7 +113,7 @@ try {
         FOREIGN KEY (MaKhachHang) REFERENCES KHACHHANG(MaKhachHang) ON DELETE RESTRICT ON UPDATE CASCADE
     )");
 
-    // 6. Bảng HOADON (Quản lý Hóa đơn)
+    echo "<div class='step'>📋 Tạo bảng HOADON...</div>";
     $db->exec("CREATE TABLE HOADON (
         MaHoaDon INTEGER PRIMARY KEY AUTOINCREMENT,
         MaPhieuThue INTEGER NOT NULL UNIQUE,
@@ -72,7 +124,7 @@ try {
         FOREIGN KEY (MaPhieuThue) REFERENCES PHIEUTHUE(MaPhieuThue) ON DELETE RESTRICT ON UPDATE CASCADE
     )");
 
-    // 7. Bảng CHITIET_HOADON (Chi tiết Hóa đơn)
+    echo "<div class='step'>📋 Tạo bảng CHITIET_HOADON...</div>";
     $db->exec("CREATE TABLE CHITIET_HOADON (
         MaHoaDon INTEGER NOT NULL,
         MaPhong INTEGER NOT NULL,
@@ -84,7 +136,7 @@ try {
         FOREIGN KEY (MaPhong) REFERENCES PHONG(MaPhong) ON DELETE RESTRICT ON UPDATE CASCADE
     )");
 
-    // 8. Bảng BAOCAO_DOANHTHU (Báo cáo Doanh thu)
+    echo "<div class='step'>📋 Tạo bảng BAOCAO_DOANHTHU...</div>";
     $db->exec("CREATE TABLE BAOCAO_DOANHTHU (
         MaBaoCao INTEGER PRIMARY KEY AUTOINCREMENT,
         Thang INTEGER NOT NULL CHECK(Thang BETWEEN 1 AND 12),
@@ -93,7 +145,7 @@ try {
         UNIQUE(Thang, Nam)
     )");
 
-    // 9. Bảng CHITIET_BAOCAO (Chi tiết Báo cáo)
+    echo "<div class='step'>📋 Tạo bảng CHITIET_BAOCAO...</div>";
     $db->exec("CREATE TABLE CHITIET_BAOCAO (
         MaBaoCao INTEGER NOT NULL,
         MaLoaiPhong INTEGER NOT NULL,
@@ -104,14 +156,15 @@ try {
         FOREIGN KEY (MaLoaiPhong) REFERENCES LOAIPHONG(MaLoaiPhong) ON DELETE RESTRICT ON UPDATE CASCADE
     )");
 
-    // 10. Bảng THAMSO (Tham số Hệ thống - QĐ6)
+    echo "<div class='step'>📋 Tạo bảng THAMSO...</div>";
     $db->exec("CREATE TABLE THAMSO (
         TenThamSo TEXT PRIMARY KEY,
         GiaTri REAL NOT NULL,
         MoTa TEXT
     )");
 
-    // Tạo các index để tăng hiệu suất truy vấn
+    // Tạo các index
+    echo "<div class='step'>⚡ Tạo indexes để tối ưu hiệu suất...</div>";
     $db->exec("CREATE INDEX idx_phong_tinhtrang ON PHONG(TinhTrang)");
     $db->exec("CREATE INDEX idx_phong_loai ON PHONG(MaLoaiPhong)");
     $db->exec("CREATE INDEX idx_phieuthue_phong ON PHIEUTHUE(MaPhong)");
@@ -119,9 +172,10 @@ try {
     $db->exec("CREATE INDEX idx_hoadon_ngay ON HOADON(NgayThanhToan)");
     $db->exec("CREATE INDEX idx_khachhang_loai ON KHACHHANG(LoaiKhach)");
 
-    echo "<h3>✓ Tạo cấu trúc bảng thành công!</h3>";
+    echo "<h3 class='success'>✓ Tạo cấu trúc bảng thành công!</h3>";
 
-    // Thêm dữ liệu mẫu cho LOAIPHONG
+    // Thêm dữ liệu mẫu
+    echo "<div class='step'>📝 Thêm dữ liệu mẫu LOAIPHONG...</div>";
     $stmt = $db->prepare("INSERT INTO LOAIPHONG (TenLoai, DonGiaCoBan) VALUES (?, ?)");
     $loaiPhongs = [
         ['Loại A', 300000],
@@ -133,7 +187,7 @@ try {
     }
     echo "✓ Thêm " . count($loaiPhongs) . " loại phòng<br>";
 
-    // Thêm dữ liệu mẫu cho PHONG
+    echo "<div class='step'>📝 Thêm dữ liệu mẫu PHONG...</div>";
     $stmt = $db->prepare("INSERT INTO PHONG (SoPhong, MaLoaiPhong, TinhTrang, GhiChu) VALUES (?, ?, ?, ?)");
     $phongs = [
         ['101', 1, 'Trống', 'Phòng sạch sẽ'],
@@ -151,7 +205,7 @@ try {
     }
     echo "✓ Thêm " . count($phongs) . " phòng<br>";
 
-    // Thêm Tham số Hệ thống (QĐ6)
+    echo "<div class='step'>📝 Thêm dữ liệu mẫu THAMSO...</div>";
     $stmt = $db->prepare("INSERT INTO THAMSO (TenThamSo, GiaTri, MoTa) VALUES (?, ?, ?)");
     $thamSos = [
         ['SO_KHACH_TOI_DA', 3, 'Số lượng khách tối đa trong 1 phòng (QĐ2)'],
@@ -164,7 +218,7 @@ try {
     }
     echo "✓ Thêm " . count($thamSos) . " tham số hệ thống<br>";
 
-    // Thêm dữ liệu mẫu KHACHHANG
+    echo "<div class='step'>📝 Thêm dữ liệu mẫu KHACHHANG...</div>";
     $stmt = $db->prepare("INSERT INTO KHACHHANG (TenKhach, LoaiKhach, CMND, DiaChi) VALUES (?, ?, ?, ?)");
     $khachHangs = [
         ['Nguyễn Văn An', 'Nội địa', '123456789', 'Hà Nội'],
@@ -179,7 +233,7 @@ try {
     }
     echo "✓ Thêm " . count($khachHangs) . " khách hàng mẫu<br>";
 
-    // Thêm dữ liệu mẫu PHIEUTHUE và CHITIET_THUE
+    echo "<div class='step'>📝 Thêm dữ liệu mẫu PHIEUTHUE...</div>";
     $stmt = $db->prepare("INSERT INTO PHIEUTHUE (MaPhong, NgayBatDauThue, TinhTrangPhieu) VALUES (?, ?, ?)");
     $stmt->execute([1, date('Y-m-d', strtotime('-5 days')), 'Đang thuê']);
     $maPhieuThue1 = $db->lastInsertId();
@@ -188,19 +242,25 @@ try {
     $stmt->execute([$maPhieuThue1, 1]);
     $stmt->execute([$maPhieuThue1, 2]);
     
-    // Cập nhật tình trạng phòng
     $db->exec("UPDATE PHONG SET TinhTrang = 'Đã thuê' WHERE MaPhong = 1");
-    
     echo "✓ Thêm dữ liệu mẫu phiếu thuê<br>";
 
-    echo "<h3 style='color: green;'>✓ Khởi tạo database hoàn tất!</h3>";
-    echo "<p><strong>File database:</strong> " . __DIR__ . '/hotel.db</p>';
-    echo "<p><strong>Tổng số bảng:</strong> 10 bảng</p>";
-    echo "<p><strong>Các ràng buộc:</strong> Primary Key, Foreign Key, Check constraints, Unique constraints</p>";
-    echo "<p><strong>Tối ưu hóa:</strong> 6 indexes được tạo</p>";
+    echo "<h2 class='success'>🎉 Khởi tạo database hoàn tất!</h2>";
+    echo "<div style='background: #e8f5e9; padding: 20px; border-radius: 10px; margin: 20px 0;'>";
+    echo "<p><strong>📁 File database:</strong> " . __DIR__ . '/hotel.db</p>';
+    echo "<p><strong>📊 Tổng số bảng:</strong> 10 bảng</p>";
+    echo "<p><strong>🔗 Ràng buộc:</strong> Primary Key, Foreign Key, Check, Unique</p>";
+    echo "<p><strong>⚡ Tối ưu hóa:</strong> 6 indexes</p>";
+    echo "</div>";
+
+    echo "<a href='../index.php' class='btn btn-success'>🏠 Về trang chủ</a>";
+    echo "<a href='../test_database.php' class='btn'>🔍 Kiểm tra Database</a>";
+    echo "<a href='../admin/index.php' class='btn'>🔐 Trang Admin</a>";
 
 } catch(PDOException $e) {
-    echo "<h3 style='color: red;'>✗ Lỗi: " . $e->getMessage() . "</h3>";
-    die();
+    echo "<h3 class='error'>✗ Lỗi: " . $e->getMessage() . "</h3>";
+    echo "<p>Vui lòng kiểm tra lại cấu hình database.</p>";
 }
+
+echo "</div></body></html>";
 ?>

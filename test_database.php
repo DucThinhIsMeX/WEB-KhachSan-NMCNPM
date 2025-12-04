@@ -21,9 +21,38 @@ echo "<!DOCTYPE html>
         .success { color: green; font-weight: bold; }
         .info { background: #e3f2fd; padding: 15px; border-radius: 5px; margin: 15px 0; }
         .stat { display: inline-block; margin: 10px 20px 10px 0; padding: 15px 25px; background: #667eea; color: white; border-radius: 5px; }
+        .nav-buttons { 
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+        .nav-btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        .nav-btn.admin {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        }
     </style>
 </head>
 <body>
+<div class='nav-buttons'>
+    <a href='index.php' class='nav-btn'>🏠 Trang chủ</a>
+    <a href='admin/index.php' class='nav-btn admin'>🔐 Admin</a>
+</div>
 <div class='container'>";
 
 echo "<h2>🔍 Kiểm tra Database Khách sạn</h2>";
@@ -152,6 +181,12 @@ while ($row = $stmt->fetch()) {
 echo "</tbody></table>";
 
 echo "<h3 style='color: green; text-align: center; margin-top: 40px;'>✓ Database hoạt động hoàn hảo!</h3>";
+
+echo "<div style='text-align: center; margin-top: 30px;'>
+    <a href='index.php' class='nav-btn' style='display: inline-block; margin: 10px;'>🏠 Về trang khách hàng</a>
+    <a href='admin/index.php' class='nav-btn admin' style='display: inline-block; margin: 10px;'>🔐 Vào trang Admin</a>
+    <a href='database/reset.php' class='nav-btn' style='display: inline-block; margin: 10px; background: #ffc107; color: #000;'>🔄 Reset Database</a>
+</div>";
 
 echo "</div></body></html>";
 ?>

@@ -14,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['them_phong'])) {
     }
 }
 
-// Lấy danh sách loại phòng
 $database = new Database();
 $db = $database->connect();
 $loaiPhongs = $db->query("SELECT * FROM LOAIPHONG")->fetchAll();
@@ -24,21 +23,22 @@ $phongs = $controller->getAllPhong();
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý Phòng</title>
+    <title>Quản lý Phòng - Admin</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🏨 Quản lý Phòng</h1>
+            <h1>🏨 Quản lý Phòng <span style="background: #dc3545; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.7em;">ADMIN</span></h1>
             <nav>
-                <a href="../index.php">Trang chủ</a>
+                <a href="http://localhost:5500">Dashboard</a>
                 <a href="phong.php">Quản lý Phòng</a>
                 <a href="khachhang.php">Khách hàng</a>
                 <a href="phieuthue.php">Phiếu thuê</a>
                 <a href="hoadon.php">Hóa đơn</a>
                 <a href="baocao.php">Báo cáo</a>
                 <a href="thamso.php">Tham số</a>
+                <a href="http://localhost:8000" target="_blank" style="background: #28a745;">🌐 Trang khách</a>
             </nav>
         </header>
 

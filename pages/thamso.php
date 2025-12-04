@@ -25,21 +25,22 @@ $thamSos = $db->query("SELECT * FROM THAMSO")->fetchAll();
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý Tham số</title>
+    <title>Quản lý Tham số - Admin</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>⚙️ Quản lý Tham số Hệ thống</h1>
+            <h1>⚙️ Quản lý Tham số Hệ thống <span style="background: #dc3545; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.7em;">ADMIN</span></h1>
             <nav>
-                <a href="../index.php">Trang chủ</a>
+                <a href="../admin/index.php">Dashboard</a>
                 <a href="phong.php">Quản lý Phòng</a>
                 <a href="khachhang.php">Khách hàng</a>
                 <a href="phieuthue.php">Phiếu thuê</a>
                 <a href="hoadon.php">Hóa đơn</a>
                 <a href="baocao.php">Báo cáo</a>
                 <a href="thamso.php">Tham số</a>
+                <a href="../index.php" style="background: #28a745;">🌐 Trang khách</a>
             </nav>
         </header>
 
@@ -52,6 +53,9 @@ $thamSos = $db->query("SELECT * FROM THAMSO")->fetchAll();
                 <div class="form-group">
                     <label><?= $ts['TenThamSo'] ?>:</label>
                     <input type="number" step="0.01" name="<?= $ts['TenThamSo'] ?>" value="<?= $ts['GiaTri'] ?>" required>
+                    <?php if ($ts['MoTa']): ?>
+                    <small style="color: #666;"><?= $ts['MoTa'] ?></small>
+                    <?php endif; ?>
                 </div>
                 <?php endforeach; ?>
                 <button type="submit" name="submit" class="btn">Cập nhật</button>

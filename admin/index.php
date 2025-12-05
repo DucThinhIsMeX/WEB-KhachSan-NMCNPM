@@ -1,128 +1,174 @@
-<?php require_once __DIR__ . '/../controllers/PhongController.php'; ?>
+<?php 
+session_start();
+require_once __DIR__ . '/../controllers/AuthController.php';
+require_once __DIR__ . '/../controllers/PhongController.php';
+
+// Kiểm tra đăng nhập
+$auth = new AuthController();
+$auth->requireAdmin();
+
+$controller = new PhongController();
+$phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
+$page_title = 'Dashboard';
+?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Quản lý Khách sạn</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <style>
-        .admin-badge {
-            background: #dc3545;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            margin-left: 10px;
-        }
-        .customer-link {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            transition: 0.3s;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .customer-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-        }
-    </style>
+    <title>Admin Dashboard - Quản lý Khách sạn</title>
+    <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
 <body>
-    <!-- Nút chuyển sang trang khách -->
-    <a href="http://localhost:5500" class="customer-link" target="_blank">
-        <span>🌐</span>
-        <span>Trang khách hàng</span>
-    </a>
+    <?php include 'includes/sidebar.php'; ?>
 
-    <div class="container">
-        <header>
-            <h1>🏨 Admin - Hệ thống Quản lý Khách sạn <span class="admin-badge">ADMIN</span></h1>
-            <nav>
-                <a href="index.php">Dashboard</a>
-                <a href="../pages/phong.php">Quản lý Phòng</a>
-                <a href="../pages/khachhang.php">Khách hàng</a>
-                <a href="../pages/phieuthue.php">Phiếu thuê</a>
-                <a href="../pages/hoadon.php">Hóa đơn</a>
-                <a href="../pages/baocao.php">Báo cáo</a>
-                <a href="../pages/thamso.php">Tham số</a>
-            </nav>
-        </header>
+    <!-- Main Content -->
+    <div class="admin-content">
+        <?php include 'includes/header.php'; ?>
 
-        <main>
-            <section class="dashboard">
-                <h2>Dashboard Quản trị</h2>
-                <?php
-                $controller = new PhongController();
-                $phongTrong = count($controller->traCuuPhong(null, 'Trống'));
-                $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
-                $tongPhong = count($controller->getAllPhong());
-                ?>
-                <div class="stats">
-                    <div class="stat-card">
-                        <h3><?= $tongPhong ?></h3>
-                        <p>Tổng số phòng</p>
+        <!-- Main Container -->
+        <main class="main-container">
+            <?php
+            $phongTrong = count($controller->traCuuPhong(null, 'Trống'));
+            $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
+            $tongPhong = count($controller->getAllPhong());
+            $tyLeLapDay = $tongPhong > 0 ? round(($phongDaThue/$tongPhong)*100) : 0;
+            ?>
+            
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card primary">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value"><?= $tongPhong ?></div>
+                            <div class="stat-label">Tổng Số Phòng</div>
+                        </div>
+                        <div class="stat-icon">🏨</div>
                     </div>
-                    <div class="stat-card">
-                        <h3><?= $phongTrong ?></h3>
-                        <p>Phòng trống</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3><?= $phongDaThue ?></h3>
-                        <p>Phòng đã thuê</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3><?= $tongPhong > 0 ? round(($phongDaThue/$tongPhong)*100) : 0 ?>%</h3>
-                        <p>Tỷ lệ lấp đầy</p>
+                    <div class="stat-change up">
+                        <span>↗</span> Hoạt động bình thường
                     </div>
                 </div>
-            </section>
 
-            <section class="recent-rooms">
-                <h2>Danh sách Phòng</h2>
-                <table>
+                <div class="stat-card success">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value"><?= $phongTrong ?></div>
+                            <div class="stat-label">Phòng Trống</div>
+                        </div>
+                        <div class="stat-icon">✅</div>
+                    </div>
+                    <div class="stat-change">
+                        Sẵn sàng cho thuê
+                    </div>
+                </div>
+
+                <div class="stat-card danger">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value"><?= $phongDaThue ?></div>
+                            <div class="stat-label">Phòng Đã Thuê</div>
+                        </div>
+                        <div class="stat-icon">🔒</div>
+                    </div>
+                    <div class="stat-change">
+                        Đang hoạt động
+                    </div>
+                </div>
+
+                <div class="stat-card warning">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value"><?= $tyLeLapDay ?>%</div>
+                            <div class="stat-label">Tỷ Lệ Lấp Đầy</div>
+                        </div>
+                        <div class="stat-icon">📊</div>
+                    </div>
+                    <div class="stat-change <?= $tyLeLapDay >= 70 ? 'up' : 'down' ?>">
+                        <span><?= $tyLeLapDay >= 70 ? '↗' : '↘' ?></span> 
+                        <?= $tyLeLapDay >= 70 ? 'Tốt' : 'Cần cải thiện' ?>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">⚡ Thao Tác Nhanh</h2>
+                </div>
+                <div class="quick-actions">
+                    <a href="phong.php?action=add" class="action-card">
+                        <div class="icon">➕</div>
+                        <h3>Thêm Phòng</h3>
+                        <p>Lập danh mục phòng mới</p>
+                    </a>
+                    <a href="phieu-thue.php?action=add" class="action-card">
+                        <div class="icon">📋</div>
+                        <h3>Tạo Phiếu Thuê</h3>
+                        <p>Cho thuê phòng cho khách</p>
+                    </a>
+                    <a href="hoa-don.php?action=add" class="action-card">
+                        <div class="icon">💳</div>
+                        <h3>Lập Hóa Đơn</h3>
+                        <p>Thanh toán cho khách</p>
+                    </a>
+                    <a href="bao-cao.php" class="action-card">
+                        <div class="icon">📈</div>
+                        <h3>Xem Báo Cáo</h3>
+                        <p>Báo cáo doanh thu tháng</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Recent Rooms -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        🛏️ Danh Sách Phòng
+                    </h2>
+                    <a href="phong.php" class="btn btn-primary">Xem Tất Cả →</a>
+                </div>
+                
+                <table class="data-table">
                     <thead>
                         <tr>
                             <th>Mã</th>
-                            <th>Số phòng</th>
-                            <th>Loại phòng</th>
-                            <th>Đơn giá</th>
-                            <th>Tình trạng</th>
-                            <th>Ghi chú</th>
+                            <th>Số Phòng</th>
+                            <th>Loại</th>
+                            <th>Đơn Giá</th>
+                            <th>Trạng Thái</th>
+                            <th>Ghi Chú</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $phongs = $controller->getAllPhong();
-                        foreach ($phongs as $phong):
+                        foreach (array_slice($phongs, 0, 10) as $phong):
                         ?>
                         <tr>
-                            <td><?= $phong['MaPhong'] ?></td>
-                            <td><?= $phong['SoPhong'] ?></td>
+                            <td><strong>#<?= $phong['MaPhong'] ?></strong></td>
+                            <td><strong><?= $phong['SoPhong'] ?></strong></td>
                             <td><?= $phong['TenLoai'] ?></td>
-                            <td><?= number_format($phong['DonGiaCoBan']) ?>đ</td>
-                            <td><span class="status-<?= strtolower(str_replace(' ', '-', $phong['TinhTrang'])) ?>"><?= $phong['TinhTrang'] ?></span></td>
-                            <td><?= $phong['GhiChu'] ?></td>
+                            <td><strong><?= number_format($phong['DonGiaCoBan']) ?>đ</strong></td>
+                            <td>
+                                <span class="status-badge <?= $phong['TinhTrang'] === 'Trống' ? 'available' : 'occupied' ?>">
+                                    <?= $phong['TinhTrang'] ?>
+                                </span>
+                            </td>
+                            <td><?= $phong['GhiChu'] ?? '-' ?></td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-            </section>
+            </div>
         </main>
-
-        <footer>
-            <p>&copy; 2024 Hệ thống Quản lý Khách sạn - Admin Panel (Port 8000)</p>
-        </footer>
     </div>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.btn-icon')?.addEventListener('click', () => {
+            document.querySelector('.admin-sidebar')?.classList.toggle('active');
+        });
+    </script>
 </body>
 </html>

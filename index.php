@@ -4,7 +4,6 @@ require_once 'controllers/PhongController.php';
 
 $database = new Database();
 
-// Kiểm tra database đã được khởi tạo chưa
 if (!$database->isDatabaseInitialized()) {
     header('Location: database/init.php');
     exit;
@@ -12,24 +11,16 @@ if (!$database->isDatabaseInitialized()) {
 
 $db = $database->connect();
 
-// Kiểm tra bảng LOAIPHONG có tồn tại không
 try {
     $db->query("SELECT 1 FROM LOAIPHONG LIMIT 1");
 } catch(PDOException $e) {
-    // Database chưa được khởi tạo đúng, redirect đến init
     header('Location: database/init.php');
     exit;
 }
 
 $phongController = new PhongController();
-
-// Lấy tham số hệ thống
 $soKhachToiDa = $database->getThamSo('SO_KHACH_TOI_DA');
-
-// Lấy danh sách loại phòng
 $loaiPhongs = $db->query("SELECT * FROM LOAIPHONG ORDER BY DonGiaCoBan")->fetchAll();
-
-// Lấy phòng trống theo loại (nếu có filter)
 $loaiPhongFilter = isset($_GET['loai']) ? $_GET['loai'] : null;
 $phongsTrong = $phongController->traCuuPhong($loaiPhongFilter, 'Trống');
 ?>
@@ -38,233 +29,196 @@ $phongsTrong = $phongController->traCuuPhong($loaiPhongFilter, 'Trống');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đặt phòng Khách sạn</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/datphong.css">
-    <style>
-        .admin-link {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            transition: 0.3s;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .admin-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-        }
-        .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 80px 20px;
-            text-align: center;
-            color: white;
-        }
-        .hero-section h1 {
-            font-size: 3em;
-            margin-bottom: 15px;
-        }
-        .hero-section p {
-            font-size: 1.3em;
-            margin-bottom: 30px;
-        }
-        .quick-stats {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-        .quick-stat {
-            background: rgba(255,255,255,0.2);
-            padding: 20px 30px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-        .quick-stat h3 {
-            font-size: 2.5em;
-            margin-bottom: 5px;
-        }
-    </style>
+    <title>Đặt Phòng Khách Sạn - Hotel Management System</title>
+    <link rel="stylesheet" href="assets/css/booking.css">
 </head>
 <body>
-    <!-- Nút Admin link đến port 8000 -->
-    <a href="http://localhost:8000" class="admin-link" target="_blank">
-        <span>🔐</span>
-        <span>Quản trị</span>
-    </a>
-
-    <div class="booking-container">
-        <!-- Hero Section -->
-        <section class="hero-section">
-            <h1>🏨 Chào mừng đến Khách sạn</h1>
-            <p>Đặt phòng dễ dàng - Trải nghiệm tuyệt vời</p>
-            <div class="quick-stats">
-                <div class="quick-stat">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>🏨 Khách Sạn Sang Trọng</h1>
+            <p class="subtitle">Trải nghiệm nghỉ dưỡng đẳng cấp - Đặt phòng dễ dàng chỉ trong vài phút</p>
+            
+            <div class="hero-stats">
+                <div class="hero-stat">
                     <h3><?= count($loaiPhongs) ?></h3>
-                    <p>Loại phòng</p>
+                    <p>Loại Phòng</p>
                 </div>
-                <div class="quick-stat">
+                <div class="hero-stat">
                     <h3><?= count($phongsTrong) ?></h3>
-                    <p>Phòng trống</p>
+                    <p>Phòng Trống</p>
                 </div>
-                <div class="quick-stat">
+                <div class="hero-stat">
                     <h3>24/7</h3>
-                    <p>Hỗ trợ</p>
+                    <p>Hỗ Trợ</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <nav class="booking-nav">
+        <div class="nav-container">
+            <a href="index.php" class="nav-link active">
+                <span>🏠</span>
+                <span>Trang Chủ</span>
+            </a>
+            <a href="pages/tra-cuu-dat-phong.php" class="nav-link">
+                <span>🔍</span>
+                <span>Tra Cứu Đặt Phòng</span>
+            </a>
+            <a href="admin/login.php" class="nav-link">
+                <span>🔐</span>
+                <span>Đăng Nhập Admin</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Filter Section -->
+        <section class="filter-section">
+            <h2>📋 Chọn Loại Phòng</h2>
+            <div class="filter-grid">
+                <a href="index.php" class="filter-card <?= !$loaiPhongFilter ? 'active' : '' ?>">
+                    <div class="filter-icon">🏠</div>
+                    <h3>Tất Cả Phòng</h3>
+                    <div class="filter-count"><?= count($phongController->traCuuPhong(null, 'Trống')) ?> phòng có sẵn</div>
+                </a>
+                
+                <?php foreach ($loaiPhongs as $loai): 
+                    $soPhong = count($phongController->traCuuPhong($loai['MaLoaiPhong'], 'Trống'));
+                    $icon = $loai['TenLoai'] == 'Loại A' ? '🛏️' : ($loai['TenLoai'] == 'Loại B' ? '🛋️' : '👑');
+                ?>
+                <a href="index.php?loai=<?= $loai['MaLoaiPhong'] ?>" 
+                   class="filter-card <?= $loaiPhongFilter == $loai['MaLoaiPhong'] ? 'active' : '' ?>">
+                    <div class="filter-icon"><?= $icon ?></div>
+                    <h3><?= $loai['TenLoai'] ?></h3>
+                    <div class="filter-price"><?= number_format($loai['DonGiaCoBan']) ?>đ/đêm</div>
+                    <div class="filter-count"><?= $soPhong ?> phòng có sẵn</div>
+                </a>
+                <?php endforeach; ?>
             </div>
         </section>
 
-        <!-- Navigation -->
-        <header class="booking-header">
-            <nav class="booking-nav">
-                <a href="index.php" class="active">🏠 Trang chủ</a>
-                <a href="pages/tra-cuu-dat-phong.php">🔍 Tra cứu đặt phòng</a>
-                <a href="#rooms">🛏️ Xem phòng</a>
-                <a href="#contact">📞 Liên hệ</a>
-            </nav>
-        </header>
-
-        <main class="booking-main" id="rooms">
-            <!-- Bộ lọc loại phòng -->
-            <section class="filter-section">
-                <h2>Chọn loại phòng</h2>
-                <div class="room-types">
-                    <a href="index.php" class="room-type-card <?= !$loaiPhongFilter ? 'active' : '' ?>">
-                        <div class="card-icon">🏠</div>
-                        <h3>Tất cả</h3>
-                        <p><?= count($phongController->traCuuPhong(null, 'Trống')) ?> phòng</p>
-                    </a>
-                    <?php foreach ($loaiPhongs as $loai): 
-                        $soPhong = count($phongController->traCuuPhong($loai['MaLoaiPhong'], 'Trống'));
-                    ?>
-                    <a href="index.php?loai=<?= $loai['MaLoaiPhong'] ?>#rooms" 
-                       class="room-type-card <?= $loaiPhongFilter == $loai['MaLoaiPhong'] ? 'active' : '' ?>">
-                        <div class="card-icon">
-                            <?php
-                            if ($loai['TenLoai'] == 'Loại A') echo '🛏️';
-                            else if ($loai['TenLoai'] == 'Loại B') echo '🛋️';
-                            else echo '👑';
-                            ?>
-                        </div>
-                        <h3><?= $loai['TenLoai'] ?></h3>
-                        <p class="price"><?= number_format($loai['DonGiaCoBan']) ?>đ/đêm</p>
-                        <p><?= $soPhong ?> phòng trống</p>
-                    </a>
-                    <?php endforeach; ?>
+        <!-- Rooms Grid -->
+        <?php if (count($phongsTrong) > 0): ?>
+        <div class="rooms-grid">
+            <?php foreach ($phongsTrong as $phong): 
+                $icon = $phong['TenLoai'] == 'Loại A' ? '🛏️' : ($phong['TenLoai'] == 'Loại B' ? '🛋️' : '👑');
+            ?>
+            <div class="room-card">
+                <div class="room-header">
+                    <div class="room-icon"><?= $icon ?></div>
+                    <div class="room-number">Phòng <?= $phong['SoPhong'] ?></div>
                 </div>
-            </section>
-
-            <!-- Danh sách phòng trống -->
-            <section class="rooms-section">
-                <h2>Phòng có sẵn (<?= count($phongsTrong) ?> phòng)</h2>
                 
-                <?php if (count($phongsTrong) > 0): ?>
-                <div class="rooms-grid">
-                    <?php foreach ($phongsTrong as $phong): ?>
-                    <div class="room-card">
-                        <div class="room-image">
-                            <?php
-                            if ($phong['TenLoai'] == 'Loại A') {
-                                echo '<div class="room-icon">🛏️</div>';
-                            } else if ($phong['TenLoai'] == 'Loại B') {
-                                echo '<div class="room-icon">🛋️</div>';
-                            } else {
-                                echo '<div class="room-icon">👑</div>';
-                            }
-                            ?>
-                            <span class="room-number">Phòng <?= $phong['SoPhong'] ?></span>
+                <div class="room-body">
+                    <h3 class="room-title"><?= $phong['TenLoai'] ?></h3>
+                    
+                    <div class="room-features">
+                        <div class="feature-item">
+                            <span class="feature-icon">📍</span>
+                            <span class="feature-label">Số phòng</span>
+                            <span class="feature-value"><?= $phong['SoPhong'] ?></span>
                         </div>
-                        <div class="room-details">
-                            <h3><?= $phong['TenLoai'] ?></h3>
-                            <div class="room-info">
-                                <p>📍 Số phòng: <strong><?= $phong['SoPhong'] ?></strong></p>
-                                <p>💰 Giá: <strong class="price"><?= number_format($phong['DonGiaCoBan']) ?>đ</strong>/đêm</p>
-                                <p>👥 Tối đa: <strong><?= $soKhachToiDa ?> khách</strong></p>
-                                <?php if ($phong['GhiChu']): ?>
-                                <p>📝 <?= $phong['GhiChu'] ?></p>
-                                <?php endif; ?>
-                            </div>
-                            <a href="pages/form-dat-phong.php?phong=<?= $phong['MaPhong'] ?>" class="btn-book">
-                                Đặt phòng ngay
-                            </a>
+                        <div class="feature-item">
+                            <span class="feature-icon">👥</span>
+                            <span class="feature-label">Sức chứa</span>
+                            <span class="feature-value">Tối đa <?= $soKhachToiDa ?> khách</span>
+                        </div>
+                        <?php if ($phong['GhiChu']): ?>
+                        <div class="feature-item">
+                            <span class="feature-icon">📝</span>
+                            <span class="feature-label">Ghi chú</span>
+                            <span class="feature-value"><?= $phong['GhiChu'] ?></span>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <div class="room-price">
+                        <div class="price-label">Giá phòng</div>
+                        <div class="price-value">
+                            <?= number_format($phong['DonGiaCoBan']) ?>
+                            <span class="price-unit">VNĐ/đêm</span>
                         </div>
                     </div>
-                    <?php endforeach; ?>
+                    
+                    <a href="pages/form-dat-phong.php?phong=<?= $phong['MaPhong'] ?>" class="btn-book">
+                        <span>📝</span>
+                        <span>Đặt Phòng Ngay</span>
+                    </a>
                 </div>
-                <?php else: ?>
-                <div class="no-rooms">
-                    <p>😔 Hiện tại không có phòng trống trong loại này</p>
-                    <a href="index.php" class="btn">Xem tất cả phòng</a>
-                </div>
-                <?php endif; ?>
-            </section>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php else: ?>
+        <div class="empty-state">
+            <div class="empty-icon">😔</div>
+            <h3>Không Có Phòng Trống</h3>
+            <p>Hiện tại không có phòng trống trong loại này. Vui lòng chọn loại phòng khác.</p>
+            <a href="index.php" class="btn btn-primary">Xem Tất Cả Phòng</a>
+        </div>
+        <?php endif; ?>
 
-            <!-- Thông tin thêm -->
-            <section class="info-section" id="contact">
-                <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Thông tin dịch vụ</h2>
-                <div class="info-grid">
-                    <div class="info-card">
-                        <div class="info-icon">⏰</div>
-                        <h3>Nhận phòng</h3>
-                        <p>Từ 14:00</p>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-icon">🚪</div>
-                        <h3>Trả phòng</h3>
-                        <p>Trước 12:00</p>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-icon">💳</div>
-                        <h3>Thanh toán</h3>
-                        <p>Tiền mặt, Thẻ</p>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-icon">📞</div>
-                        <h3>Hỗ trợ 24/7</h3>
-                        <p>1900-xxxx</p>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-icon">🍽️</div>
-                        <h3>Nhà hàng</h3>
-                        <p>6:00 - 22:00</p>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-icon">🏊</div>
-                        <h3>Bể bơi</h3>
-                        <p>5:00 - 21:00</p>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-icon">🚗</div>
-                        <h3>Đậu xe</h3>
-                        <p>Miễn phí</p>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-icon">📶</div>
-                        <h3>WiFi</h3>
-                        <p>Miễn phí</p>
-                    </div>
+        <!-- Info Section -->
+        <section class="info-section">
+            <h2>🎯 Dịch Vụ & Tiện Ích</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">⏰</div>
+                    <h3>Nhận Phòng</h3>
+                    <p>Từ 14:00</p>
                 </div>
-            </section>
-        </main>
+                <div class="info-card">
+                    <div class="info-icon">🚪</div>
+                    <h3>Trả Phòng</h3>
+                    <p>Trước 12:00</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">💳</div>
+                    <h3>Thanh Toán</h3>
+                    <p>Tiền mặt, Thẻ</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">📞</div>
+                    <h3>Hotline 24/7</h3>
+                    <p>1900-xxxx</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🍽️</div>
+                    <h3>Nhà Hàng</h3>
+                    <p>6:00 - 22:00</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🏊</div>
+                    <h3>Bể Bơi</h3>
+                    <p>5:00 - 21:00</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🚗</div>
+                    <h3>Bãi Đậu Xe</h3>
+                    <p>Miễn phí</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">📶</div>
+                    <h3>WiFi</h3>
+                    <p>Tốc độ cao</p>
+                </div>
+            </div>
+        </section>
+    </main>
 
-        <footer class="booking-footer">
-            <p>&copy; 2024 Khách sạn - Hệ thống đặt phòng trực tuyến</p>
-            <p style="margin-top: 10px; font-size: 0.9em;">
-                📍 Địa chỉ: 123 Đường ABC, Quận XYZ, TP.HCM | 
-                📞 Hotline: 1900-xxxx | 
-                📧 Email: contact@hotel.com
-            </p>
-        </footer>
-    </div>
+    <!-- Footer -->
+    <footer class="booking-footer">
+        <div class="footer-content">
+            <p style="font-size: 1.2em; margin-bottom: 15px;">&copy; 2024 Khách Sạn Sang Trọng - Hotel Management System</p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">📍 123 Đường ABC, Quận XYZ, TP.HCM</a>
+                <a href="#" class="footer-link">📞 Hotline: 1900-xxxx</a>
+                <a href="#" class="footer-link">📧 Email: contact@hotel.com</a>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

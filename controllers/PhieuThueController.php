@@ -17,8 +17,25 @@ class PhieuThueController {
             
             // Kiểm tra số lượng khách tối đa
             $soKhachToiDa = $this->database->getThamSo('SO_KHACH_TOI_DA');
+            if ($soKhachToiDa === null) {
+                $soKhachToiDa = 3; // Giá trị mặc định
+            }
+            
             if (count($danhSachKhach) > $soKhachToiDa) {
                 throw new Exception("Số lượng khách vượt quá quy định ($soKhachToiDa khách)");
+            }
+            
+            // Kiểm tra phòng có trống không
+            $stmt = $this->db->prepare("SELECT TinhTrang FROM PHONG WHERE MaPhong = ?");
+            $stmt->execute([$maPhong]);
+            $phong = $stmt->fetch();
+            
+            if (!$phong) {
+                throw new Exception("Phòng không tồn tại");
+            }
+            
+            if ($phong['TinhTrang'] !== 'Trống') {
+                throw new Exception("Phòng đã được thuê");
             }
             
             // Tạo phiếu thuê

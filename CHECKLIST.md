@@ -68,5 +68,45 @@
 
 - [ ] README.md
 - [ ] HUONG-DAN-SU-DUNG.md
+- [ ] DEPLOY.md
 - [ ] Code có comment đầy đủ
 - [ ] Cấu trúc thư mục rõ ràng
+
+## 🚀 DEPLOY
+
+- [ ] **Môi trường Development**
+  - [ ] PHP Built-in server hoạt động
+  - [ ] Database khởi tạo thành công
+  - [ ] Tất cả chức năng test OK
+
+- [ ] **Chuẩn bị Production**
+  - [ ] Minify CSS/JS
+  - [ ] Optimize images
+  - [ ] Setup .htaccess
+  - [ ] Remove debug code
+  - [ ] Test performance
+
+- [ ] **Deploy Options**
+  - [ ] Local (XAMPP/WAMP) ✅
+  - [ ] Hosting miễn phí (InfinityFree/000webhost)
+  - [ ] VPS/Server (Ubuntu/CentOS)
+  - [ ] Cloud (AWS/GCP/Azure)
+
+- [ ] **Security**
+  - [ ] Bảo vệ admin area
+  - [ ] Validate all inputs
+  - [ ] Prevent SQL injection
+  - [ ] Setup SSL certificate
+  - [ ] Hide error messages
+
+- [ ] **Monitoring**
+  - [ ] Error logging
+  - [ ] Backup strategy
+  - [ ] Performance monitoring
+  - [ ] Uptime monitoring
+
+- [ ] **Documentation**
+  - [ ] Installation guide
+  - [ ] Deployment guide
+  - [ ] Troubleshooting guide
+  - [ ] API documentation (if any)

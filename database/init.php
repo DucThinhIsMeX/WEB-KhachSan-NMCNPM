@@ -1,4 +1,4 @@
-php database/init.php<?php
+<?php
 require_once __DIR__ . '/../config/database.php';
 
 echo "<!DOCTYPE html>
@@ -68,6 +68,7 @@ try {
     $db->exec("DROP TABLE IF EXISTS PHONG");
     $db->exec("DROP TABLE IF EXISTS LOAIPHONG");
     $db->exec("DROP TABLE IF EXISTS THAMSO");
+    $db->exec("DROP TABLE IF EXISTS NGUOIDUNG");
 
     echo "<div class='step'>📋 Tạo bảng LOAIPHONG...</div>";
     $db->exec("CREATE TABLE LOAIPHONG (
@@ -162,6 +163,24 @@ try {
         GiaTri REAL NOT NULL,
         MoTa TEXT
     )");
+
+    echo "<div class='step'>📋 Tạo bảng NGUOIDUNG...</div>";
+    $db->exec("CREATE TABLE IF NOT EXISTS NGUOIDUNG (
+        MaNguoiDung INT AUTO_INCREMENT PRIMARY KEY,
+        TenDangNhap VARCHAR(50) UNIQUE NOT NULL,
+        MatKhau VARCHAR(255) NOT NULL,
+        HoTen VARCHAR(100) NOT NULL,
+        VaiTro ENUM('Admin', 'NhanVien') DEFAULT 'NhanVien',
+        TrangThai ENUM('Hoạt động', 'Khóa') DEFAULT 'Hoạt động',
+        NgayTao DATETIME DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+    // Thêm tài khoản admin mặc định (password: admin123)
+    echo "<div class='step'>➕ Thêm tài khoản admin mặc định...</div>";
+    $matKhauMaHoa = password_hash('admin123', PASSWORD_DEFAULT);
+    $stmt = $db->prepare("INSERT IGNORE INTO NGUOIDUNG (TenDangNhap, MatKhau, HoTen, VaiTro) 
+               VALUES (?, ?, ?, ?)");
+    $stmt->execute(['admin', $matKhauMaHoa, 'Quản Trị Viên', 'Admin']);
 
     // Tạo các index
     echo "<div class='step'>⚡ Tạo indexes để tối ưu hiệu suất...</div>";

@@ -39,12 +39,16 @@ class Database {
     // Hàm lấy tham số từ bảng THAMSO
     public function getThamSo($tenThamSo) {
         try {
+            // Đảm bảo kết nối được thiết lập
+            if ($this->conn === null) {
+                $this->connect();
+            }
+            
             $stmt = $this->conn->prepare("SELECT GiaTri FROM THAMSO WHERE TenThamSo = ?");
             $stmt->execute([$tenThamSo]);
             $result = $stmt->fetch();
             return $result ? $result['GiaTri'] : null;
         } catch(PDOException $e) {
-            error_log("Error getThamSo: " . $e->getMessage());
             return null;
         }
     }

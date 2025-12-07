@@ -68,7 +68,7 @@ try {
     $db->exec("DROP TABLE IF EXISTS PHONG");
     $db->exec("DROP TABLE IF EXISTS LOAIPHONG");
     $db->exec("DROP TABLE IF EXISTS THAMSO");
-    $db->exec("DROP TABLE IF EXISTS NGUOIDUNG");
+    $db->exec("DROP TABLE IF EXISTS NGUOIDUNG"); // Đã sửa lỗi dòng này
 
     echo "<div class='step'>📋 Tạo bảng LOAIPHONG...</div>";
     $db->exec("CREATE TABLE LOAIPHONG (
@@ -164,32 +164,34 @@ try {
         MoTa TEXT
     )");
 
+    // ĐÃ SỬA: Chuyển cú pháp tạo bảng NGUOIDUNG sang SQLite
     echo "<div class='step'>📋 Tạo bảng NGUOIDUNG...</div>";
-    $db->exec("CREATE TABLE IF NOT EXISTS NGUOIDUNG (
-        MaNguoiDung INT AUTO_INCREMENT PRIMARY KEY,
-        TenDangNhap VARCHAR(50) UNIQUE NOT NULL,
-        MatKhau VARCHAR(255) NOT NULL,
-        HoTen VARCHAR(100) NOT NULL,
-        VaiTro ENUM('Admin', 'NhanVien') DEFAULT 'NhanVien',
-        TrangThai ENUM('Hoạt động', 'Khóa') DEFAULT 'Hoạt động',
-        NgayTao DATETIME DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+    $db->exec("CREATE TABLE NGUOIDUNG (
+        MaNguoiDung INTEGER PRIMARY KEY AUTOINCREMENT,
+        TenDangNhap TEXT UNIQUE NOT NULL,
+        MatKhau TEXT NOT NULL,
+        HoTen TEXT NOT NULL,
+        VaiTro TEXT DEFAULT 'NhanVien' CHECK(VaiTro IN ('Admin', 'NhanVien')),
+        TrangThai TEXT DEFAULT 'Hoạt động' CHECK(TrangThai IN ('Hoạt động', 'Khóa')),
+        NgayTao DATETIME DEFAULT (datetime('now','localtime'))
+    )");
 
     // Thêm tài khoản admin mặc định (password: admin123)
     echo "<div class='step'>➕ Thêm tài khoản admin mặc định...</div>";
     $matKhauMaHoa = password_hash('admin123', PASSWORD_DEFAULT);
-    $stmt = $db->prepare("INSERT IGNORE INTO NGUOIDUNG (TenDangNhap, MatKhau, HoTen, VaiTro) 
-               VALUES (?, ?, ?, ?)");
+    // ĐÃ SỬA: INSERT IGNORE -> INSERT OR IGNORE
+    $stmt = $db->prepare("INSERT OR IGNORE INTO NGUOIDUNG (TenDangNhap, MatKhau, HoTen, VaiTro) 
+                VALUES (?, ?, ?, ?)");
     $stmt->execute(['admin', $matKhauMaHoa, 'Quản Trị Viên', 'Admin']);
 
     // Tạo các index
     echo "<div class='step'>⚡ Tạo indexes để tối ưu hiệu suất...</div>";
-    $db->exec("CREATE INDEX idx_phong_tinhtrang ON PHONG(TinhTrang)");
-    $db->exec("CREATE INDEX idx_phong_loai ON PHONG(MaLoaiPhong)");
-    $db->exec("CREATE INDEX idx_phieuthue_phong ON PHIEUTHUE(MaPhong)");
-    $db->exec("CREATE INDEX idx_phieuthue_tinhtrang ON PHIEUTHUE(TinhTrangPhieu)");
-    $db->exec("CREATE INDEX idx_hoadon_ngay ON HOADON(NgayThanhToan)");
-    $db->exec("CREATE INDEX idx_khachhang_loai ON KHACHHANG(LoaiKhach)");
+    $db->exec("CREATE INDEX IF NOT EXISTS idx_phong_tinhtrang ON PHONG(TinhTrang)");
+    $db->exec("CREATE INDEX IF NOT EXISTS idx_phong_loai ON PHONG(MaLoaiPhong)");
+    $db->exec("CREATE INDEX IF NOT EXISTS idx_phieuthue_phong ON PHIEUTHUE(MaPhong)");
+    $db->exec("CREATE INDEX IF NOT EXISTS idx_phieuthue_tinhtrang ON PHIEUTHUE(TinhTrangPhieu)");
+    $db->exec("CREATE INDEX IF NOT EXISTS idx_hoadon_ngay ON HOADON(NgayThanhToan)");
+    $db->exec("CREATE INDEX IF NOT EXISTS idx_khachhang_loai ON KHACHHANG(LoaiKhach)");
 
     echo "<h3 class='success'>✓ Tạo cấu trúc bảng thành công!</h3>";
 
@@ -267,7 +269,7 @@ try {
     echo "<h2 class='success'>🎉 Khởi tạo database hoàn tất!</h2>";
     echo "<div style='background: #e8f5e9; padding: 20px; border-radius: 10px; margin: 20px 0;'>";
     echo "<p><strong>📁 File database:</strong> " . __DIR__ . '/hotel.db</p>';
-    echo "<p><strong>📊 Tổng số bảng:</strong> 10 bảng</p>";
+    echo "<p><strong>📊 Tổng số bảng:</strong> 11 bảng</p>";
     echo "<p><strong>🔗 Ràng buộc:</strong> Primary Key, Foreign Key, Check, Unique</p>";
     echo "<p><strong>⚡ Tối ưu hóa:</strong> 6 indexes</p>";
     echo "</div>";

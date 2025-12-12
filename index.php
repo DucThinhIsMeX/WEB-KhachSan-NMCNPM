@@ -102,10 +102,13 @@ if ($searchQ) {
                 
                 <?php foreach ($loaiPhongs as $loai): 
                     $soPhong = count($phongController->traCuuPhong($loai['MaLoaiPhong'], 'Trống'));
-                    $icon = $loai['TenLoai'] == 'Loại A' ? '' : ($loai['TenLoai'] == 'Loại B' ? '🛋️' : '👑');
+                    // Remove decorative icons (sofa/bed/crown) to simplify the UI
+                    $icon = '';
+                    $filterTypeClass = $loai['TenLoai'] == 'Loại A' ? 'filter-card--type-a' : ($loai['TenLoai'] == 'Loại B' ? 'filter-card--type-b' : 'filter-card--type-c');
+                    $filterCardClass = 'filter-card ' . $filterTypeClass . ' ' . ($loaiPhongFilter == $loai['MaLoaiPhong'] ? 'active' : '');
                 ?>
                 <a href="index.php?loai=<?= $loai['MaLoaiPhong'] ?>" 
-                   class="filter-card <?= $loaiPhongFilter == $loai['MaLoaiPhong'] ? 'active' : '' ?>">
+                   class="<?= htmlspecialchars($filterCardClass) ?>">
                     <div class="filter-icon"><?= $icon ?></div>
                     <h3><?= $loai['TenLoai'] ?></h3>
                     <div class="filter-price"><?= number_format($loai['DonGiaCoBan']) ?>đ/đêm</div>
@@ -120,14 +123,13 @@ if ($searchQ) {
         <div class="rooms-grid">
             <?php foreach ($phongsTrong as $phong): 
                     $roomType = $phong['TenLoai'];
+                    // Remove decorative icons in room headers for clear layout
+                    $icon = '';
                     if ($roomType == 'Loại A') {
-                        $icon = '';
                         $headerClass = 'room-header room-header--type-a';
                     } elseif ($roomType == 'Loại B') {
-                        $icon = '🛋️';
                         $headerClass = 'room-header room-header--type-b';
                     } else {
-                        $icon = '👑';
                         $headerClass = 'room-header room-header--type-c';
                     }
                 ?>

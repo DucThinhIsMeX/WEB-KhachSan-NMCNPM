@@ -94,8 +94,7 @@ if ($searchQ) {
                 <button type="submit" class="btn-primary search-btn">🔎 Tìm</button>
             </form>
             <div class="filter-grid">
-                <a href="index.php" class="filter-card <?= !$loaiPhongFilter ? 'active' : '' ?>">
-                    <div class="filter-icon">🏠</div>
+                <a href="index.php" class="filter-card filter-card--all <?= !$loaiPhongFilter ? 'active' : '' ?>">
                     <h3>Tất Cả Phòng</h3>
                     <div class="filter-count"><?= count($phongController->traCuuPhong(null, 'Trống')) ?> phòng có sẵn</div>
                 </a>

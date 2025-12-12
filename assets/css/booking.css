@@ -24,8 +24,9 @@ body {
 
 /* Hero Section */
 .hero-section {
-    background: linear-gradient(135deg, rgba(102,126,234,0.95) 0%, rgba(118,75,162,0.95) 100%),
-                url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    /* Use the hotel's hero image while keeping the purple gradient overlay for readability */
+    background: linear-gradient(135deg, rgba(102,126,234,0.55) 0%, rgba(118,75,162,0.55) 100%),
+                url('https://cdn2.tuoitre.vn/thumb_w/1200/471584752817336320/2025/3/20/cau-ba-son-le-phan-3-17424634807981182058329-65-0-1405-2560-crop-1742463632755439491864.jpg');
     padding: 80px 20px;
     text-align: center;
     color: white;
@@ -306,6 +307,21 @@ body {
 .filter-card--type-c .filter-icon { display: none; }
 .filter-card--type-c h3, .filter-card--type-c .filter-price, .filter-card--type-c .filter-count { color: #fff; position: relative; z-index: 2; }
 
+/* "Tất Cả Phòng" - background image + remove icon */
+.filter-card--all {
+    background-image: url('https://hotelroyalhoian.vn/wp-content/uploads/2025/05/dac-san-hoi-an-1-1.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+.filter-card--all::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.22); border-radius: inherit; }
+.filter-card--all .filter-icon { display: none; }
+.filter-card--all h3, .filter-card--all .filter-count { color: #fff; position: relative; z-index: 2; }
+
+/* Ensure small gray badges for the ALL card too */
+.filter-card--all h3 { background: rgba(0,0,0,0.45); padding: 6px 12px; border-radius: 12px; display: inline-block; color: #fff; }
+.filter-card--all .filter-count { background: rgba(0,0,0,0.35); padding: 5px 8px; border-radius: 10px; color: #fff; display: inline-block; margin-top: 8px; }
+
 /* When Loại A is active, keep its background image visible, but add a
    purple border and faint purple overlay so it stands out without
    filling the whole card with a gradient (which hides the image). */
@@ -350,6 +366,16 @@ body {
 }
 .filter-card--type-c.active::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(102,126,234,0.16), rgba(118,75,162,0.16)), rgba(0,0,0,0.22); border-radius: inherit; }
 .filter-card--type-c.active h3, .filter-card--type-c.active .filter-price, .filter-card--type-c.active .filter-count { color: #fff; z-index: 2; }
+.filter-card--all.active {
+    background: none;
+    background-image: url('https://hotelroyalhoian.vn/wp-content/uploads/2025/05/dac-san-hoi-an-1-1.jpg');
+    background-size: cover;
+    background-position: center;
+    border-color: var(--primary);
+    box-shadow: 0 12px 30px rgba(102,126,234,0.35);
+}
+.filter-card--all.active::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(102,126,234,0.16), rgba(118,75,162,0.16)), rgba(0,0,0,0.22); border-radius: inherit; }
+.filter-card--all.active h3, .filter-card--all.active .filter-count { color: #fff; z-index: 2; }
 
 /* Make the white labels on top of the filter images easier to read by adding
    a small gray rounded background behind them, similar to the room-number

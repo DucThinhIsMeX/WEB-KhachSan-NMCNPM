@@ -15,6 +15,8 @@
 cd "c:\Users\Duc Thinh\Documents\Nhập môn CNPM\DOAN\WEB-KhachSan-NMCNPM"
 
 # Bước 2: Khởi tạo database (chỉ lần đầu)
+# LƯU Ý: `database/init.php` sẽ xóa các bảng cũ nếu tồn tại (reset DB).
+# Sao lưu database/hotel.db trước khi chạy nếu bạn muốn giữ dữ liệu hiện có.
 php database/init.php
 
 # Bước 3: Chạy server

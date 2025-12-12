@@ -231,6 +231,16 @@ body {
     box-shadow: 0 12px 30px rgba(102,126,234,0.4);
 }
 
+/* Slightly enlarge & elevate active filter cards so they stand out visually */
+.filter-card.active {
+    transform: translateY(-8px) scale(1.03);
+    z-index: 6;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+/* Ensure active + hover doesn't exceed the intended scale */
+.filter-card.active:hover { transform: translateY(-8px) scale(1.03); }
+
 .filter-icon {
     font-size: 3.5em;
     margin-bottom: 15px;

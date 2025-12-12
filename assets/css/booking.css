@@ -299,6 +299,24 @@ body {
     overflow: hidden;
 }
 
+/* Loại A: background image as header and overlay */
+.room-header--type-a {
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598207.jpg?k=85857d4624ac244979f0a05ce375c7fca3aed3f38432f14c6a5e2fe88fced8c5&o=');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    position: relative;
+}
+.room-header--type-a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.25);
+    border-radius: inherit;
+}
+.room-header--type-a > * { position: relative; z-index: 2; }
+.room-header--type-a .room-number { background: rgba(0,0,0,0.45); color: #fff; box-shadow: none; }
+
 .room-header::before {
     content: '';
     position: absolute;

@@ -102,7 +102,7 @@ if ($searchQ) {
                 
                 <?php foreach ($loaiPhongs as $loai): 
                     $soPhong = count($phongController->traCuuPhong($loai['MaLoaiPhong'], 'Trống'));
-                    $icon = $loai['TenLoai'] == 'Loại A' ? '🛏️' : ($loai['TenLoai'] == 'Loại B' ? '🛋️' : '👑');
+                    $icon = $loai['TenLoai'] == 'Loại A' ? '' : ($loai['TenLoai'] == 'Loại B' ? '🛋️' : '👑');
                 ?>
                 <a href="index.php?loai=<?= $loai['MaLoaiPhong'] ?>" 
                    class="filter-card <?= $loaiPhongFilter == $loai['MaLoaiPhong'] ? 'active' : '' ?>">
@@ -119,12 +119,24 @@ if ($searchQ) {
         <?php if (count($phongsTrong) > 0): ?>
         <div class="rooms-grid">
             <?php foreach ($phongsTrong as $phong): 
-                $icon = $phong['TenLoai'] == 'Loại A' ? '🛏️' : ($phong['TenLoai'] == 'Loại B' ? '🛋️' : '👑');
-            ?>
+                    $roomType = $phong['TenLoai'];
+                    if ($roomType == 'Loại A') {
+                        $icon = '';
+                        $headerClass = 'room-header room-header--type-a';
+                    } elseif ($roomType == 'Loại B') {
+                        $icon = '🛋️';
+                        $headerClass = 'room-header room-header--type-b';
+                    } else {
+                        $icon = '👑';
+                        $headerClass = 'room-header room-header--type-c';
+                    }
+                ?>
             <div class="room-card">
-                <div class="room-header">
-                    <div class="room-icon"><?= $icon ?></div>
-                    <div class="room-number">Phòng <?= $phong['SoPhong'] ?></div>
+                <div class="<?= htmlspecialchars($headerClass) ?>">
+                    <?php if (!empty($icon)): ?>
+                        <div class="room-icon"><?= $icon ?></div>
+                    <?php endif; ?>
+                    <div class="room-number">Phòng <?= htmlspecialchars($phong['SoPhong']) ?></div>
                 </div>
                 
                 <div class="room-body">

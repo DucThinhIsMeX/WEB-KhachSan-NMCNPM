@@ -65,6 +65,8 @@ if (isset($_GET['search']) && !empty($_GET['keyword'])) {
                                value="<?= htmlspecialchars($_GET['keyword'] ?? '') ?>" required>
                     </div>
                     <button type="submit" name="search" class="btn">🔍 Tìm Kiếm</button>
+                    <button type="button" id="exportBtn" class="export-btn" style="margin-left: 10px;">📤 Export JSON</button>
+                    <button type="button" id="printBtn" class="btn-ghost" style="margin-left: 10px;">🖨️ In</button>
                 </form>
                 
                 <?php if ($error): ?>
@@ -111,6 +113,27 @@ if (isset($_GET['search']) && !empty($_GET['keyword'])) {
                     </div>
                 <?php endif; ?>
             </section>
+            <script>
+                const printBtn = document.getElementById('printBtn');
+                const exportBtn = document.getElementById('exportBtn');
+                printBtn && printBtn.addEventListener('click', function() { window.print(); });
+
+                exportBtn && exportBtn.addEventListener('click', function(){
+                    // Gather results from DOM
+                    const cards = Array.from(document.querySelectorAll('.rooms-section .room-card'));
+                    const data = cards.map(card => {
+                        return {
+                            title: card.querySelector('h3') ? card.querySelector('h3').innerText.trim() : '',
+                            info: card.querySelector('.room-info') ? card.querySelector('.room-info').innerText.trim() : ''
+                        }
+                    });
+                    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url; a.download = 'tim_kiem_phieu_thue.json';
+                    document.body.appendChild(a); a.click(); a.remove();
+                });
+            </script>
             <?php endif; ?>
         </main>
 

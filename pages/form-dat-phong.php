@@ -61,6 +61,8 @@ if (!$phong || $phong['TinhTrang'] !== 'Trống') {
 }
 
 $soKhachToiDa = $database->getThamSo('SO_KHACH_TOI_DA');
+$tlPhuThu = $database->getThamSo('TL_PHU_THU_KHACH_3');
+$hsKhachNN = $database->getThamSo('HS_KHACH_NUOC_NGOAI');
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -220,6 +222,12 @@ $soKhachToiDa = $database->getThamSo('SO_KHACH_TOI_DA');
                     <div class="info-item">
                         <span>Sức Chứa</span>
                         <strong>Tối đa <?= $soKhachToiDa ?> khách</strong>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <div class="estimate-box" role="status" aria-live="polite">
+                        <div>💸 Giá ước tính:</div>
+                        <div class="estimate-value" id="estimateValue"><?= number_format($phong['DonGiaCoBan']) ?>đ</div>
                     </div>
                 </div>
                 <?php if ($phong['GhiChu']): ?>
@@ -431,22 +439,74 @@ $soKhachToiDa = $database->getThamSo('SO_KHACH_TOI_DA');
                     document.getElementById('khach3Section').classList.add('hidden');
                 }
             }
+            updateEstimate();
         }
 
-        // Validate form trước khi submit
-        document.getElementById('formDatPhong').addEventListener('submit', function(e) {
-            const ngayBatDau = new Date(document.querySelector('input[name="ngayBatDau"]').value);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            if (ngayBatDau < today) {
-                e.preventDefault();
-                alert('Ngày nhận phòng phải từ hôm nay trở đi!');
-                return false;
-            }
-            
-            return confirm('Xác nhận đặt phòng với thông tin đã nhập?');
-        });
++        // Tính ước lượng tiền phòng dựa trên tham số hệ thống và số khách
++        const donGiaCoBan = <?= json_encode(floatval($phong['DonGiaCoBan'])) ?>;
++        const soKhachToiDaParam = <?= json_encode(intval($soKhachToiDa)) ?>;
++        const tlPhuThu = <?= json_encode(floatval($tlPhuThu)) ?>;
++        const hsKhachNN = <?= json_encode(floatval($hsKhachNN)) ?>;
++
++        function currencyFormat(n) {
++            return n.toLocaleString('vi-VN') + 'đ';
++        }
++
++        function getActiveGuestCount() {
++            let count = 0;
++            for (let i = 1; i <= 3; i++) {
++                const name = document.querySelector('input[name="tenKhach' + i + '"]');
++                if (name && name.value.trim() !== '') count++;
++            }
++            return count;
++        }
++
++        function hasForeignGuest() {
++            for (let i = 1; i <= 3; i++) {
++                const select = document.querySelector('select[name="loaiKhach' + i + '"]');
++                if (select && select.value === 'Nước ngoài') return true;
++            }
++            return false;
++        }
++
++        function updateEstimate() {
++            const days = 1; // Default 1 đêm (không có ngày trả)
++            let price = donGiaCoBan;
++
++            const activeGuests = getActiveGuestCount() || 1;
++            if (activeGuests >= soKhachToiDaParam) {
++                price *= (1 + tlPhuThu);
++            }
++            if (hasForeignGuest()) price *= hsKhachNN;
++
++            const total = Math.round(price * days);
++            document.getElementById('estimateValue').textContent = currencyFormat(total);
++        }
++
++        // Các sự kiện thay đổi để cập nhật ước lượng
++        document.querySelectorAll('select[name^="loaiKhach"], input[name^="tenKhach"]').forEach(el => {
++            el.addEventListener('change', updateEstimate);
++            el.addEventListener('input', updateEstimate);
++        });
++        document.querySelector('input[name="ngayBatDau"]').addEventListener('change', updateEstimate);
++
++        // Đặt ước lượng khi tải trang
++        updateEstimate();
++
++        // Validate form trước khi submit
++        document.getElementById('formDatPhong').addEventListener('submit', function(e) {
++            const ngayBatDau = new Date(document.querySelector('input[name="ngayBatDau"]').value);
++            const today = new Date();
++            today.setHours(0, 0, 0, 0);
++            
++            if (ngayBatDau < today) {
++                e.preventDefault();
++                alert('Ngày nhận phòng phải từ hôm nay trở đi!');
++                return false;
++            }
++            
++            return confirm('Xác nhận đặt phòng với thông tin đã nhập?');
++        });
     </script>
 </body>
 </html>

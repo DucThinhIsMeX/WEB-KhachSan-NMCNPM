@@ -22,7 +22,25 @@ $phongController = new PhongController();
 $soKhachToiDa = $database->getThamSo('SO_KHACH_TOI_DA');
 $loaiPhongs = $db->query("SELECT * FROM LOAIPHONG ORDER BY DonGiaCoBan")->fetchAll();
 $loaiPhongFilter = isset($_GET['loai']) ? $_GET['loai'] : null;
+$searchQ = isset($_GET['q']) ? trim($_GET['q']) : null;
 $phongsTrong = $phongController->traCuuPhong($loaiPhongFilter, 'Trống');
+
+// Server-side filtering by search query (SoPhong or TenLoai)
+if ($searchQ) {
+    $searchQ = strtolower($searchQ);
+    $phongsTrong = array_values(array_filter($phongsTrong, function($p) use ($searchQ) {
+        return stripos($p['SoPhong'] . ' ' . $p['TenLoai'], $searchQ) !== false;
+    }));
+}
+
+// Gallery images per room type (TenLoai). Add images here or update to pull from DB.
+// Gallery images per room type (TenLoai). Add images here or update to pull from DB.
+$galleryImagesByType = [
+    // Loại A gallery removed: keep empty so no gallery renders for Loại A
+    'Loại A' => [],
+    'Loại B' => [],
+    'Loại C' => [],
+];
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -79,19 +97,26 @@ $phongsTrong = $phongController->traCuuPhong($loaiPhongFilter, 'Trống');
         <!-- Filter Section -->
         <section class="filter-section">
             <h2>📋 Chọn Loại Phòng</h2>
+            <form method="GET" class="search-bar" role="search">
+                <input type="hidden" name="loai" value="<?= htmlspecialchars($loaiPhongFilter ?? '') ?>">
+                <input type="text" name="q" class="search-input" placeholder="Tìm phòng theo số phòng hoặc loại..." value="<?= htmlspecialchars($searchQ ?? '') ?>">
+                <button type="submit" class="btn-primary search-btn">🔎 Tìm</button>
+            </form>
             <div class="filter-grid">
-                <a href="index.php" class="filter-card <?= !$loaiPhongFilter ? 'active' : '' ?>">
-                    <div class="filter-icon">🏠</div>
+                <a href="index.php" class="filter-card filter-card--all <?= !$loaiPhongFilter ? 'active' : '' ?>">
                     <h3>Tất Cả Phòng</h3>
                     <div class="filter-count"><?= count($phongController->traCuuPhong(null, 'Trống')) ?> phòng có sẵn</div>
                 </a>
                 
                 <?php foreach ($loaiPhongs as $loai): 
                     $soPhong = count($phongController->traCuuPhong($loai['MaLoaiPhong'], 'Trống'));
-                    $icon = $loai['TenLoai'] == 'Loại A' ? '🛏️' : ($loai['TenLoai'] == 'Loại B' ? '🛋️' : '👑');
+                    // Remove decorative icons (sofa/bed/crown) to simplify the UI
+                    $icon = '';
+                    $filterTypeClass = $loai['TenLoai'] == 'Loại A' ? 'filter-card--type-a' : ($loai['TenLoai'] == 'Loại B' ? 'filter-card--type-b' : 'filter-card--type-c');
+                    $filterCardClass = 'filter-card ' . $filterTypeClass . ' ' . ($loaiPhongFilter == $loai['MaLoaiPhong'] ? 'active' : '');
                 ?>
                 <a href="index.php?loai=<?= $loai['MaLoaiPhong'] ?>" 
-                   class="filter-card <?= $loaiPhongFilter == $loai['MaLoaiPhong'] ? 'active' : '' ?>">
+                   class="<?= htmlspecialchars($filterCardClass) ?>">
                     <div class="filter-icon"><?= $icon ?></div>
                     <h3><?= $loai['TenLoai'] ?></h3>
                     <div class="filter-price"><?= number_format($loai['DonGiaCoBan']) ?>đ/đêm</div>
@@ -99,18 +124,54 @@ $phongsTrong = $phongController->traCuuPhong($loaiPhongFilter, 'Trống');
                 </a>
                 <?php endforeach; ?>
             </div>
+            <?php
+            // Render a small gallery when a specific room type is selected
+            if ($loaiPhongFilter) {
+                // Find the TenLoai by MaLoaiPhong
+                $selectedLoai = null;
+                foreach ($loaiPhongs as $l) {
+                    if ($l['MaLoaiPhong'] == $loaiPhongFilter) { $selectedLoai = $l; break; }
+                }
+                if ($selectedLoai !== null && isset($galleryImagesByType[$selectedLoai['TenLoai']]) && count($galleryImagesByType[$selectedLoai['TenLoai']]) > 0) {
+                    $images = $galleryImagesByType[$selectedLoai['TenLoai']];
+            ?>
+            <div class="type-gallery" aria-live="polite">
+                <h3>Hình ảnh Loại: <?= htmlspecialchars($selectedLoai['TenLoai']) ?></h3>
+                <div class="type-gallery-grid">
+                    <?php foreach ($images as $img): ?>
+                        <div class="type-gallery-item">
+                            <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($selectedLoai['TenLoai']) ?>">
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php
+                }
+            }
+            ?>
         </section>
 
         <!-- Rooms Grid -->
         <?php if (count($phongsTrong) > 0): ?>
         <div class="rooms-grid">
             <?php foreach ($phongsTrong as $phong): 
-                $icon = $phong['TenLoai'] == 'Loại A' ? '🛏️' : ($phong['TenLoai'] == 'Loại B' ? '🛋️' : '👑');
-            ?>
+                    $roomType = $phong['TenLoai'];
+                    // Remove decorative icons in room headers for clear layout
+                    $icon = '';
+                    if ($roomType == 'Loại A') {
+                        $headerClass = 'room-header room-header--type-a';
+                    } elseif ($roomType == 'Loại B') {
+                        $headerClass = 'room-header room-header--type-b';
+                    } else {
+                        $headerClass = 'room-header room-header--type-c';
+                    }
+                ?>
             <div class="room-card">
-                <div class="room-header">
-                    <div class="room-icon"><?= $icon ?></div>
-                    <div class="room-number">Phòng <?= $phong['SoPhong'] ?></div>
+                <div class="<?= htmlspecialchars($headerClass) ?>">
+                    <?php if (!empty($icon)): ?>
+                        <div class="room-icon"><?= $icon ?></div>
+                    <?php endif; ?>
+                    <div class="room-number">Phòng <?= htmlspecialchars($phong['SoPhong']) ?></div>
                 </div>
                 
                 <div class="room-body">

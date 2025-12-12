@@ -24,8 +24,9 @@ body {
 
 /* Hero Section */
 .hero-section {
-    background: linear-gradient(135deg, rgba(102,126,234,0.95) 0%, rgba(118,75,162,0.95) 100%),
-                url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    /* Use the hotel's hero image while keeping the purple gradient overlay for readability */
+    background: linear-gradient(135deg, rgba(102,126,234,0.55) 0%, rgba(118,75,162,0.55) 100%),
+                url('https://cdn2.tuoitre.vn/thumb_w/1200/471584752817336320/2025/3/20/cau-ba-son-le-phan-3-17424634807981182058329-65-0-1405-2560-crop-1742463632755439491864.jpg');
     padding: 80px 20px;
     text-align: center;
     color: white;
@@ -176,6 +177,35 @@ body {
     box-shadow: 0 8px 24px rgba(0,0,0,0.1);
 }
 
+/* Gallery for selected room type */
+.type-gallery {
+    margin-top: 18px;
+    margin-bottom: 24px;
+}
+.type-gallery h3 {
+    margin-bottom: 12px;
+    color: var(--dark);
+    font-weight: 700;
+}
+.type-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+}
+.type-gallery-item {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.type-gallery-item img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+}
+.type-gallery-item:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+
 .filter-section h2 {
     color: var(--dark);
     margin-bottom: 25px;
@@ -231,6 +261,16 @@ body {
     box-shadow: 0 12px 30px rgba(102,126,234,0.4);
 }
 
+/* Slightly enlarge & elevate active filter cards so they stand out visually */
+.filter-card.active {
+    transform: translateY(-8px) scale(1.03);
+    z-index: 6;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+/* Ensure active + hover doesn't exceed the intended scale */
+.filter-card.active:hover { transform: translateY(-8px) scale(1.03); }
+
 .filter-icon {
     font-size: 3.5em;
     margin-bottom: 15px;
@@ -258,6 +298,135 @@ body {
     font-size: 0.9em;
     opacity: 0.8;
 }
+
+/* Filter card background images for room types */
+.filter-card--type-a {
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598207.jpg?k=85857d4624ac244979f0a05ce375c7fca3aed3f38432f14c6a5e2fe88fced8c5&o=');
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+.filter-card--type-a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.28);
+    border-radius: inherit;
+}
+.filter-card--type-a .filter-icon { display: none; }
+.filter-card--type-a h3, .filter-card--type-a .filter-price, .filter-card--type-a .filter-count { color: #fff; position: relative; z-index: 2; }
+
+.filter-card--type-b {
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/756373524.jpg?k=f1e0eb0bcdf7b45cd5b3c1730e618b5df3bd1a0748659abe585f2f6a06cb0477&o=');
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+.filter-card--type-b::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.22); border-radius: inherit; }
+.filter-card--type-b .filter-icon { display: none; }
+.filter-card--type-b h3, .filter-card--type-b .filter-price, .filter-card--type-b .filter-count { color: #fff; position: relative; z-index: 2; }
+
+.filter-card--type-c {
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/501210724.jpg?k=0a37e1f4076c1600d054b182a3920b7619d68cd792fd507fbd3009f009a8eef3&o=');
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+.filter-card--type-c::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.22); border-radius: inherit; }
+.filter-card--type-c .filter-icon { display: none; }
+.filter-card--type-c h3, .filter-card--type-c .filter-price, .filter-card--type-c .filter-count { color: #fff; position: relative; z-index: 2; }
+
+/* "Tất Cả Phòng" - background image + remove icon */
+.filter-card--all {
+    background-image: url('https://hotelroyalhoian.vn/wp-content/uploads/2025/05/dac-san-hoi-an-1-1.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+.filter-card--all::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.22); border-radius: inherit; }
+.filter-card--all .filter-icon { display: none; }
+.filter-card--all h3, .filter-card--all .filter-count { color: #fff; position: relative; z-index: 2; }
+
+/* Ensure small gray badges for the ALL card too */
+.filter-card--all h3 { background: rgba(0,0,0,0.45); padding: 6px 12px; border-radius: 12px; display: inline-block; color: #fff; }
+.filter-card--all .filter-count { background: rgba(0,0,0,0.35); padding: 5px 8px; border-radius: 10px; color: #fff; display: inline-block; margin-top: 8px; }
+
+/* When Loại A is active, keep its background image visible, but add a
+   purple border and faint purple overlay so it stands out without
+   filling the whole card with a gradient (which hides the image). */
+.filter-card--type-a.active {
+    /* Keep the original image, don't let .filter-card.active gradient fill overwrite it */
+    background: none;
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598207.jpg?k=85857d4624ac244979f0a05ce375c7fca3aed3f38432f14c6a5e2fe88fced8c5&o=');
+    background-size: cover;
+    background-position: center;
+    border-color: var(--primary);
+    box-shadow: 0 12px 30px rgba(102,126,234,0.35);
+}
+.filter-card--type-a.active::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* Keep original dark overlay; add a subtle purple gradient to signal active */
+    background: linear-gradient(90deg, rgba(102,126,234,0.16), rgba(118,75,162,0.16)), rgba(0,0,0,0.22);
+    border-radius: inherit;
+}
+.filter-card--type-a.active h3, .filter-card--type-a.active .filter-price, .filter-card--type-a.active .filter-count { color: #fff; z-index: 2; }
+
+/* Same behavior for Loại B & C: keep their images when active, add purple border/overlay */
+.filter-card--type-b.active {
+    background: none;
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/756373524.jpg?k=f1e0eb0bcdf7b45cd5b3c1730e618b5df3bd1a0748659abe585f2f6a06cb0477&o=');
+    background-size: cover;
+    background-position: center;
+    border-color: var(--primary);
+    box-shadow: 0 12px 30px rgba(102,126,234,0.35);
+}
+.filter-card--type-b.active::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(102,126,234,0.16), rgba(118,75,162,0.16)), rgba(0,0,0,0.22); border-radius: inherit; }
+.filter-card--type-b.active h3, .filter-card--type-b.active .filter-price, .filter-card--type-b.active .filter-count { color: #fff; z-index: 2; }
+
+.filter-card--type-c.active {
+    background: none;
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/501210724.jpg?k=0a37e1f4076c1600d054b182a3920b7619d68cd792fd507fbd3009f009a8eef3&o=');
+    background-size: cover;
+    background-position: center;
+    border-color: var(--primary);
+    box-shadow: 0 12px 30px rgba(102,126,234,0.35);
+}
+.filter-card--type-c.active::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(102,126,234,0.16), rgba(118,75,162,0.16)), rgba(0,0,0,0.22); border-radius: inherit; }
+.filter-card--type-c.active h3, .filter-card--type-c.active .filter-price, .filter-card--type-c.active .filter-count { color: #fff; z-index: 2; }
+.filter-card--all.active {
+    background: none;
+    background-image: url('https://hotelroyalhoian.vn/wp-content/uploads/2025/05/dac-san-hoi-an-1-1.jpg');
+    background-size: cover;
+    background-position: center;
+    border-color: var(--primary);
+    box-shadow: 0 12px 30px rgba(102,126,234,0.35);
+}
+.filter-card--all.active::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(102,126,234,0.16), rgba(118,75,162,0.16)), rgba(0,0,0,0.22); border-radius: inherit; }
+.filter-card--all.active h3, .filter-card--all.active .filter-count { color: #fff; z-index: 2; }
+
+/* Make the white labels on top of the filter images easier to read by adding
+   a small gray rounded background behind them, similar to the room-number
+   badge on the room cards. Also ensure bed/crown icons are hidden where
+   necessary via CSS for additional safety. */
+.filter-card--type-a h3, .filter-card--type-b h3, .filter-card--type-c h3 {
+    background: rgba(0,0,0,0.45);
+    padding: 6px 12px;
+    border-radius: 12px;
+    display: inline-block;
+    color: #fff;
+}
+.filter-card--type-a .filter-price, .filter-card--type-b .filter-price, .filter-card--type-c .filter-price,
+.filter-card--type-a .filter-count, .filter-card--type-b .filter-count, .filter-card--type-c .filter-count {
+    background: rgba(0,0,0,0.35);
+    padding: 5px 8px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-top: 8px;
+    color: #fff;
+}
+
 
 /* Room Cards */
 .rooms-grid {
@@ -297,7 +466,62 @@ body {
     text-align: center;
     position: relative;
     overflow: hidden;
+    min-height: 240px;
 }
+
+/* Loại A: background image as header and overlay */
+.room-header--type-a {
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598207.jpg?k=85857d4624ac244979f0a05ce375c7fca3aed3f38432f14c6a5e2fe88fced8c5&o=');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    position: relative;
+}
+.room-header--type-a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.25);
+    border-radius: inherit;
+}
+.room-header--type-a > * { position: relative; z-index: 2; }
+.room-header--type-a .room-number { background: rgba(0,0,0,0.45); color: #fff; box-shadow: none; }
+
+/* Loại B: background image */
+.room-header--type-b {
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/756373524.jpg?k=f1e0eb0bcdf7b45cd5b3c1730e618b5df3bd1a0748659abe585f2f6a06cb0477&o=');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    position: relative;
+}
+.room-header--type-b::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.22);
+    border-radius: inherit;
+}
+.room-header--type-b > * { position: relative; z-index: 2; }
+.room-header--type-b .room-number { background: rgba(0,0,0,0.35); color: #fff; box-shadow: none; }
+
+/* Loại C: background image */
+.room-header--type-c {
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/501210724.jpg?k=0a37e1f4076c1600d054b182a3920b7619d68cd792fd507fbd3009f009a8eef3&o=');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    position: relative;
+}
+.room-header--type-c::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.2);
+    border-radius: inherit;
+}
+.room-header--type-c > * { position: relative; z-index: 2; }
+.room-header--type-c .room-number { background: rgba(0,0,0,0.35); color: #fff; box-shadow: none; }
 
 .room-header::before {
     content: '';
@@ -322,6 +546,14 @@ body {
     position: relative;
     z-index: 1;
 }
+
+/* Hide the large decorative icons for Loại B and Loại C room headers just
+    in case the markup still renders icons — we choose to remove them with
+    PHP and this CSS ensures they're not visible. */
+.room-header--type-b .room-icon,
+.room-header--type-c .room-icon,
+.filter-card--type-b .filter-icon,
+.filter-card--type-c .filter-icon { display: none !important; }
 
 .room-number {
     background: rgba(255,255,255,0.95);
@@ -382,6 +614,50 @@ body {
     margin: 20px 0;
     text-align: center;
 }
+
+/* Buttons */
+.btn-primary {
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    box-shadow: 0 8px 20px rgba(102,126,234,0.2);
+}
+.btn-ghost {
+    background: transparent;
+    border: 1px solid rgba(0,0,0,0.06);
+    color: var(--dark);
+    padding: 10px 18px;
+    border-radius: 10px;
+}
+
+/* Booking form specifics */
+.booking-form { max-width: 900px; margin: 0 auto; }
+.khach-section { padding: 18px; }
+.form-row { grid-template-columns: 1fr 1fr; }
+
+/* Estimated price box */
+.estimate-box {
+    background: linear-gradient(135deg, rgba(255,255,255,0.95), #fff);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+.estimate-value { font-size: 1.6em; font-weight: 800; color: var(--danger); }
+
+/* Search bar on index */
+.search-bar { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
+.search-input { padding: 12px 15px; border-radius: 10px; border: 1px solid #e6e6f0; width: 320px; }
+.search-btn { padding: 12px 18px; border-radius: 10px; }
+
+/* Tra cứu cards */
+.search-results .room-card { border-left: 6px solid var(--primary); padding: 10px; }
+.export-btn { background: linear-gradient(90deg, #ffd166, #f97316); color: white; padding: 8px 12px; border-radius: 8px; }
 
 .price-label {
     color: #6c757d;

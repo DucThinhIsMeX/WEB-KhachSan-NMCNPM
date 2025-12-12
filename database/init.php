@@ -166,19 +166,19 @@ try {
 
     echo "<div class='step'>📋 Tạo bảng NGUOIDUNG...</div>";
     $db->exec("CREATE TABLE IF NOT EXISTS NGUOIDUNG (
-        MaNguoiDung INT AUTO_INCREMENT PRIMARY KEY,
-        TenDangNhap VARCHAR(50) UNIQUE NOT NULL,
-        MatKhau VARCHAR(255) NOT NULL,
-        HoTen VARCHAR(100) NOT NULL,
-        VaiTro ENUM('Admin', 'NhanVien') DEFAULT 'NhanVien',
-        TrangThai ENUM('Hoạt động', 'Khóa') DEFAULT 'Hoạt động',
+        MaNguoiDung INTEGER PRIMARY KEY AUTOINCREMENT,
+        TenDangNhap TEXT UNIQUE NOT NULL,
+        MatKhau TEXT NOT NULL,
+        HoTen TEXT NOT NULL,
+        VaiTro TEXT DEFAULT 'NhanVien',
+        TrangThai TEXT DEFAULT 'Hoạt động',
         NgayTao DATETIME DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+    )");
 
     // Thêm tài khoản admin mặc định (password: admin123)
     echo "<div class='step'>➕ Thêm tài khoản admin mặc định...</div>";
     $matKhauMaHoa = password_hash('admin123', PASSWORD_DEFAULT);
-    $stmt = $db->prepare("INSERT IGNORE INTO NGUOIDUNG (TenDangNhap, MatKhau, HoTen, VaiTro) 
+    $stmt = $db->prepare("INSERT OR IGNORE INTO NGUOIDUNG (TenDangNhap, MatKhau, HoTen, VaiTro) 
                VALUES (?, ?, ?, ?)");
     $stmt->execute(['admin', $matKhauMaHoa, 'Quản Trị Viên', 'Admin']);
 

@@ -300,6 +300,11 @@ body {
    purple border and faint purple overlay so it stands out without
    filling the whole card with a gradient (which hides the image). */
 .filter-card--type-a.active {
+    /* Keep the original image, don't let .filter-card.active gradient fill overwrite it */
+    background: none;
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598207.jpg?k=85857d4624ac244979f0a05ce375c7fca3aed3f38432f14c6a5e2fe88fced8c5&o=');
+    background-size: cover;
+    background-position: center;
     border-color: var(--primary);
     box-shadow: 0 12px 30px rgba(102,126,234,0.35);
 }
@@ -312,6 +317,29 @@ body {
     border-radius: inherit;
 }
 .filter-card--type-a.active h3, .filter-card--type-a.active .filter-price, .filter-card--type-a.active .filter-count { color: #fff; z-index: 2; }
+
+/* Same behavior for Loại B & C: keep their images when active, add purple border/overlay */
+.filter-card--type-b.active {
+    background: none;
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/756373524.jpg?k=f1e0eb0bcdf7b45cd5b3c1730e618b5df3bd1a0748659abe585f2f6a06cb0477&o=');
+    background-size: cover;
+    background-position: center;
+    border-color: var(--primary);
+    box-shadow: 0 12px 30px rgba(102,126,234,0.35);
+}
+.filter-card--type-b.active::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(102,126,234,0.16), rgba(118,75,162,0.16)), rgba(0,0,0,0.22); border-radius: inherit; }
+.filter-card--type-b.active h3, .filter-card--type-b.active .filter-price, .filter-card--type-b.active .filter-count { color: #fff; z-index: 2; }
+
+.filter-card--type-c.active {
+    background: none;
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/501210724.jpg?k=0a37e1f4076c1600d054b182a3920b7619d68cd792fd507fbd3009f009a8eef3&o=');
+    background-size: cover;
+    background-position: center;
+    border-color: var(--primary);
+    box-shadow: 0 12px 30px rgba(102,126,234,0.35);
+}
+.filter-card--type-c.active::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(102,126,234,0.16), rgba(118,75,162,0.16)), rgba(0,0,0,0.22); border-radius: inherit; }
+.filter-card--type-c.active h3, .filter-card--type-c.active .filter-price, .filter-card--type-c.active .filter-count { color: #fff; z-index: 2; }
 
 /* Make the white labels on top of the filter images easier to read by adding
    a small gray rounded background behind them, similar to the room-number

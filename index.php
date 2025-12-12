@@ -22,7 +22,16 @@ $phongController = new PhongController();
 $soKhachToiDa = $database->getThamSo('SO_KHACH_TOI_DA');
 $loaiPhongs = $db->query("SELECT * FROM LOAIPHONG ORDER BY DonGiaCoBan")->fetchAll();
 $loaiPhongFilter = isset($_GET['loai']) ? $_GET['loai'] : null;
+$searchQ = isset($_GET['q']) ? trim($_GET['q']) : null;
 $phongsTrong = $phongController->traCuuPhong($loaiPhongFilter, 'Trống');
+
+// Server-side filtering by search query (SoPhong or TenLoai)
+if ($searchQ) {
+    $searchQ = strtolower($searchQ);
+    $phongsTrong = array_values(array_filter($phongsTrong, function($p) use ($searchQ) {
+        return stripos($p['SoPhong'] . ' ' . $p['TenLoai'], $searchQ) !== false;
+    }));
+}
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -79,6 +88,11 @@ $phongsTrong = $phongController->traCuuPhong($loaiPhongFilter, 'Trống');
         <!-- Filter Section -->
         <section class="filter-section">
             <h2>📋 Chọn Loại Phòng</h2>
+            <form method="GET" class="search-bar" role="search">
+                <input type="hidden" name="loai" value="<?= htmlspecialchars($loaiPhongFilter ?? '') ?>">
+                <input type="text" name="q" class="search-input" placeholder="Tìm phòng theo số phòng hoặc loại..." value="<?= htmlspecialchars($searchQ ?? '') ?>">
+                <button type="submit" class="btn-primary search-btn">🔎 Tìm</button>
+            </form>
             <div class="filter-grid">
                 <a href="index.php" class="filter-card <?= !$loaiPhongFilter ? 'active' : '' ?>">
                     <div class="filter-icon">🏠</div>

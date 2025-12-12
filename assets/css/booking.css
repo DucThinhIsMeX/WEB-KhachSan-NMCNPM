@@ -383,6 +383,50 @@ body {
     text-align: center;
 }
 
+/* Buttons */
+.btn-primary {
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    box-shadow: 0 8px 20px rgba(102,126,234,0.2);
+}
+.btn-ghost {
+    background: transparent;
+    border: 1px solid rgba(0,0,0,0.06);
+    color: var(--dark);
+    padding: 10px 18px;
+    border-radius: 10px;
+}
+
+/* Booking form specifics */
+.booking-form { max-width: 900px; margin: 0 auto; }
+.khach-section { padding: 18px; }
+.form-row { grid-template-columns: 1fr 1fr; }
+
+/* Estimated price box */
+.estimate-box {
+    background: linear-gradient(135deg, rgba(255,255,255,0.95), #fff);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+.estimate-value { font-size: 1.6em; font-weight: 800; color: var(--danger); }
+
+/* Search bar on index */
+.search-bar { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
+.search-input { padding: 12px 15px; border-radius: 10px; border: 1px solid #e6e6f0; width: 320px; }
+.search-btn { padding: 12px 18px; border-radius: 10px; }
+
+/* Tra cứu cards */
+.search-results .room-card { border-left: 6px solid var(--primary); padding: 10px; }
+.export-btn { background: linear-gradient(90deg, #ffd166, #f97316); color: white; padding: 8px 12px; border-radius: 8px; }
+
 .price-label {
     color: #6c757d;
     font-size: 0.9em;

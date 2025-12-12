@@ -34,13 +34,10 @@ if ($searchQ) {
 }
 
 // Gallery images per room type (TenLoai). Add images here or update to pull from DB.
+// Gallery images per room type (TenLoai). Add images here or update to pull from DB.
 $galleryImagesByType = [
-    'Loại A' => [
-        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598207.jpg?k=85857d4624ac244979f0a05ce375c7fca3aed3f38432f14c6a5e2fe88fced8c5&o=',
-        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598209.jpg?k=28e2d6423c8d3e71dd73de995d52b6f4db49e78637dffa61d885a8244c05c273&o=',
-        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598204.jpg?k=b4bcd7b8a45ba2854f83e8787881695aafd1fdc4a9246a8161a96ef3e04f85c3&o=',
-        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598347.jpg?k=5835510d930fa1beec1caf42d3e9b7d3f78bc1e670a1cfbeaf627cafa49a522d&o='
-    ],
+    // Loại A gallery removed: keep empty so no gallery renders for Loại A
+    'Loại A' => [],
     'Loại B' => [],
     'Loại C' => [],
 ];

@@ -37,18 +37,21 @@ if ($searchQ) {
 $galleryImagesByType = [
     'Loại A' => [
         'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598207.jpg?k=85857d4624ac244979f0a05ce375c7fca3aed3f38432f14c6a5e2fe88fced8c5&o=',
-        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/756373524.jpg?k=f1e0eb0bcdf7b45cd5b3c1730e618b5df3bd1a0748659abe585f2f6a06cb0477&o=',
-        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/501210724.jpg?k=0a37e1f4076c1600d054b182a3920b7619d68cd792fd507fbd3009f009a8eef3&o='
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598204.jpg?k=b4bcd7b8a45ba2854f83e8787881695aafd1fdc4a9246a8161a96ef3e04f85c3&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598239.jpg?k=cdde2a8650e8d9473d46a9c970b6812edf4f60ac7bdbb54136fb250ec1b8c523&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598352.jpg?k=266b179529c81d14abd5476e116408b86d73d1dcb1ffe3d870073ebf899f8edc&o='
     ],
     'Loại B' => [
-        'https://hotelroyalhoian.vn/wp-content/uploads/2025/05/dac-san-hoi-an-1-1.jpg',
-        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/756373524.jpg?k=f1e0eb0bcdf7b45cd5b3c1730e618b5df3bd1a0748659abe585f2f6a06cb0477&o=',
-        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/501210724.jpg?k=0a37e1f4076c1600d054b182a3920b7619d68cd792fd507fbd3009f009a8eef3&o='
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/618207154.jpg?k=0b16b6e8e0e359353538fe56facd1b5bf36c8119944b78c3c208c8bcdf855748&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/609527454.jpg?k=dbf0b5373264fa2141ca059a991af078eaa3b98762f7f14250458d33d9d45ca8&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/609529875.jpg?k=6efb01fca1b8674787083f94c4386a82b36f4ed368cb395566a7327d2a372555&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/609533794.jpg?k=20f29f6863117b2c3bb85f6af380bf64df2fcb6d83f33e3be35630c2b3e50c96&o='
     ],
     'Loại C' => [
-        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598207.jpg?k=85857d4624ac244979f0a05ce375c7fca3aed3f38432f14c6a5e2fe88fced8c5&o=',
-        'https://hotelroyalhoian.vn/wp-content/uploads/2025/05/dac-san-hoi-an-1-1.jpg',
-        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/501210724.jpg?k=0a37e1f4076c1600d054b182a3920b7619d68cd792fd507fbd3009f009a8eef3&o='
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/786166480.jpg?k=b8295a6c79a796daa1a8c86841fa21da528771d16b4a3ee3acdb47716c441003&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/786165449.jpg?k=e77157cacbfa611407adaf4f455d96f60be8fe32c8d4f4c6a0a63e3b3fd8916f&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/786166591.jpg?k=457155977656700b042551cf6661fad7e28dee7499e3218571a2e28c110a956c&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/786237066.jpg?k=4f8a2cf5b0d0c1e07789a993cc2bbb25bb5235825480d6ab753cf23010a654ef&o='
     ],
 ];
 ?>
@@ -143,15 +146,15 @@ $galleryImagesByType = [
                 if ($selectedLoai !== null && isset($galleryImagesByType[$selectedLoai['TenLoai']]) && count($galleryImagesByType[$selectedLoai['TenLoai']]) > 0) {
                     $images = $galleryImagesByType[$selectedLoai['TenLoai']];
             ?>
-            <div class="type-gallery" aria-live="polite">
+            <div class="type-gallery" aria-live="polite" data-images='<?= htmlspecialchars(json_encode($images), ENT_NOQUOTES, 'UTF-8') ?>'>
                 <h3>Hình ảnh Loại: <?= htmlspecialchars($selectedLoai['TenLoai']) ?></h3>
-                <div class="type-gallery-grid">
-                    <?php foreach ($images as $img): ?>
-                        <div class="type-gallery-item">
-                            <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($selectedLoai['TenLoai']) ?>">
-                        </div>
-                    <?php endforeach; ?>
+                <?php if (count($images) > 0): ?>
+                <div class="type-gallery-main" tabindex="0">
+                    <img src="<?= htmlspecialchars($images[0]) ?>" alt="<?= htmlspecialchars($selectedLoai['TenLoai']) ?>" data-index="0">
+                    <div class="type-gallery-counter">1/<?= count($images) ?></div>
                 </div>
+                <?php endif; ?>
+                <!-- Thumbnails removed: all images accessed via modal <> buttons -->
             </div>
             <?php
                 }
@@ -288,6 +291,18 @@ $galleryImagesByType = [
             </div>
         </div>
     </footer>
+</footer>
+
+    <!-- Image Modal -->
+    <div id="image-modal" class="image-modal" aria-hidden="true" role="dialog" aria-label="Image viewer">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close">×</button>
+            <button class="modal-prev" aria-label="Previous">‹</button>
+            <div class="modal-image"><img src="" alt=""></div>
+            <button class="modal-next" aria-label="Next">›</button>
+        </div>
+    </div>
+    <script defer src="assets/js/gallery.js"></script>
 </body>
 </html>
 <?php
@@ -327,9 +342,24 @@ if ($searchQ) {
 
 // Gallery images per room type (TenLoai). Add images here or update to pull from DB.
 $galleryImagesByType = [
-    'Loại A' => [],
-    'Loại B' => [],
-    'Loại C' => [],
+    'Loại A' => [
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598207.jpg?k=85857d4624ac244979f0a05ce375c7fca3aed3f38432f14c6a5e2fe88fced8c5&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598204.jpg?k=b4bcd7b8a45ba2854f83e8787881695aafd1fdc4a9246a8161a96ef3e04f85c3&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598239.jpg?k=cdde2a8650e8d9473d46a9c970b6812edf4f60ac7bdbb54136fb250ec1b8c523&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598352.jpg?k=266b179529c81d14abd5476e116408b86d73d1dcb1ffe3d870073ebf899f8edc&o='
+    ],
+    'Loại B' => [
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/618207154.jpg?k=0b16b6e8e0e359353538fe56facd1b5bf36c8119944b78c3c208c8bcdf855748&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/609527454.jpg?k=dbf0b5373264fa2141ca059a991af078eaa3b98762f7f14250458d33d9d45ca8&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/609529875.jpg?k=6efb01fca1b8674787083f94c4386a82b36f4ed368cb395566a7327d2a372555&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/609533794.jpg?k=20f29f6863117b2c3bb85f6af380bf64df2fcb6d83f33e3be35630c2b3e50c96&o='
+    ],
+    'Loại C' => [
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/786166480.jpg?k=b8295a6c79a796daa1a8c86841fa21da528771d16b4a3ee3acdb47716c441003&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/786165449.jpg?k=e77157cacbfa611407adaf4f455d96f60be8fe32c8d4f4c6a0a63e3b3fd8916f&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/786166591.jpg?k=457155977656700b042551cf6661fad7e28dee7499e3218571a2e28c110a956c&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/786237066.jpg?k=4f8a2cf5b0d0c1e07789a993cc2bbb25bb5235825480d6ab753cf23010a654ef&o='
+    ],
 ];
 ?>
 <!DOCTYPE html>
@@ -423,15 +453,14 @@ $galleryImagesByType = [
                 if ($selectedLoai !== null && isset($galleryImagesByType[$selectedLoai['TenLoai']]) && count($galleryImagesByType[$selectedLoai['TenLoai']]) > 0) {
                     $images = $galleryImagesByType[$selectedLoai['TenLoai']];
             ?>
-            <div class="type-gallery" aria-live="polite">
+            <div class="type-gallery" aria-live="polite" data-images='<?= htmlspecialchars(json_encode($images), ENT_NOQUOTES, 'UTF-8') ?>'>
                 <h3>Hình ảnh Loại: <?= htmlspecialchars($selectedLoai['TenLoai']) ?></h3>
-                <div class="type-gallery-grid">
-                    <?php foreach ($images as $img): ?>
-                        <div class="type-gallery-item">
-                            <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($selectedLoai['TenLoai']) ?>">
-                        </div>
-                    <?php endforeach; ?>
+                <?php if (count($images) > 0): ?>
+                <div class="type-gallery-main" tabindex="0">
+                    <img src="<?= htmlspecialchars($images[0]) ?>" alt="<?= htmlspecialchars($selectedLoai['TenLoai']) ?>" data-index="0">
                 </div>
+                <?php endif; ?>
+                <!-- thumbnails intentionally hidden; use modal to view other images -->
             </div>
             <?php
                 }
@@ -568,6 +597,16 @@ $galleryImagesByType = [
             </div>
         </div>
     </footer>
+    <!-- Image Modal -->
+    <div id="image-modal" class="image-modal" aria-hidden="true" role="dialog" aria-label="Image viewer">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close">×</button>
+            <button class="modal-prev" aria-label="Previous">‹</button>
+            <div class="modal-image"><img src="" alt=""></div>
+            <button class="modal-next" aria-label="Next">›</button>
+        </div>
+    </div>
+    <script defer src="assets/js/gallery.js"></script>
 </body>
 </html>
 <?php
@@ -608,10 +647,24 @@ if ($searchQ) {
 // Gallery images per room type (TenLoai). Add images here or update to pull from DB.
 // Gallery images per room type (TenLoai). Add images here or update to pull from DB.
 $galleryImagesByType = [
-    // Loại A gallery removed: keep empty so no gallery renders for Loại A
-    'Loại A' => [],
-    'Loại B' => [],
-    'Loại C' => [],
+    'Loại A' => [
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598207.jpg?k=85857d4624ac244979f0a05ce375c7fca3aed3f38432f14c6a5e2fe88fced8c5&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598204.jpg?k=b4bcd7b8a45ba2854f83e8787881695aafd1fdc4a9246a8161a96ef3e04f85c3&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598239.jpg?k=cdde2a8650e8d9473d46a9c970b6812edf4f60ac7bdbb54136fb250ec1b8c523&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598352.jpg?k=266b179529c81d14abd5476e116408b86d73d1dcb1ffe3d870073ebf899f8edc&o='
+    ],
+    'Loại B' => [
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/618207154.jpg?k=0b16b6e8e0e359353538fe56facd1b5bf36c8119944b78c3c208c8bcdf855748&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/609527454.jpg?k=dbf0b5373264fa2141ca059a991af078eaa3b98762f7f14250458d33d9d45ca8&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/609529875.jpg?k=6efb01fca1b8674787083f94c4386a82b36f4ed368cb395566a7327d2a372555&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/609533794.jpg?k=20f29f6863117b2c3bb85f6af380bf64df2fcb6d83f33e3be35630c2b3e50c96&o='
+    ],
+    'Loại C' => [
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/786166480.jpg?k=b8295a6c79a796daa1a8c86841fa21da528771d16b4a3ee3acdb47716c441003&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/786165449.jpg?k=e77157cacbfa611407adaf4f455d96f60be8fe32c8d4f4c6a0a63e3b3fd8916f&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/786166591.jpg?k=457155977656700b042551cf6661fad7e28dee7499e3218571a2e28c110a956c&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/786237066.jpg?k=4f8a2cf5b0d0c1e07789a993cc2bbb25bb5235825480d6ab753cf23010a654ef&o='
+    ],
 ];
 ?>
 <!DOCTYPE html>
@@ -707,15 +760,14 @@ $galleryImagesByType = [
                 if ($selectedLoai !== null && isset($galleryImagesByType[$selectedLoai['TenLoai']]) && count($galleryImagesByType[$selectedLoai['TenLoai']]) > 0) {
                     $images = $galleryImagesByType[$selectedLoai['TenLoai']];
             ?>
-            <div class="type-gallery" aria-live="polite">
+            <div class="type-gallery" aria-live="polite" data-images='<?= htmlspecialchars(json_encode($images), ENT_NOQUOTES, 'UTF-8') ?>'>
                 <h3>Hình ảnh Loại: <?= htmlspecialchars($selectedLoai['TenLoai']) ?></h3>
-                <div class="type-gallery-grid">
-                    <?php foreach ($images as $img): ?>
-                        <div class="type-gallery-item">
-                            <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($selectedLoai['TenLoai']) ?>">
-                        </div>
-                    <?php endforeach; ?>
+                <?php if (count($images) > 0): ?>
+                <div class="type-gallery-main" tabindex="0">
+                    <img src="<?= htmlspecialchars($images[0]) ?>" alt="<?= htmlspecialchars($selectedLoai['TenLoai']) ?>" data-index="0">
                 </div>
+                <?php endif; ?>
+                <!-- thumbnails intentionally hidden; use modal to view other images -->
             </div>
             <?php
                 }
@@ -853,6 +905,16 @@ $galleryImagesByType = [
             </div>
         </div>
     </footer>
+    <!-- Image Modal -->
+    <div id="image-modal" class="image-modal" aria-hidden="true" role="dialog" aria-label="Image viewer">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close">×</button>
+            <button class="modal-prev" aria-label="Previous">‹</button>
+            <div class="modal-image"><img src="" alt=""></div>
+            <button class="modal-next" aria-label="Next">›</button>
+        </div>
+    </div>
+    <script defer src="assets/js/gallery.js"></script>
 </body>
 </html>
 
@@ -890,10 +952,24 @@ if ($searchQ) {
 // Gallery images per room type (TenLoai). Add images here or update to pull from DB.
 // Gallery images per room type (TenLoai). Add images here or update to pull from DB.
 $galleryImagesByType = [
-    // Loại A gallery removed: keep empty so no gallery renders for Loại A
-    'Loại A' => [],
-    'Loại B' => [],
-    'Loại C' => [],
+    'Loại A' => [
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598207.jpg?k=85857d4624ac244979f0a05ce375c7fca3aed3f38432f14c6a5e2fe88fced8c5&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598204.jpg?k=b4bcd7b8a45ba2854f83e8787881695aafd1fdc4a9246a8161a96ef3e04f85c3&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598239.jpg?k=cdde2a8650e8d9473d46a9c970b6812edf4f60ac7bdbb54136fb250ec1b8c523&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/781598352.jpg?k=266b179529c81d14abd5476e116408b86d73d1dcb1ffe3d870073ebf899f8edc&o='
+    ],
+    'Loại B' => [
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/618207154.jpg?k=0b16b6e8e0e359353538fe56facd1b5bf36c8119944b78c3c208c8bcdf855748&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/609527454.jpg?k=dbf0b5373264fa2141ca059a991af078eaa3b98762f7f14250458d33d9d45ca8&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/609529875.jpg?k=6efb01fca1b8674787083f94c4386a82b36f4ed368cb395566a7327d2a372555&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/609533794.jpg?k=20f29f6863117b2c3bb85f6af380bf64df2fcb6d83f33e3be35630c2b3e50c96&o='
+    ],
+    'Loại C' => [
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/786166480.jpg?k=b8295a6c79a796daa1a8c86841fa21da528771d16b4a3ee3acdb47716c441003&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/786165449.jpg?k=e77157cacbfa611407adaf4f455d96f60be8fe32c8d4f4c6a0a63e3b3fd8916f&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/786166591.jpg?k=457155977656700b042551cf6661fad7e28dee7499e3218571a2e28c110a956c&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/786237066.jpg?k=4f8a2cf5b0d0c1e07789a993cc2bbb25bb5235825480d6ab753cf23010a654ef&o='
+    ],
 ];
 ?>
 <!DOCTYPE html>
@@ -989,15 +1065,14 @@ $galleryImagesByType = [
                 if ($selectedLoai !== null && isset($galleryImagesByType[$selectedLoai['TenLoai']]) && count($galleryImagesByType[$selectedLoai['TenLoai']]) > 0) {
                     $images = $galleryImagesByType[$selectedLoai['TenLoai']];
             ?>
-            <div class="type-gallery" aria-live="polite">
+            <div class="type-gallery" aria-live="polite" data-images='<?= htmlspecialchars(json_encode($images), ENT_NOQUOTES, 'UTF-8') ?>'>
                 <h3>Hình ảnh Loại: <?= htmlspecialchars($selectedLoai['TenLoai']) ?></h3>
-                <div class="type-gallery-grid">
-                    <?php foreach ($images as $img): ?>
-                        <div class="type-gallery-item">
-                            <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($selectedLoai['TenLoai']) ?>">
-                        </div>
-                    <?php endforeach; ?>
+                <?php if (count($images) > 0): ?>
+                <div class="type-gallery-main" tabindex="0">
+                    <img src="<?= htmlspecialchars($images[0]) ?>" alt="<?= htmlspecialchars($selectedLoai['TenLoai']) ?>" data-index="0">
                 </div>
+                <?php endif; ?>
+                <!-- thumbnails intentionally hidden; use modal to view other images -->
             </div>
             <?php
                 }
@@ -1135,6 +1210,16 @@ $galleryImagesByType = [
             </div>
         </div>
     </footer>
+    <!-- Image Modal -->
+    <div id="image-modal" class="image-modal" aria-hidden="true" role="dialog" aria-label="Image viewer">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close">×</button>
+            <button class="modal-prev" aria-label="Previous">‹</button>
+            <div class="modal-image"><img src="" alt=""></div>
+            <button class="modal-next" aria-label="Next">›</button>
+        </div>
+    </div>
+    <script defer src="assets/js/gallery.js"></script>
 </body>
 </html>
 

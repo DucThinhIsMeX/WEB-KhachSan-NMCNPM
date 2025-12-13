@@ -2,24 +2,24 @@
 session_start();
 require_once __DIR__ . '/../controllers/AuthController.php';
 require_once __DIR__ . '/../controllers/PhieuThueController.php';
-require_once __DIR__ . '/../controllers/KhachHangController.php';
 require_once __DIR__ . '/../controllers/PhongController.php';
-require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../controllers/KhachHangController.php';
 
 // Kiểm tra đăng nhập
 $auth = new AuthController();
 $auth->requireAdmin();
 
 $phieuThueCtrl = new PhieuThueController();
+$controller = new PhongController();
 $khachHangCtrl = new KhachHangController();
-$phongCtrl = new PhongController();
 $database = new Database();
+$db = $database->connect();
 
 $message = '';
 $error = '';
 
 // Xử lý tạo phiếu thuê
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
     try {
         // Thêm khách hàng
         $danhSachKhach = [];
@@ -42,62 +42,102 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $danhSachKhach
         );
         
-        $message = "Tạo phiếu thuê #$maPhieuThue thành công!";
+        $message = "✅ Tạo phiếu thuê #$maPhieuThue thành công!";
     } catch (Exception $e) {
-        $error = "Lỗi: " . $e->getMessage();
+        $error = "❌ Lỗi: " . $e->getMessage();
     }
 }
 
-$phongsTrong = $phongCtrl->traCuuPhong(null, 'Trống');
+// Xử lý hủy phiếu thuê
+if (isset($_GET['action']) && $_GET['action'] === 'cancel' && isset($_GET['id'])) {
+    try {
+        $stmt = $db->prepare("UPDATE PHIEUTHUE SET TinhTrangPhieu = 'Đã hủy' WHERE MaPhieuThue = ?");
+        $stmt->execute([$_GET['id']]);
+        
+        // Cập nhật phòng về trống
+        $stmt = $db->prepare("UPDATE PHONG SET TinhTrang = 'Trống' 
+                             WHERE MaPhong = (SELECT MaPhong FROM PHIEUTHUE WHERE MaPhieuThue = ?)");
+        $stmt->execute([$_GET['id']]);
+        
+        $message = "✅ Hủy phiếu thuê thành công!";
+    } catch (Exception $e) {
+        $error = "❌ Lỗi: " . $e->getMessage();
+    }
+}
+
+$phongsTrong = $controller->traCuuPhong(null, 'Trống');
 $phieuThues = $phieuThueCtrl->getPhieuThue();
 $soKhachToiDa = $database->getThamSo('SO_KHACH_TOI_DA');
+
+$page_title = 'Phiếu Thuê';
+$phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
 ?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <title>Quản lý Phiếu Thuê</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
     <style>
-        .khach-group { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px; }
-        .khach-group h4 { margin-bottom: 10px; color: #667eea; }
+        .khach-section {
+            border: 2px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            background: #f8f9ff;
+        }
+        .khach-section h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .khach-section.hidden {
+            display: none;
+        }
+        .toggle-khach {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .toggle-khach:hover {
+            background: #5568d3;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>📝 Quản lý Phiếu Thuê</h1>
-            <nav>
-                <a href="index.php">🏠 Dashboard</a>
-                <a href="phong.php">🛏️ Quản lý Phòng</a>
-                <a href="phieu-thue.php" class="active">📝 Phiếu Thuê</a>
-                <a href="hoa-don.php">💰 Hóa Đơn</a>
-                <a href="bao-cao.php">📊 Báo Cáo</a>
-                <a href="tham-so.php">⚙️ Tham Số</a>
-            </nav>
-        </header>
+    <?php include 'includes/sidebar.php'; ?>
 
-        <main>
+    <div class="admin-content">
+        <?php include 'includes/header.php'; ?>
+
+        <main class="main-container">
             <?php if ($message): ?>
-                <div class="alert alert-success"><?= $message ?></div>
+                <div class="alert alert-success"><?= htmlspecialchars($message) ?></div>
             <?php endif; ?>
             <?php if ($error): ?>
-                <div class="alert alert-error"><?= $error ?></div>
+                <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
             <?php endif; ?>
 
-            <section>
-                <h2>➕ Tạo Phiếu Thuê Mới</h2>
-                <form method="POST" id="formPhieuThue">
-                    <input type="hidden" name="action" value="add">
+            <div class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">➕ Tạo Phiếu Thuê Mới</h2>
+                </div>
+
+                <form method="POST" id="formPhieuThue" style="max-width: 900px;">
+                    <input type="hidden" name="action" value="create">
                     
                     <div class="form-group">
                         <label>Chọn Phòng Trống:</label>
-                        <select name="maPhong" required>
+                        <select name="maPhong" required class="form-control">
                             <option value="">-- Chọn phòng --</option>
                             <?php foreach ($phongsTrong as $phong): ?>
                                 <option value="<?= $phong['MaPhong'] ?>">
-                                    Phòng <?= $phong['SoPhong'] ?> - <?= $phong['TenLoai'] ?> 
-                                    (<?= number_format($phong['DonGiaCoBan']) ?>đ)
+                                    Phòng <?= htmlspecialchars($phong['SoPhong']) ?> - 
+                                    <?= htmlspecialchars($phong['TenLoai']) ?> 
+                                    (<?= number_format($phong['DonGiaCoBan']) ?>đ/đêm)
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -105,50 +145,124 @@ $soKhachToiDa = $database->getThamSo('SO_KHACH_TOI_DA');
 
                     <div class="form-group">
                         <label>Ngày Bắt Đầu Thuê:</label>
-                        <input type="date" name="ngayBatDau" value="<?= date('Y-m-d') ?>" required>
+                        <input type="date" name="ngayBatDau" 
+                               value="<?= date('Y-m-d') ?>" 
+                               min="<?= date('Y-m-d') ?>"
+                               required class="form-control">
                     </div>
 
-                    <h3>Thông Tin Khách Hàng (Tối đa <?= $soKhachToiDa ?> khách)</h3>
+                    <hr style="margin: 30px 0;">
+                    <h3 style="color: #667eea;">👥 Thông Tin Khách Hàng</h3>
+                    <p style="color: #666; margin-bottom: 20px;">
+                        <strong>Lưu ý:</strong> Tối đa <?= $soKhachToiDa ?> khách/phòng. 
+                        Khách thứ 3 sẽ phụ thu <?= $database->getThamSo('TL_PHU_THU_KHACH_3') * 100 ?>%.
+                    </p>
 
-                    <?php for ($i = 1; $i <= $soKhachToiDa; $i++): ?>
-                    <div class="khach-group">
-                        <h4>👤 Khách <?= $i ?> <?= $i == 1 ? '(Bắt buộc)' : '(Tùy chọn)' ?></h4>
+                    <!-- Khách 1 -->
+                    <div class="khach-section">
+                        <h4>👤 Khách Hàng 1 (Bắt buộc)</h4>
                         <div class="form-group">
-                            <label>Tên Khách:</label>
-                            <input type="text" name="tenKhach<?= $i ?>" <?= $i == 1 ? 'required' : '' ?>>
+                            <label>Họ và Tên:</label>
+                            <input type="text" name="tenKhach1" required class="form-control">
                         </div>
-                        <div class="form-group">
-                            <label>Loại Khách:</label>
-                            <select name="loaiKhach<?= $i ?>">
-                                <option value="Nội địa">Nội địa</option>
-                                <option value="Nước ngoài">Nước ngoài</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>CMND/CCCD:</label>
-                            <input type="text" name="cmnd<?= $i ?>">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label>Loại Khách:</label>
+                                <select name="loaiKhach1" required class="form-control">
+                                    <option value="Nội địa">Nội địa</option>
+                                    <option value="Nước ngoài">Nước ngoài</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>CMND/CCCD:</label>
+                                <input type="text" name="cmnd1" required class="form-control">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Địa Chỉ:</label>
-                            <input type="text" name="diaChi<?= $i ?>">
+                            <input type="text" name="diaChi1" required class="form-control">
                         </div>
                     </div>
-                    <?php endfor; ?>
 
-                    <button type="submit" class="btn">💾 Lưu Phiếu Thuê</button>
+                    <!-- Khách 2 -->
+                    <div class="khach-section hidden" id="khach2Section">
+                        <h4>👤 Khách Hàng 2 (Tùy chọn)</h4>
+                        <div class="form-group">
+                            <label>Họ và Tên:</label>
+                            <input type="text" name="tenKhach2" class="form-control">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label>Loại Khách:</label>
+                                <select name="loaiKhach2" class="form-control">
+                                    <option value="Nội địa">Nội địa</option>
+                                    <option value="Nước ngoài">Nước ngoài</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>CMND/CCCD:</label>
+                                <input type="text" name="cmnd2" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Địa Chỉ:</label>
+                            <input type="text" name="diaChi2" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- Khách 3 -->
+                    <div class="khach-section hidden" id="khach3Section">
+                        <h4>👤 Khách Hàng 3 (Phụ thu <?= $database->getThamSo('TL_PHU_THU_KHACH_3') * 100 ?>%)</h4>
+                        <div class="form-group">
+                            <label>Họ và Tên:</label>
+                            <input type="text" name="tenKhach3" class="form-control">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label>Loại Khách:</label>
+                                <select name="loaiKhach3" class="form-control">
+                                    <option value="Nội địa">Nội địa</option>
+                                    <option value="Nước ngoài">Nước ngoài</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>CMND/CCCD:</label>
+                                <input type="text" name="cmnd3" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Địa Chỉ:</label>
+                            <input type="text" name="diaChi3" class="form-control">
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin: 20px 0;">
+                        <button type="button" class="toggle-khach" id="btnKhach2" onclick="toggleKhach(2)">
+                            ➕ Thêm Khách 2
+                        </button>
+                        <button type="button" class="toggle-khach hidden" id="btnKhach3" onclick="toggleKhach(3)">
+                            ➕ Thêm Khách 3
+                        </button>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">✅ Tạo Phiếu Thuê</button>
                 </form>
-            </section>
+            </div>
 
-            <section>
-                <h2>📋 Danh Sách Phiếu Thuê</h2>
-                <table>
+            <div class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">📋 Danh Sách Phiếu Thuê</h2>
+                </div>
+                
+                <table class="data-table">
                     <thead>
                         <tr>
                             <th>Mã PT</th>
-                            <th>Số Phòng</th>
+                            <th>Phòng</th>
                             <th>Ngày Thuê</th>
-                            <th>Tình Trạng</th>
-                            <th>Chi Tiết</th>
+                            <th>Khách</th>
+                            <th>Trạng Thái</th>
+                            <th>Thao Tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -156,27 +270,80 @@ $soKhachToiDa = $database->getThamSo('SO_KHACH_TOI_DA');
                             $khachs = $phieuThueCtrl->getChiTietKhach($pt['MaPhieuThue']);
                         ?>
                         <tr>
-                            <td><strong><?= $pt['MaPhieuThue'] ?></strong></td>
-                            <td>Phòng <?= $pt['SoPhong'] ?></td>
+                            <td><strong>#<?= $pt['MaPhieuThue'] ?></strong></td>
+                            <td>Phòng <?= htmlspecialchars($pt['SoPhong']) ?></td>
                             <td><?= date('d/m/Y', strtotime($pt['NgayBatDauThue'])) ?></td>
-                            <td><span class="status-<?= strtolower(str_replace(' ', '-', $pt['TinhTrangPhieu'])) ?>">
-                                <?= $pt['TinhTrangPhieu'] ?>
-                            </span></td>
                             <td>
                                 <?php foreach ($khachs as $k): ?>
-                                    <div><?= $k['TenKhach'] ?> (<?= $k['LoaiKhach'] ?>)</div>
+                                    <div><?= htmlspecialchars($k['TenKhach']) ?> 
+                                        <small>(<?= htmlspecialchars($k['LoaiKhach']) ?>)</small>
+                                    </div>
                                 <?php endforeach; ?>
+                            </td>
+                            <td>
+                                <span class="status-badge <?= $pt['TinhTrangPhieu'] === 'Đang thuê' ? 'occupied' : 'available' ?>">
+                                    <?= htmlspecialchars($pt['TinhTrangPhieu']) ?>
+                                </span>
+                            </td>
+                            <td>
+                                <?php if ($pt['TinhTrangPhieu'] === 'Đang thuê'): ?>
+                                    <a href="?action=cancel&id=<?= $pt['MaPhieuThue'] ?>" 
+                                       class="btn btn-sm btn-danger"
+                                       onclick="return confirm('Xác nhận hủy phiếu thuê?')">
+                                        ❌ Hủy
+                                    </a>
+                                <?php else: ?>
+                                    <span style="color: #999;">-</span>
+                                <?php endif; ?>
                             </td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-            </section>
+            </div>
         </main>
-
-        <footer>
-            <p>&copy; 2024 Hệ thống Quản lý Khách sạn</p>
-        </footer>
     </div>
+
+    <script>
+        function toggleKhach(soKhach) {
+            const section = document.getElementById('khach' + soKhach + 'Section');
+            const btn = document.getElementById('btnKhach' + soKhach);
+            
+            if (section.classList.contains('hidden')) {
+                section.classList.remove('hidden');
+                btn.textContent = '➖ Bỏ Khách ' + soKhach;
+                btn.style.background = '#dc3545';
+                
+                if (soKhach === 2) {
+                    document.getElementById('btnKhach3').classList.remove('hidden');
+                }
+            } else {
+                section.classList.add('hidden');
+                btn.textContent = '➕ Thêm Khách ' + soKhach;
+                btn.style.background = '#667eea';
+                
+                section.querySelectorAll('input, select').forEach(input => {
+                    if (input.type !== 'hidden') {
+                        input.value = input.tagName === 'SELECT' ? 'Nội địa' : '';
+                    }
+                });
+                
+                if (soKhach === 2) {
+                    document.getElementById('btnKhach3').classList.add('hidden');
+                    document.getElementById('khach3Section').classList.add('hidden');
+                }
+            }
+        }
+
+        document.getElementById('formPhieuThue').addEventListener('submit', function(e) {
+            const ngay = document.querySelector('input[name="ngayBatDau"]').value;
+            if (!ngay) {
+                e.preventDefault();
+                alert('Vui lòng chọn ngày bắt đầu thuê!');
+                return false;
+            }
+            return confirm('Xác nhận tạo phiếu thuê?');
+        });
+    </script>
 </body>
 </html>

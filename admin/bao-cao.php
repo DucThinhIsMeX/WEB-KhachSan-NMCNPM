@@ -2,12 +2,14 @@
 session_start();
 require_once __DIR__ . '/../controllers/AuthController.php';
 require_once __DIR__ . '/../controllers/BaoCaoController.php';
+require_once __DIR__ . '/../controllers/PhongController.php';
 
 // Kiểm tra đăng nhập
 $auth = new AuthController();
 $auth->requireAdmin();
 
 $baoCaoCtrl = new BaoCaoController();
+$controller = new PhongController();
 
 $message = '';
 $error = '';
@@ -37,43 +39,40 @@ if ($baoCao) {
         $tongDoanhThu += $item['DoanhThu'];
     }
 }
+
+$page_title = 'Báo Cáo Doanh Thu';
+$phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
 ?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <title>Báo Cáo Doanh Thu</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>📊 Báo Cáo Doanh Thu</h1>
-            <nav>
-                <a href="index.php">🏠 Dashboard</a>
-                <a href="phong.php">🛏️ Quản lý Phòng</a>
-                <a href="phieu-thue.php">📝 Phiếu Thuê</a>
-                <a href="hoa-don.php">💰 Hóa Đơn</a>
-                <a href="bao-cao.php" class="active">📊 Báo Cáo</a>
-                <a href="tham-so.php">⚙️ Tham Số</a>
-            </nav>
-        </header>
+    <?php include 'includes/sidebar.php'; ?>
 
-        <main>
+    <div class="admin-content">
+        <?php include 'includes/header.php'; ?>
+
+        <main class="main-container">
             <?php if ($message): ?>
-                <div class="alert alert-success"><?= $message ?></div>
+                <div class="alert alert-success"><?= htmlspecialchars($message) ?></div>
             <?php endif; ?>
             <?php if ($error): ?>
-                <div class="alert alert-error"><?= $error ?></div>
+                <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
             <?php endif; ?>
 
-            <section>
-                <h2>📅 Chọn Tháng Báo Cáo</h2>
-                <form method="POST">
+            <div class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">📅 Chọn Tháng Báo Cáo</h2>
+                </div>
+                <form method="POST" style="max-width: 800px;">
                     <div class="form-group">
                         <label>Tháng:</label>
-                        <select name="thang" required>
+                        <select name="thang" required class="form-control">
                             <?php for ($i = 1; $i <= 12; $i++): ?>
                                 <option value="<?= $i ?>" <?= $i == date('n') ? 'selected' : '' ?>>
                                     Tháng <?= $i ?>
@@ -83,28 +82,35 @@ if ($baoCao) {
                     </div>
                     <div class="form-group">
                         <label>Năm:</label>
-                        <select name="nam" required>
+                        <select name="nam" required class="form-control">
                             <?php for ($i = date('Y'); $i >= 2020; $i--): ?>
                                 <option value="<?= $i ?>"><?= $i ?></option>
                             <?php endfor; ?>
                         </select>
                     </div>
-                    <button type="submit" class="btn">📊 Xem Báo Cáo</button>
+                    <button type="submit" class="btn btn-primary">📊 Xem Báo Cáo</button>
                 </form>
-            </section>
+            </div>
 
             <?php if ($baoCao): ?>
-            <section>
-                <h2>📈 Kết Quả Báo Cáo Tháng <?= $baoCao[0]['Thang'] ?>/<?= $baoCao[0]['Nam'] ?></h2>
+            <div class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">📈 Kết Quả Báo Cáo Tháng <?= $baoCao[0]['Thang'] ?>/<?= $baoCao[0]['Nam'] ?></h2>
+                </div>
                 
-                <div class="stats">
-                    <div class="stat-card">
-                        <h3><?= number_format($tongDoanhThu) ?>đ</h3>
-                        <p>Tổng Doanh Thu</p>
+                <div class="stats-grid" style="margin-bottom: 30px;">
+                    <div class="stat-card success">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-value"><?= number_format($tongDoanhThu) ?>đ</div>
+                                <div class="stat-label">Tổng Doanh Thu</div>
+                            </div>
+                            <div class="stat-icon">💰</div>
+                        </div>
                     </div>
                 </div>
 
-                <table>
+                <table class="data-table">
                     <thead>
                         <tr>
                             <th>Loại Phòng</th>
@@ -115,7 +121,7 @@ if ($baoCao) {
                     <tbody>
                         <?php foreach ($baoCao as $item): ?>
                         <tr>
-                            <td><strong><?= $item['TenLoai'] ?></strong></td>
+                            <td><strong><?= htmlspecialchars($item['TenLoai']) ?></strong></td>
                             <td><?= number_format($item['DoanhThu']) ?>đ</td>
                             <td><?= number_format($item['TyLe'], 2) ?>%</td>
                         </tr>
@@ -123,7 +129,10 @@ if ($baoCao) {
                     </tbody>
                 </table>
 
-                <canvas id="chartDoanhThu" width="400" height="200"></canvas>
+                <div style="margin-top: 30px; background: white; padding: 20px; border-radius: 10px;">
+                    <canvas id="chartDoanhThu" height="100"></canvas>
+                </div>
+                
                 <script>
                 const ctx = document.getElementById('chartDoanhThu').getContext('2d');
                 new Chart(ctx, {
@@ -136,16 +145,15 @@ if ($baoCao) {
                             backgroundColor: ['#667eea', '#764ba2', '#f093fb']
                         }]
                     },
-                    options: { responsive: true }
+                    options: { 
+                        responsive: true,
+                        maintainAspectRatio: true
+                    }
                 });
                 </script>
-            </section>
+            </div>
             <?php endif; ?>
         </main>
-
-        <footer>
-            <p>&copy; 2024 Hệ thống Quản lý Khách sạn</p>
-        </footer>
     </div>
 </body>
 </html>

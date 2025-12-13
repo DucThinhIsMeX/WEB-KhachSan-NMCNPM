@@ -570,6 +570,13 @@ body {
         padding: 20px 15px;
     }
 }
+
+@media (max-width: 768px) {
+    .image-modal .modal-prev { left: 12px; }
+    .image-modal .modal-next { right: 12px; }
+    .image-modal .modal-close { top: 8px; right: 8px; }
+    .type-gallery-main img { height: 240px; }
+}
 /* Booking Page - Modern Design */
 :root {
     --primary: #667eea;
@@ -775,8 +782,97 @@ body {
     height: 120px;
     object-fit: cover;
     display: block;
+    cursor: pointer;
+}
+.type-gallery-counter {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    padding: 6px 10px;
+    font-size: 0.9em;
+    border-radius: 8px;
 }
 .type-gallery-item:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+
+/* Larger single frame for the gallery */
+.type-gallery-main {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.12);
+    margin-bottom: 12px;
+    position: relative;
+}
+.type-gallery-main img {
+    width: 100%;
+    height: 340px;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+}
+
+.type-gallery-main .main-prev, .type-gallery-main .main-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.35);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 20px;
+    z-index: 5;
+}
+.type-gallery-main .main-prev { left: 12px; }
+.type-gallery-main .main-next { right: 12px; }
+.type-gallery-main .main-prev:hover, .type-gallery-main .main-next:hover { background: rgba(0,0,0,0.55); }
+
+/* Image modal (lightbox) */
+.image-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.7);
+    z-index: 9999;
+}
+.image-modal.is-open { display: flex; }
+.image-modal .modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 85%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+.image-modal .modal-image img {
+    max-width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+}
+.image-modal .modal-close, .image-modal .modal-prev, .image-modal .modal-next {
+    position: absolute;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: none;
+    font-size: 24px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.image-modal .modal-close { top: 18px; right: 18px; }
+.image-modal .modal-prev { left: -40px; top: 50%; transform: translateY(-50%); }
+.image-modal .modal-next { right: -40px; top: 50%; transform: translateY(-50%); }
+.image-modal .modal-prev:hover, .image-modal .modal-next:hover, .image-modal .modal-close:hover { background: rgba(255,255,255,0.2); }
 
 .filter-section h2 {
     color: var(--dark);
@@ -889,7 +985,7 @@ body {
 .filter-card--type-a h3, .filter-card--type-a .filter-price, .filter-card--type-a .filter-count { color: #fff; position: relative; z-index: 2; }
 
 .filter-card--type-b {
-    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/756373524.jpg?k=f1e0eb0bcdf7b45cd5b3c1730e618b5df3bd1a0748659abe585f2f6a06cb0477&o=');
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/618207154.jpg?k=0b16b6e8e0e359353538fe56facd1b5bf36c8119944b78c3c208c8bcdf855748&o=');
     background-size: cover;
     background-position: center;
     color: white;
@@ -899,7 +995,7 @@ body {
 .filter-card--type-b h3, .filter-card--type-b .filter-price, .filter-card--type-b .filter-count { color: #fff; position: relative; z-index: 2; }
 
 .filter-card--type-c {
-    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/501210724.jpg?k=0a37e1f4076c1600d054b182a3920b7619d68cd792fd507fbd3009f009a8eef3&o=');
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/786166480.jpg?k=b8295a6c79a796daa1a8c86841fa21da528771d16b4a3ee3acdb47716c441003&o=');
     background-size: cover;
     background-position: center;
     color: white;
@@ -948,7 +1044,7 @@ body {
 /* Same behavior for Loại B & C: keep their images when active, add purple border/overlay */
 .filter-card--type-b.active {
     background: none;
-    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/756373524.jpg?k=f1e0eb0bcdf7b45cd5b3c1730e618b5df3bd1a0748659abe585f2f6a06cb0477&o=');
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/618207154.jpg?k=0b16b6e8e0e359353538fe56facd1b5bf36c8119944b78c3c208c8bcdf855748&o=');
     background-size: cover;
     background-position: center;
     border-color: var(--primary);
@@ -959,7 +1055,7 @@ body {
 
 .filter-card--type-c.active {
     background: none;
-    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/501210724.jpg?k=0a37e1f4076c1600d054b182a3920b7619d68cd792fd507fbd3009f009a8eef3&o=');
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/786166480.jpg?k=b8295a6c79a796daa1a8c86841fa21da528771d16b4a3ee3acdb47716c441003&o=');
     background-size: cover;
     background-position: center;
     border-color: var(--primary);
@@ -1061,7 +1157,7 @@ body {
 
 /* Loại B: background image */
 .room-header--type-b {
-    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/756373524.jpg?k=f1e0eb0bcdf7b45cd5b3c1730e618b5df3bd1a0748659abe585f2f6a06cb0477&o=');
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/618207154.jpg?k=0b16b6e8e0e359353538fe56facd1b5bf36c8119944b78c3c208c8bcdf855748&o=');
     background-size: cover;
     background-position: center;
     color: #fff;
@@ -1079,7 +1175,7 @@ body {
 
 /* Loại C: background image */
 .room-header--type-c {
-    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/501210724.jpg?k=0a37e1f4076c1600d054b182a3920b7619d68cd792fd507fbd3009f009a8eef3&o=');
+    background-image: url('https://cf.bstatic.com/xdata/images/hotel/max1024x768/786166480.jpg?k=b8295a6c79a796daa1a8c86841fa21da528771d16b4a3ee3acdb47716c441003&o=');
     background-size: cover;
     background-position: center;
     color: #fff;

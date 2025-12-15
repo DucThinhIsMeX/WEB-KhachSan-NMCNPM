@@ -107,23 +107,88 @@ $galleryImagesByType = [
     <!-- Navigation -->
     <nav class="booking-nav">
         <div class="nav-container">
-            <a href="index.php" class="nav-link active">
-                <i class="ph ph-house"></i>
-                <span>Trang Chủ</span>
-            </a>
-            <a href="pages/tra-cuu-dat-phong.php" class="nav-link">
-                <i class="ph ph-magnifying-glass"></i>
-                <span>Tra Cứu Đặt Phòng</span>
-            </a>
-            <a href="admin/login.php" class="nav-link">
-                <i class="ph ph-lock-key"></i>
-                <span>Đăng Nhập Admin</span>
+            <div class="nav-left">
+                <a href="index.php" class="nav-link active">
+                    <i class="ph ph-house"></i>
+                    <span>Trang Chủ</span>
+                </a>
+                <a href="pages/tra-cuu-dat-phong.php" class="nav-link">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <span>Tra Cứu Đặt Phòng</span>
+                </a>
+            </div>
+            <a href="admin/login.php" class="nav-link nav-login">
+                <i class="ph ph-user-circle"></i>
+                <span>Đăng Nhập</span>
             </a>
         </div>
     </nav>
 
     <!-- Main Content -->
     <main class="main-content">
+        <!-- About Hotel Section -->
+        <section class="about-section">
+            <div class="about-container">
+                <div class="about-image">
+                    <img src="https://hotelroyalhoian.vn/wp-content/uploads/2025/05/dac-san-hoi-an-1-1.jpg" alt="Khách sạn">
+                    <div class="about-badge">
+                        <i class="ph ph-star"></i>
+                        <span>5 Sao</span>
+                    </div>
+                </div>
+                <div class="about-content">
+                    <h2><i class="ph ph-buildings"></i> Về Khách Sạn Của Chúng Tôi</h2>
+                    <p class="about-intro">
+                        Tọa lạc tại vị trí đắc địa giữa lòng thành phố, khách sạn của chúng tôi mang đến 
+                        trải nghiệm nghỉ dưỡng sang trọng với dịch vụ 5 sao đẳng cấp quốc tế.
+                    </p>
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <i class="ph ph-check-circle"></i>
+                            <span>Phòng nghỉ sang trọng với view tuyệt đẹp</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="ph ph-check-circle"></i>
+                            <span>Nhà hàng phục vụ ẩm thực đa quốc gia</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="ph ph-check-circle"></i>
+                            <span>Bể bơi vô cực trên tầng thượng</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="ph ph-check-circle"></i>
+                            <span>Spa & gym hiện đại, đầy đủ tiện nghi</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="ph ph-check-circle"></i>
+                            <span>Đội ngũ nhân viên chuyên nghiệp, tận tâm</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="ph ph-check-circle"></i>
+                            <span>Gần các điểm tham quan và trung tâm mua sắm</span>
+                        </div>
+                    </div>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <i class="ph ph-medal"></i>
+                            <strong>10+</strong>
+                            <span>Năm kinh nghiệm</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="ph ph-users-three"></i>
+                            <strong>50K+</strong>
+                            <span>Khách hàng hài lòng</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="ph ph-trophy"></i>
+                            <strong>25+</strong>
+                            <span>Giải thưởng</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Filter Section -->
         <section class="filter-section">
             <h2><i class="ph ph-list-bullets"></i> Chọn Loại Phòng</h2>

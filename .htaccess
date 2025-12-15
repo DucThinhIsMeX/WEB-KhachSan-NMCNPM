@@ -1,11 +1,23 @@
-RewriteEngine On
-RewriteBase /
-
 # Bảo vệ database
 <Files "hotel.db">
     Order Allow,Deny
     Deny from all
 </Files>
+
+# Rewrite engine
+RewriteEngine On
+RewriteBase /
+
+# Ensure static assets load correctly
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^(assets/.*|.*\.(css|js|jpg|jpeg|png|gif|ico))$ - [L]
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>
 
 # Trang mặc định
 DirectoryIndex index.php

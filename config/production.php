@@ -60,6 +60,16 @@ define('SMTP_USER', 'your-email@gmail.com');
 define('SMTP_PASS', 'your-password');
 define('SMTP_FROM', 'noreply@hotel.com');
 
+// Google OAuth Configuration
+define('GOOGLE_CLIENT_ID', '416938682838-6ohqmd704l8v07ved380didth1feauqm.apps.googleusercontent.com');
+define('GOOGLE_CLIENT_SECRET', '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');
+define('GOOGLE_REDIRECT_URI', APP_URL . '/customer/oauth-callback.php');
+
+// Facebook OAuth Configuration
+define('FACEBOOK_APP_ID', '851970674092651');
+define('FACEBOOK_APP_SECRET', '19c7a3b759084aa9d821cc6d5346361e');
+define('FACEBOOK_REDIRECT_URI', APP_URL . '/auth/facebook/callback');
+
 // Timezone
 date_default_timezone_set('Asia/Ho_Chi_Minh');
 ?>

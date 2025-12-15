@@ -1288,3 +1288,86 @@ body {
         font-size: 4em;
     }
 }
+
+/* Admin Login Section */
+.admin-login-section {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 2px solid #e9ecef;
+}
+
+.admin-login-section h3 {
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.btn-admin-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1.05em;
+    transition: 0.3s;
+    border: 2px solid transparent;
+}
+
+.btn-admin-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(44, 62, 80, 0.3);
+    border-color: #1a252f;
+}
+
+.btn-admin-login i {
+    font-size: 1.3em;
+}
+
+/* Customer Login Link (for admin page) */
+.customer-login-link {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.customer-login-link p {
+    color: #6c757d;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+.customer-login-link a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.customer-login-link a:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .admin-login-section h3 {
+        font-size: 0.85em;
+    }
+    
+    .btn-admin-login {
+        padding: 12px 16px;
+        font-size: 1em;
+    }
+}

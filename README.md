@@ -51,3 +51,62 @@ http://localhost:8000/troubleshoot.php
 - HOADON, CHITIET_HOADON
 - BAOCAO_DOANHTHU, CHITIET_BAOCAO
 - THAMSO
+
+## 🔐 CẤU HÌNH OAUTH
+
+### ✅ Google OAuth (Đã sẵn sàng)
+
+### Credentials hiện tại:
+
+```
+Client ID: 416938682838-6ohqmd704l8v07ved380didth1feauqm.apps.googleusercontent.com
+Client Secret: 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
+Redirect URI: http://localhost:8000/customer/oauth-callback.php
+```
+
+### Kiểm tra cấu hình:
+
+```bash
+# Bước 1: Truy cập tool kiểm tra
+http://localhost:8000/customer/verify-oauth-credentials.php
+
+# Bước 2: Nếu OK, test đăng nhập
+http://localhost:8000/customer/login.php
+```
+
+### ⚠️ QUAN TRỌNG:
+
+1. **Redirect URI trên Google Console phải là:**
+   ```
+   http://localhost:8000/customer/oauth-callback.php
+   ```
+
+2. **Nếu vẫn gặp lỗi 401:**
+   - Đợi 5-10 phút để Google cập nhật
+   - Clear cache browser (Ctrl+Shift+Del)
+   - Restart PHP server
+
+3. **Khi deploy lên production:**
+   - Cập nhật Redirect URI thành: `https://yourdomain.com/customer/oauth-callback.php`
+   - Thêm URI mới vào Google Console
+   - Cập nhật `config/production.php`
+
+### Troubleshooting:
+
+**Lỗi "redirect_uri_mismatch":**
+- Check Google Console có đúng URI: `http://localhost:8000/customer/oauth-callback.php`
+- Không có space, không có trailing slash
+
+**Lỗi "invalid_client":**
+- Đã fix! Client ID và Secret đã đúng
+- Nếu vẫn lỗi → Clear cache và thử lại sau 5 phút
+
+**Lỗi "access_denied":**
+- User từ chối quyền truy cập
+- Thử đăng nhập lại và click "Allow"
+
+## 🔑 ĐĂNG NHẬP HỆ THỐNG
+
+### Tài khoản Quản trị viên (Admin)
+
+**Truy cập:** http://localhost:8000/admin/login.php

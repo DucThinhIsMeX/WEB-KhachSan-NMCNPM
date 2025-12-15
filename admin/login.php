@@ -37,6 +37,7 @@ if (isset($_GET['error']) && $_GET['error'] === 'access_denied') {
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng Nhập Admin</title>
     <link rel="stylesheet" href="../assets/css/admin.css">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -129,14 +130,29 @@ if (isset($_GET['error']) && $_GET['error'] === 'access_denied') {
             text-decoration: none;
             font-weight: 500;
         }
-        .info-box {
-            background: #f0f4ff;
-            border-left: 4px solid #667eea;
-            padding: 15px;
-            border-radius: 8px;
+        .customer-login-link {
+            text-align: center;
             margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .customer-login-link p {
+            color: #6c757d;
             font-size: 0.9em;
-            color: #555;
+            margin-bottom: 10px;
+        }
+        
+        .customer-login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        
+        .customer-login-link a:hover {
+            color: #764ba2;
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -173,10 +189,19 @@ if (isset($_GET['error']) && $_GET['error'] === 'access_denied') {
                 </button>
             </form>
 
-            <div class="login-footer">
-                <a href="../index.php">
-                    <i class="ph ph-arrow-left"></i> Quay lại trang chủ
+            <div class="customer-login-link">
+                <p>Bạn là khách hàng?</p>
+                <a href="../customer/login.php">
+                    <i class="ph ph-user-circle"></i>
+                    Đăng nhập khách hàng
                 </a>
+            </div>
+
+            <div class="login-footer">
+                <p>&copy; 2024 Hotel Management System</p>
+                <p style="font-size: 0.85em; color: #999; margin-top: 10px;">
+                    Tài khoản mặc định: <strong>admin</strong> / <strong>admin123</strong>
+                </p>
             </div>
         </div>
     </div>

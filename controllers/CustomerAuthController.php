@@ -10,270 +10,217 @@ class CustomerAuthController {
         $this->db = $database->connect();
     }
     
-    // Xử lý callback từ Google
     public function handleGoogleCallback($code) {
-        try {
-            error_log("=== handleGoogleCallback Start ===");
-            error_log("Authorization code: " . substr($code, 0, 20) . "...");
-            
-            // Lấy access token
-            $tokenData = [
+        // 1. Exchange code for token
+        $ch = curl_init(GOOGLE_TOKEN_URL);
+        curl_setopt_array($ch, [
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => http_build_query([
                 'code' => $code,
                 'client_id' => GOOGLE_CLIENT_ID,
                 'client_secret' => GOOGLE_CLIENT_SECRET,
                 'redirect_uri' => GOOGLE_REDIRECT_URI,
                 'grant_type' => 'authorization_code'
-            ];
-            
-            error_log("Token request data: " . print_r([
-                'url' => GOOGLE_TOKEN_URL,
-                'client_id' => GOOGLE_CLIENT_ID,
-                'redirect_uri' => GOOGLE_REDIRECT_URI
-            ], true));
-            
-            // Sử dụng CURL
-            $ch = curl_init(GOOGLE_TOKEN_URL);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($tokenData));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
-            
-            $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            $curlError = curl_error($ch);
-            // Removed curl_close() - deprecated in PHP 8.5
-            
-            error_log("Token response HTTP code: " . $httpCode);
-            error_log("Token response body: " . $response);
-            
-            if ($curlError) {
-                error_log("CURL error: " . $curlError);
-                return false;
-            }
-            
-            if ($response === false || $httpCode !== 200) {
-                error_log("Failed to get token - HTTP " . $httpCode);
-                return false;
-            }
-            
-            $tokenInfo = json_decode($response, true);
-            
-            if (isset($tokenInfo['error'])) {
-                error_log("Token error: " . $tokenInfo['error'] . " - " . ($tokenInfo['error_description'] ?? ''));
-                return false;
-            }
-            
-            if (!isset($tokenInfo['access_token'])) {
-                error_log("No access_token in response");
-                return false;
-            }
-            
-            error_log("Access token received: " . substr($tokenInfo['access_token'], 0, 20) . "...");
-            
-            // Lấy thông tin user từ Google
-            $userInfo = $this->getGoogleUserInfo($tokenInfo['access_token']);
-            
-            if (!$userInfo) {
-                error_log("Failed to get user info");
-                return false;
-            }
-            
-            error_log("User info received: " . print_r($userInfo, true));
-            
-            // Lưu hoặc cập nhật user trong database
-            return $this->saveOrUpdateUser($userInfo, 'google', $tokenInfo);
-            
-        } catch (Exception $e) {
-            error_log("Exception in handleGoogleCallback: " . $e->getMessage());
-            error_log("Stack trace: " . $e->getTraceAsString());
+            ]),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYPEER => false
+        ]);
+        
+        $response = curl_exec($ch);
+        $tokenInfo = json_decode($response, true);
+        
+        if (!isset($tokenInfo['access_token'])) {
+            error_log("Google token error: " . print_r($tokenInfo, true));
             return false;
         }
-    }
-    
-    // Lấy thông tin user từ Google
-    private function getGoogleUserInfo($accessToken) {
-        try {
-            error_log("=== getGoogleUserInfo Start ===");
-            error_log("Access token: " . substr($accessToken, 0, 20) . "...");
-            
-            $ch = curl_init(GOOGLE_USERINFO_URL);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $accessToken]);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            
-            $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            $curlError = curl_error($ch);
-            // Removed curl_close()
-            
-            error_log("UserInfo response HTTP code: " . $httpCode);
-            error_log("UserInfo response body: " . $response);
-            
-            if ($curlError) {
-                error_log("CURL error: " . $curlError);
-                return false;
-            }
-            
-            if ($response === false || $httpCode !== 200) {
-                error_log("Failed to get user info - HTTP " . $httpCode);
-                return false;
-            }
-            
-            $userInfo = json_decode($response, true);
-            
-            if (isset($userInfo['error'])) {
-                error_log("UserInfo error: " . json_encode($userInfo['error']));
-                return false;
-            }
-            
-            return $userInfo;
-        } catch (Exception $e) {
-            error_log("Exception in getGoogleUserInfo: " . $e->getMessage());
+        
+        // 2. Get user info
+        $ch = curl_init(GOOGLE_USERINFO_URL . '?access_token=' . $tokenInfo['access_token']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        
+        $response = curl_exec($ch);
+        $userInfo = json_decode($response, true);
+        
+        if (!isset($userInfo['id'])) {
+            error_log("Google userinfo error: " . print_r($userInfo, true));
             return false;
         }
+        
+        // 3. Save to database
+        return $this->saveUser($userInfo, 'google', $tokenInfo['access_token']);
     }
     
-    // Xử lý callback từ Facebook
     public function handleFacebookCallback($code) {
         try {
-            $tokenUrl = FACEBOOK_TOKEN_URL;
-            $tokenUrl .= '?client_id=' . FACEBOOK_APP_ID;
-            $tokenUrl .= '&redirect_uri=' . urlencode(FACEBOOK_REDIRECT_URI);
-            $tokenUrl .= '&client_secret=' . FACEBOOK_APP_SECRET;
-            $tokenUrl .= '&code=' . $code;
+            error_log("=== handleFacebookCallback Start ===");
             
-            $response = file_get_contents($tokenUrl);
+            // 1. Exchange code for token
+            $tokenUrl = FACEBOOK_TOKEN_URL . '?' . http_build_query([
+                'client_id' => FACEBOOK_APP_ID,
+                'client_secret' => FACEBOOK_APP_SECRET,
+                'redirect_uri' => FACEBOOK_REDIRECT_URI,
+                'code' => $code
+            ]);
             
-            if ($response === false) {
-                error_log("Failed to get token from Facebook");
-                return false;
-            }
+            $ch = curl_init($tokenUrl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             
+            $response = curl_exec($ch);
             $tokenInfo = json_decode($response, true);
             
-            if (isset($tokenInfo['access_token'])) {
-                $userInfo = $this->getFacebookUserInfo($tokenInfo['access_token']);
-                
-                if ($userInfo) {
-                    return $this->saveOrUpdateUser($userInfo, 'facebook', $tokenInfo);
-                }
-            }
-            
-            return false;
-        } catch (Exception $e) {
-            error_log("Error in handleFacebookCallback: " . $e->getMessage());
-            return false;
-        }
-    }
-    
-    // Lấy thông tin user từ Facebook
-    private function getFacebookUserInfo($accessToken) {
-        try {
-            $userInfoUrl = FACEBOOK_USERINFO_URL . '?fields=id,name,email,picture&access_token=' . $accessToken;
-            $response = file_get_contents($userInfoUrl);
-            
-            if ($response === false) {
-                error_log("Failed to get user info from Facebook");
+            if (!isset($tokenInfo['access_token'])) {
+                error_log("Facebook token error: " . print_r($tokenInfo, true));
                 return false;
             }
             
-            return json_decode($response, true);
-        } catch (Exception $e) {
-            error_log("Error in getFacebookUserInfo: " . $e->getMessage());
-            return false;
-        }
-    }
-    
-    // Lưu hoặc cập nhật user trong database
-    private function saveOrUpdateUser($userInfo, $provider, $tokenInfo) {
-        try {
-            error_log("=== saveOrUpdateUser Start ===");
+            error_log("✓ Facebook access token received");
             
+            // 2. Get user info with specific fields
+            $userInfoUrl = FACEBOOK_USERINFO_URL . '?' . http_build_query([
+                'fields' => 'id,name,email,picture.type(large)',
+                'access_token' => $tokenInfo['access_token']
+            ]);
+            
+            $ch = curl_init($userInfoUrl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            
+            $response = curl_exec($ch);
+            $userInfo = json_decode($response, true);
+            
+            if (!isset($userInfo['id'])) {
+                error_log("Facebook userinfo error: " . print_r($userInfo, true));
+                return false;
+            }
+            
+            error_log("✓ Facebook user info received: " . $userInfo['name']);
+            
+            // 3. Save to database
             $providerId = $userInfo['id'];
-            $email = $userInfo['email'] ?? '';
             $name = $userInfo['name'];
-            $avatar = $provider === 'google' ? $userInfo['picture'] : $userInfo['picture']['data']['url'];
             
-            error_log("User data - Provider: $provider, ID: $providerId, Email: $email, Name: $name");
-            
-            // Kiểm tra bảng KHACHHANG_USERS có tồn tại không
-            try {
-                $this->db->query("SELECT 1 FROM KHACHHANG_USERS LIMIT 1");
-            } catch (Exception $e) {
-                error_log("Table KHACHHANG_USERS not found: " . $e->getMessage());
-                error_log("Please run database/init.php to create tables");
-                return false;
-            }
-            
-            // Kiểm tra user đã tồn tại chưa
-            $stmt = $this->db->prepare("SELECT * FROM KHACHHANG_USERS WHERE Provider = ? AND ProviderId = ?");
-            $stmt->execute([$provider, $providerId]);
-            $existingUser = $stmt->fetch();
-            
-            if ($existingUser) {
-                error_log("User exists, updating...");
-                // Cập nhật thông tin
-                $stmt = $this->db->prepare("UPDATE KHACHHANG_USERS 
-                                           SET Email = ?, TenHienThi = ?, Avatar = ?, 
-                                               AccessToken = ?, LanDangNhapCuoi = CURRENT_TIMESTAMP
-                                           WHERE MaKhachHangUser = ?");
-                $stmt->execute([
-                    $email, 
-                    $name, 
-                    $avatar, 
-                    $tokenInfo['access_token'],
-                    $existingUser['MaKhachHangUser']
-                ]);
-                $userId = $existingUser['MaKhachHangUser'];
-                error_log("Updated existing user ID: $userId");
+            // Email handling - QUAN TRỌNG: không dùng constraint UNIQUE
+            // Nếu Facebook không trả về email, tạo email unique với timestamp
+            if (isset($userInfo['email']) && !empty($userInfo['email'])) {
+                $email = $userInfo['email'];
             } else {
-                error_log("Creating new user...");
-                // Tạo user mới
-                $stmt = $this->db->prepare("INSERT INTO KHACHHANG_USERS 
-                                           (Email, TenHienThi, Avatar, Provider, ProviderId, AccessToken, RefreshToken)
-                                           VALUES (?, ?, ?, ?, ?, ?, ?)");
-                $stmt->execute([
-                    $email,
-                    $name,
-                    $avatar,
-                    $provider,
-                    $providerId,
-                    $tokenInfo['access_token'],
-                    $tokenInfo['refresh_token'] ?? null
-                ]);
-                $userId = $this->db->lastInsertId();
-                error_log("Created new user ID: $userId");
+                // Tạo email unique với timestamp để tránh conflict
+                $email = 'fb_' . $providerId . '_' . time() . '@facebook.user';
             }
             
-            // Lưu session
+            // Avatar từ Facebook
+            $avatar = isset($userInfo['picture']['data']['url']) 
+                ? $userInfo['picture']['data']['url'] 
+                : 'https://ui-avatars.com/api/?name=' . urlencode($name);
+            
+            error_log("Processing Facebook user: ID=$providerId, Email=$email, Name=$name");
+            
+            // Check if user exists - tìm theo Provider và ProviderId, KHÔNG tìm theo Email
+            $stmt = $this->db->prepare("SELECT * FROM KHACHHANG_USERS WHERE Provider = ? AND ProviderId = ?");
+            $stmt->execute(['facebook', $providerId]);
+            $user = $stmt->fetch();
+            
+            if ($user) {
+                // Update existing user
+                error_log("✓ Updating existing Facebook user ID: " . $user['MaKhachHangUser']);
+                
+                $stmt = $this->db->prepare("UPDATE KHACHHANG_USERS 
+                    SET TenHienThi = ?, Avatar = ?, AccessToken = ?, LanDangNhapCuoi = CURRENT_TIMESTAMP 
+                    WHERE MaKhachHangUser = ?");
+                $stmt->execute([$name, $avatar, $tokenInfo['access_token'], $user['MaKhachHangUser']]);
+                $userId = $user['MaKhachHangUser'];
+            } else {
+                // Create new user
+                error_log("✓ Creating new Facebook user");
+                
+                // Double check email không trùng (trong trường hợp hiếm)
+                $stmt = $this->db->prepare("SELECT MaKhachHangUser FROM KHACHHANG_USERS WHERE Email = ?");
+                $stmt->execute([$email]);
+                if ($stmt->fetch()) {
+                    // Email đã tồn tại, thêm random suffix
+                    $email = 'fb_' . $providerId . '_' . time() . '_' . rand(1000, 9999) . '@facebook.user';
+                    error_log("Email conflict detected, using: $email");
+                }
+                
+                $stmt = $this->db->prepare("INSERT INTO KHACHHANG_USERS 
+                    (Email, TenHienThi, Avatar, Provider, ProviderId, AccessToken, TrangThai) 
+                    VALUES (?, ?, ?, ?, ?, ?, 'Hoạt động')");
+                $stmt->execute([$email, $name, $avatar, 'facebook', $providerId, $tokenInfo['access_token']]);
+                $userId = $this->db->lastInsertId();
+                
+                error_log("✓ Created new Facebook user ID: $userId");
+            }
+            
+            // Save to session
             $_SESSION['customer_id'] = $userId;
             $_SESSION['customer_name'] = $name;
             $_SESSION['customer_email'] = $email;
             $_SESSION['customer_avatar'] = $avatar;
-            $_SESSION['customer_provider'] = $provider;
+            $_SESSION['customer_provider'] = 'facebook';
             
-            error_log("Session saved: customer_id=$userId, name=$name, email=$email");
-            error_log("=== saveOrUpdateUser Success ===");
+            error_log("✓ Facebook login successful - User ID: $userId");
+            error_log("=== handleFacebookCallback Success ===");
             
             return $userId;
+            
         } catch (Exception $e) {
-            error_log("Exception in saveOrUpdateUser: " . $e->getMessage());
+            error_log("✗ Exception in handleFacebookCallback: " . $e->getMessage());
             error_log("Stack trace: " . $e->getTraceAsString());
             return false;
         }
     }
     
-    // Kiểm tra đăng nhập
+    private function saveUser($userInfo, $provider, $accessToken) {
+        $providerId = $userInfo['id'];
+        $name = $userInfo['name'];
+        
+        if ($provider === 'google') {
+            $email = $userInfo['email'] ?? '';
+            $avatar = $userInfo['picture'] ?? '';
+        } else {
+            $email = $userInfo['email'] ?? ($providerId . '@facebook.user');
+            $avatar = $userInfo['picture']['data']['url'] ?? '';
+        }
+        
+        // Check if user exists
+        $stmt = $this->db->prepare("SELECT * FROM KHACHHANG_USERS WHERE Provider = ? AND ProviderId = ?");
+        $stmt->execute([$provider, $providerId]);
+        $user = $stmt->fetch();
+        
+        if ($user) {
+            // Update existing user
+            $stmt = $this->db->prepare("UPDATE KHACHHANG_USERS 
+                SET Email = ?, TenHienThi = ?, Avatar = ?, AccessToken = ?, LanDangNhapCuoi = CURRENT_TIMESTAMP 
+                WHERE MaKhachHangUser = ?");
+            $stmt->execute([$email, $name, $avatar, $accessToken, $user['MaKhachHangUser']]);
+            $userId = $user['MaKhachHangUser'];
+        } else {
+            // Create new user
+            $stmt = $this->db->prepare("INSERT INTO KHACHHANG_USERS 
+                (Email, TenHienThi, Avatar, Provider, ProviderId, AccessToken) 
+                VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$email, $name, $avatar, $provider, $providerId, $accessToken]);
+            $userId = $this->db->lastInsertId();
+        }
+        
+        // Save to session
+        $_SESSION['customer_id'] = $userId;
+        $_SESSION['customer_name'] = $name;
+        $_SESSION['customer_email'] = $email;
+        $_SESSION['customer_avatar'] = $avatar;
+        $_SESSION['customer_provider'] = $provider;
+        
+        return $userId;
+    }
+    
     public function isLoggedIn() {
         return isset($_SESSION['customer_id']);
     }
     
-    // Lấy thông tin khách hàng đã đăng nhập
     public function getCustomerInfo() {
-        if (!$this->isLoggedIn()) {
-            return null;
-        }
+        if (!$this->isLoggedIn()) return null;
         
         return [
             'id' => $_SESSION['customer_id'],
@@ -284,12 +231,9 @@ class CustomerAuthController {
         ];
     }
     
-    // Đăng xuất
     public function logout() {
-        unset($_SESSION['customer_id']);
-        unset($_SESSION['customer_name']);
-        unset($_SESSION['customer_email']);
-        unset($_SESSION['customer_avatar']);
-        unset($_SESSION['customer_provider']);
+        session_unset();
+        session_destroy();
     }
 }
+?>

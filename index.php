@@ -83,7 +83,7 @@ $galleryImagesByType = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đặt Phòng Khách Sạn - Hotel Management System</title>
-    <link rel="stylesheet" href="assets/css/booking.css">
+    <link rel="stylesheet" href="/assets/css/booking.css">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>

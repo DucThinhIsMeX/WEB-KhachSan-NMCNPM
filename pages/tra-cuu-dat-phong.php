@@ -60,6 +60,91 @@ if (isset($_GET['search']) && !empty($_GET['keyword'])) {
             background: #f5f7fa;
         }
         
+        /* Navigation */
+        .booking-nav {
+            background: white;
+            padding: 0;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 32px;
+            gap: 20px;
+        }
+        
+        .nav-left {
+            display: flex;
+            gap: 8px;
+            padding: 16px 0;
+        }
+        
+        .nav-left a {
+            padding: 12px 24px;
+            background: #f9fafb;
+            color: #6b7280;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95em;
+            border: 2px solid transparent;
+        }
+        
+        .nav-left a i {
+            font-size: 1.2em;
+        }
+        
+        .nav-left a:hover {
+            background: #f3f4f6;
+            color: #4f46e5;
+            transform: translateY(-1px);
+            border-color: #e5e7eb;
+        }
+        
+        .nav-left a.active {
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        
+        .nav-left a.active:hover {
+            background: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+        }
+        
+        .nav-login {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+        }
+        
+        .nav-login:hover {
+            background: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+        }
+        
         /* Hero Section */
         .search-hero {
             background: linear-gradient(135deg, rgba(102,126,234,0.95) 0%, rgba(118,75,162,0.95) 100%),

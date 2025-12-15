@@ -43,6 +43,13 @@ class PhongController {
         return $stmt->execute([$soPhong, $maLoaiPhong, $ghiChu]);
     }
     
+    // Cập nhật thông tin phòng (BM1)
+    public function capNhatPhong($maPhong, $soPhong, $maLoaiPhong, $ghiChu = null) {
+        $stmt = $this->db->prepare("UPDATE PHONG SET SoPhong = ?, MaLoaiPhong = ?, GhiChu = ? 
+                                    WHERE MaPhong = ?");
+        return $stmt->execute([$soPhong, $maLoaiPhong, $ghiChu, $maPhong]);
+    }
+    
     // Cập nhật tình trạng phòng (BM3)
     public function capNhatTinhTrang($maPhong, $tinhTrang) {
         $stmt = $this->db->prepare("UPDATE PHONG SET TinhTrang = ? WHERE MaPhong = ?");

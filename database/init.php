@@ -175,6 +175,22 @@ try {
         NgayTao DATETIME DEFAULT CURRENT_TIMESTAMP
     )");
 
+    echo "<div class='step'>📋 Tạo bảng KHACHHANG_USERS...</div>";
+    $db->exec("CREATE TABLE IF NOT EXISTS KHACHHANG_USERS (
+        MaKhachHangUser INTEGER PRIMARY KEY AUTOINCREMENT,
+        Email TEXT UNIQUE NOT NULL,
+        TenHienThi TEXT NOT NULL,
+        Avatar TEXT,
+        Provider TEXT NOT NULL CHECK(Provider IN ('google', 'facebook')),
+        ProviderId TEXT NOT NULL,
+        AccessToken TEXT,
+        RefreshToken TEXT,
+        NgayTao DATETIME DEFAULT CURRENT_TIMESTAMP,
+        LanDangNhapCuoi DATETIME,
+        TrangThai TEXT DEFAULT 'Hoạt động' CHECK(TrangThai IN ('Hoạt động', 'Khóa')),
+        UNIQUE(Provider, ProviderId)
+    )");
+
     // Thêm tài khoản admin mặc định (password: admin123)
     echo "<div class='step'>➕ Thêm tài khoản admin mặc định...</div>";
     $matKhauMaHoa = password_hash('admin123', PASSWORD_DEFAULT);
@@ -267,7 +283,7 @@ try {
     echo "<h2 class='success'>🎉 Khởi tạo database hoàn tất!</h2>";
     echo "<div style='background: #e8f5e9; padding: 20px; border-radius: 10px; margin: 20px 0;'>";
     echo "<p><strong>📁 File database:</strong> " . __DIR__ . '/hotel.db</p>';
-    echo "<p><strong>📊 Tổng số bảng:</strong> 10 bảng</p>';
+    echo "<p><strong>📊 Tổng số bảng:</strong> 11 bảng (bao gồm KHACHHANG_USERS)</p>";
     echo "<p><strong>🔗 Ràng buộc:</strong> Primary Key, Foreign Key, Check, Unique</p>";
     echo "<p><strong>⚡ Tối ưu hóa:</strong> 6 indexes</p>";
     echo "</div>";

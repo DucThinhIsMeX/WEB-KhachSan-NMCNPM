@@ -1,6 +1,12 @@
 <?php
 require_once 'config/database.php';
 require_once 'controllers/PhongController.php';
+require_once 'controllers/CustomerAuthController.php';
+
+session_start();
+$customerAuth = new CustomerAuthController();
+$isCustomerLoggedIn = $customerAuth->isLoggedIn();
+$customerInfo = $customerAuth->getCustomerInfo();
 
 $database = new Database();
 
@@ -117,10 +123,26 @@ $galleryImagesByType = [
                     <span>Tra Cứu Đặt Phòng</span>
                 </a>
             </div>
-            <a href="admin/login.php" class="nav-link nav-login">
+            <?php if ($isCustomerLoggedIn): ?>
+            <div class="nav-user-menu">
+                <div class="user-avatar">
+                    <img src="<?= htmlspecialchars($customerInfo['avatar']) ?>" alt="<?= htmlspecialchars($customerInfo['name']) ?>">
+                    <span><?= htmlspecialchars($customerInfo['name']) ?></span>
+                    <i class="ph ph-caret-down"></i>
+                </div>
+                <div class="user-dropdown">
+                    <a href="customer/profile.php"><i class="ph ph-user"></i> Thông tin cá nhân</a>
+                    <a href="customer/bookings.php"><i class="ph ph-ticket"></i> Lịch sử đặt phòng</a>
+                    <hr>
+                    <a href="customer/logout.php"><i class="ph ph-sign-out"></i> Đăng xuất</a>
+                </div>
+            </div>
+            <?php else: ?>
+            <a href="customer/login.php" class="nav-link nav-login">
                 <i class="ph ph-user-circle"></i>
                 <span>Đăng Nhập</span>
             </a>
+            <?php endif; ?>
         </div>
     </nav>
 

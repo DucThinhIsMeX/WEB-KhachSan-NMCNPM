@@ -6,3 +6,28 @@
 vendor/
 node_modules/
 .env
+
+# OAuth Configuration (chứa client secret)
+config/oauth.php
+
+# Database
+database/hotel.db
+database/*.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+error_log
+
+# Temporary files
+*.tmp
+*.bak

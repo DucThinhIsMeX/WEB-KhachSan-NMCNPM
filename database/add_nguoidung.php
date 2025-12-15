@@ -6,8 +6,10 @@ $db = $database->connect();
 
 try {
     echo "<!DOCTYPE html>";
-    echo "<html><head><meta charset='UTF-8'><title>Thêm Bảng NGUOIDUNG</title></head><body>";
-    echo "<h2>🔧 Thêm Bảng NGUOIDUNG</h2>";
+    echo "<html><head><meta charset='UTF-8'><title>Thêm Bảng NGUOIDUNG</title>";
+    echo "<script src='https://unpkg.com/@phosphor-icons/web'></script>";
+    echo "</head><body>";
+    echo "<h2><i class='ph ph-wrench'></i> Thêm Bảng NGUOIDUNG</h2>";
     
     // Tạo bảng NGUOIDUNG
     echo "<p>Đang tạo bảng NGUOIDUNG...</p>";
@@ -39,20 +41,20 @@ try {
     }
     
     echo "<hr>";
-    echo "<h3 style='color: green;'>✅ Hoàn Tất!</h3>";
+    echo "<h3 style='color: green;'><i class='ph ph-check-circle'></i> Hoàn Tất!</h3>";
     echo "<div style='background: #f0f4ff; padding: 15px; border-left: 4px solid #667eea; margin: 20px 0;'>";
-    echo "<p><strong>📌 Tài khoản admin mặc định:</strong></p>";
+    echo "<p><strong><i class='ph ph-info'></i> Tài khoản admin mặc định:</strong></p>";
     echo "<ul>";
     echo "<li>Tên đăng nhập: <code style='background: #fff; padding: 2px 6px; border-radius: 3px;'>admin</code></li>";
     echo "<li>Mật khẩu: <code style='background: #fff; padding: 2px 6px; border-radius: 3px;'>admin123</code></li>";
     echo "</ul>";
     echo "</div>";
-    echo "<p><a href='../admin/login.php' style='color: #667eea; text-decoration: none; font-weight: bold;'>→ Đăng nhập Admin</a></p>";
-    echo "<p><a href='../index.php' style='color: #667eea; text-decoration: none;'>→ Trang chủ</a></p>";
+    echo "<p><a href='../admin/login.php' style='color: #667eea; text-decoration: none; font-weight: bold;'><i class='ph ph-sign-in'></i> Đăng nhập Admin</a></p>";
+    echo "<p><a href='../index.php' style='color: #667eea; text-decoration: none;'><i class='ph ph-house'></i> Trang chủ</a></p>";
     echo "</body></html>";
     
 } catch(PDOException $e) {
-    echo "<h3 style='color: red;'>❌ Lỗi: " . htmlspecialchars($e->getMessage()) . "</h3>";
+    echo "<h3 style='color: red;'><i class='ph ph-warning'></i> Lỗi: " . htmlspecialchars($e->getMessage()) . "</h3>";
     echo "<p>Vui lòng kiểm tra kết nối database.</p>";
 }
 ?>

@@ -14,6 +14,7 @@ $db = $database->connect();
 <head>
     <meta charset="UTF-8">
     <title>Tạo Tài Khoản Admin</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -133,7 +134,8 @@ $db = $database->connect();
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔐 Tạo Tài Khoản Admin</h1>
+            <i class="ph-fill ph-shield-check" style="font-size: 3em; color: white;"></i>
+            <h1>Tạo Tài Khoản Admin</h1>
             <p>Khởi tạo hệ thống đăng nhập</p>
         </div>
         
@@ -145,7 +147,7 @@ $db = $database->connect();
             try {
                 // Bước 1: Kiểm tra và tạo bảng NGUOIDUNG
                 echo '<div class="step">';
-                echo '<h3>📋 Bước 1: Kiểm tra bảng NGUOIDUNG</h3>';
+                echo '<h3><i class="ph ph-database"></i> Bước 1: Kiểm tra bảng NGUOIDUNG</h3>';
                 
                 $stmt = $db->query("SHOW TABLES LIKE 'NGUOIDUNG'");
                 $tableExists = $stmt->rowCount() > 0;
@@ -174,7 +176,7 @@ $db = $database->connect();
                 
                 // Bước 2: Kiểm tra tài khoản admin
                 echo '<div class="step">';
-                echo '<h3>👤 Bước 2: Tạo tài khoản admin</h3>';
+                echo '<h3><i class="ph ph-user-plus"></i> Bước 2: Tạo tài khoản admin</h3>';
                 
                 $stmt = $db->query("SELECT COUNT(*) as count FROM NGUOIDUNG WHERE TenDangNhap = 'admin'");
                 $result = $stmt->fetch();
@@ -201,7 +203,7 @@ $db = $database->connect();
                 
                 // Bước 3: Tạo thêm tài khoản demo (tùy chọn)
                 echo '<div class="step">';
-                echo '<h3>👥 Bước 3: Tạo tài khoản demo</h3>';
+                echo '<h3><i class="ph ph-users"></i> Bước 3: Tạo tài khoản demo</h3>';
                 
                 $stmt = $db->query("SELECT COUNT(*) as count FROM NGUOIDUNG WHERE TenDangNhap = 'demo'");
                 $result = $stmt->fetch();
@@ -221,7 +223,7 @@ $db = $database->connect();
                 
                 // Hiển thị danh sách tài khoản
                 echo '<div class="step success">';
-                echo '<h3>✅ Bước 4: Danh sách tài khoản hiện có</h3>';
+                echo '<h3><i class="ph ph-check-circle"></i> Bước 4: Danh sách tài khoản hiện có</h3>';
                 
                 $stmt = $db->query("SELECT TenDangNhap, HoTen, VaiTro, TrangThai, 
                                     DATE_FORMAT(NgayTao, '%d/%m/%Y %H:%i') as NgayTaoFormat 
@@ -245,7 +247,7 @@ $db = $database->connect();
             } catch(PDOException $e) {
                 $success = false;
                 echo '<div class="step error">';
-                echo '<h3>❌ Lỗi</h3>';
+                echo '<h3><i class="ph ph-warning"></i> Lỗi</h3>';
                 echo '<p><strong>Chi tiết:</strong> ' . htmlspecialchars($e->getMessage()) . '</p>';
                 echo '<p>Vui lòng kiểm tra:</p>';
                 echo '<ul>';
@@ -261,35 +263,35 @@ $db = $database->connect();
             
             <!-- Thông tin đăng nhập -->
             <div class="info-box">
-                <h2>🎉 Khởi Tạo Thành Công!</h2>
+                <h2><i class="ph ph-confetti"></i> Khởi Tạo Thành Công!</h2>
                 
                 <div class="credentials">
-                    <p><strong>🔐 TÀI KHOẢN ADMIN:</strong></p>
+                    <p><strong><i class="ph ph-shield-check"></i> TÀI KHOẢN ADMIN:</strong></p>
                     <p>Username: <code>admin</code></p>
                     <p>Password: <code>admin123</code></p>
                 </div>
                 
                 <div class="credentials" style="background: #f0f4ff;">
-                    <p><strong>👤 TÀI KHOẢN DEMO (Nhân Viên):</strong></p>
+                    <p><strong><i class="ph ph-user"></i> TÀI KHOẢN DEMO (Nhân Viên):</strong></p>
                     <p>Username: <code>demo</code></p>
                     <p>Password: <code>demo123</code></p>
                 </div>
                 
                 <p style="margin-top: 20px; color: #dc3545; font-weight: bold;">
-                    ⚠️ Lưu ý: Vui lòng đổi mật khẩu sau khi đăng nhập lần đầu!
+                    <i class="ph ph-warning-circle"></i> Lưu ý: Vui lòng đổi mật khẩu sau khi đăng nhập lần đầu!
                 </p>
             </div>
             
             <!-- Nút điều hướng -->
             <div style="text-align: center; margin-top: 30px;">
                 <a href="../admin/login.php" class="btn btn-success">
-                    🚀 Đăng Nhập Admin
+                    <i class="ph ph-sign-in"></i> Đăng Nhập Admin
                 </a>
                 <a href="../admin/tai-khoan.php" class="btn">
-                    👥 Quản Lý Tài Khoản
+                    <i class="ph ph-users"></i> Quản Lý Tài Khoản
                 </a>
                 <a href="../index.php" class="btn">
-                    🏠 Trang Chủ
+                    <i class="ph ph-house"></i> Trang Chủ
                 </a>
             </div>
             
@@ -297,10 +299,10 @@ $db = $database->connect();
             
             <div style="text-align: center; margin-top: 30px;">
                 <a href="../test_database.php" class="btn">
-                    🔧 Kiểm Tra Kết Nối
+                    <i class="ph ph-wrench"></i> Kiểm Tra Kết Nối
                 </a>
                 <a href="../index.php" class="btn">
-                    🏠 Trang Chủ
+                    <i class="ph ph-house"></i> Trang Chủ
                 </a>
             </div>
             

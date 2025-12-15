@@ -21,7 +21,7 @@ $error = '';
 // Xử lý tạo phiếu thuê
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
     try {
-        // Thêm khách hàng
+        // Thêm khách hàng vào database
         $danhSachKhach = [];
         for ($i = 1; $i <= 3; $i++) {
             if (!empty($_POST["tenKhach$i"])) {
@@ -78,6 +78,7 @@ $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
     <meta charset="UTF-8">
     <title>Quản lý Phiếu Thuê</title>
     <link rel="stylesheet" href="../assets/css/admin.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         .khach-section {
             border: 2px solid #667eea;
@@ -115,22 +116,28 @@ $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
 
         <main class="main-container">
             <?php if ($message): ?>
-                <div class="alert alert-success"><?= htmlspecialchars($message) ?></div>
+                <div class="alert alert-success">
+                    <i class="ph ph-check-circle"></i> <?= htmlspecialchars($message) ?>
+                </div>
             <?php endif; ?>
             <?php if ($error): ?>
-                <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
+                <div class="alert alert-error">
+                    <i class="ph ph-warning"></i> <?= htmlspecialchars($error) ?>
+                </div>
             <?php endif; ?>
 
             <div class="content-section">
                 <div class="section-header">
-                    <h2 class="section-title">➕ Tạo Phiếu Thuê Mới</h2>
+                    <h2 class="section-title">
+                        <i class="ph ph-plus-circle"></i> Tạo Phiếu Thuê Mới
+                    </h2>
                 </div>
 
                 <form method="POST" id="formPhieuThue" style="max-width: 900px;">
                     <input type="hidden" name="action" value="create">
                     
                     <div class="form-group">
-                        <label>Chọn Phòng Trống:</label>
+                        <label><i class="ph ph-bed"></i> Chọn Phòng Trống:</label>
                         <select name="maPhong" required class="form-control">
                             <option value="">-- Chọn phòng --</option>
                             <?php foreach ($phongsTrong as $phong): ?>
@@ -144,7 +151,7 @@ $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
                     </div>
 
                     <div class="form-group">
-                        <label>Ngày Bắt Đầu Thuê:</label>
+                        <label><i class="ph ph-calendar"></i> Ngày Bắt Đầu Thuê:</label>
                         <input type="date" name="ngayBatDau" 
                                value="<?= date('Y-m-d') ?>" 
                                min="<?= date('Y-m-d') ?>"
@@ -152,15 +159,17 @@ $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
                     </div>
 
                     <hr style="margin: 30px 0;">
-                    <h3 style="color: #667eea;">👥 Thông Tin Khách Hàng</h3>
+                    <h3 style="color: #667eea;">
+                        <i class="ph ph-users"></i> Thông Tin Khách Hàng
+                    </h3>
                     <p style="color: #666; margin-bottom: 20px;">
-                        <strong>Lưu ý:</strong> Tối đa <?= $soKhachToiDa ?> khách/phòng. 
+                        <strong><i class="ph ph-warning"></i> Lưu ý:</strong> Tối đa <?= $soKhachToiDa ?> khách/phòng. 
                         Khách thứ 3 sẽ phụ thu <?= $database->getThamSo('TL_PHU_THU_KHACH_3') * 100 ?>%.
                     </p>
 
                     <!-- Khách 1 -->
                     <div class="khach-section">
-                        <h4>👤 Khách Hàng 1 (Bắt buộc)</h4>
+                        <h4><i class="ph ph-user"></i> Khách Hàng 1 (Bắt buộc)</h4>
                         <div class="form-group">
                             <label>Họ và Tên:</label>
                             <input type="text" name="tenKhach1" required class="form-control">
@@ -179,14 +188,14 @@ $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Địa Chỉ:</label>
+                            <label><i class="ph ph-map-pin"></i> Địa Chỉ:</label>
                             <input type="text" name="diaChi1" required class="form-control">
                         </div>
                     </div>
 
                     <!-- Khách 2 -->
                     <div class="khach-section hidden" id="khach2Section">
-                        <h4>👤 Khách Hàng 2 (Tùy chọn)</h4>
+                        <h4><i class="ph ph-user"></i> Khách Hàng 2 (Tùy chọn)</h4>
                         <div class="form-group">
                             <label>Họ và Tên:</label>
                             <input type="text" name="tenKhach2" class="form-control">
@@ -212,7 +221,7 @@ $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
 
                     <!-- Khách 3 -->
                     <div class="khach-section hidden" id="khach3Section">
-                        <h4>👤 Khách Hàng 3 (Phụ thu <?= $database->getThamSo('TL_PHU_THU_KHACH_3') * 100 ?>%)</h4>
+                        <h4><i class="ph ph-user"></i> Khách Hàng 3 (Phụ thu <?= $database->getThamSo('TL_PHU_THU_KHACH_3') * 100 ?>%)</h4>
                         <div class="form-group">
                             <label>Họ và Tên:</label>
                             <input type="text" name="tenKhach3" class="form-control">
@@ -238,20 +247,24 @@ $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
 
                     <div style="text-align: center; margin: 20px 0;">
                         <button type="button" class="toggle-khach" id="btnKhach2" onclick="toggleKhach(2)">
-                            ➕ Thêm Khách 2
+                            <i class="ph ph-plus"></i> Thêm Khách 2
                         </button>
                         <button type="button" class="toggle-khach hidden" id="btnKhach3" onclick="toggleKhach(3)">
-                            ➕ Thêm Khách 3
+                            <i class="ph ph-plus"></i> Thêm Khách 3
                         </button>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">✅ Tạo Phiếu Thuê</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ph ph-check-circle"></i> Tạo Phiếu Thuê
+                    </button>
                 </form>
             </div>
 
             <div class="content-section">
                 <div class="section-header">
-                    <h2 class="section-title">📋 Danh Sách Phiếu Thuê</h2>
+                    <h2 class="section-title">
+                        <i class="ph ph-list-bullets"></i> Danh Sách Phiếu Thuê
+                    </h2>
                 </div>
                 
                 <table class="data-table">
@@ -275,7 +288,7 @@ $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
                             <td><?= date('d/m/Y', strtotime($pt['NgayBatDauThue'])) ?></td>
                             <td>
                                 <?php foreach ($khachs as $k): ?>
-                                    <div><?= htmlspecialchars($k['TenKhach']) ?> 
+                                    <div><i class="ph ph-user"></i> <?= htmlspecialchars($k['TenKhach']) ?> 
                                         <small>(<?= htmlspecialchars($k['LoaiKhach']) ?>)</small>
                                     </div>
                                 <?php endforeach; ?>
@@ -290,7 +303,7 @@ $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
                                     <a href="?action=cancel&id=<?= $pt['MaPhieuThue'] ?>" 
                                        class="btn btn-sm btn-danger"
                                        onclick="return confirm('Xác nhận hủy phiếu thuê?')">
-                                        ❌ Hủy
+                                        <i class="ph ph-x-circle"></i> Hủy
                                     </a>
                                 <?php else: ?>
                                     <span style="color: #999;">-</span>
@@ -311,7 +324,7 @@ $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
             
             if (section.classList.contains('hidden')) {
                 section.classList.remove('hidden');
-                btn.textContent = '➖ Bỏ Khách ' + soKhach;
+                btn.innerHTML = '<i class="ph ph-minus"></i> Bỏ Khách ' + soKhach;
                 btn.style.background = '#dc3545';
                 
                 if (soKhach === 2) {
@@ -319,7 +332,7 @@ $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
                 }
             } else {
                 section.classList.add('hidden');
-                btn.textContent = '➕ Thêm Khách ' + soKhach;
+                btn.innerHTML = '<i class="ph ph-plus"></i> Thêm Khách ' + soKhach;
                 btn.style.background = '#667eea';
                 
                 section.querySelectorAll('input, select').forEach(input => {

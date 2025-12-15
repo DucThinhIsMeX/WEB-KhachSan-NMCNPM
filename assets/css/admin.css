@@ -136,9 +136,11 @@ body {
 }
 
 .nav-link .icon {
-    font-size: 1.2em;
-    width: 24px;
-    text-align: center;
+    font-size: 1.3em;
+    margin-right: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .nav-link .badge {
@@ -286,6 +288,10 @@ body {
     font-size: 1.5em;
 }
 
+.stat-icon i {
+    font-size: 2em;
+}
+
 .stat-card.primary .stat-icon {
     background: linear-gradient(135deg, rgba(102,126,234,0.15), rgba(118,75,162,0.15));
     color: var(--primary);
@@ -360,6 +366,11 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.section-title i {
+    margin-right: 10px;
+    vertical-align: middle;
 }
 
 /* Buttons */
@@ -624,6 +635,58 @@ body {
     background: rgba(255,193,7,0.1);
     color: #856404;
     border-left: 4px solid var(--warning);
+}
+
+/* Phosphor Icons styling for admin */
+.sidebar-header i {
+    font-size: 1.3em;
+    vertical-align: middle;
+}
+
+.nav-link .icon {
+    font-size: 1.3em;
+    margin-right: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-icon i {
+    font-size: 2em;
+}
+
+.section-title i {
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.btn i {
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.alert i {
+    margin-right: 8px;
+    font-size: 1.2em;
+    vertical-align: middle;
+}
+
+.modal-header i {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.form-group label i {
+    margin-right: 5px;
+    color: var(--primary);
+}
+
+.quick-actions .action-card .icon i {
+    font-size: 3em;
+}
+
+.header-actions .btn-icon i {
+    font-size: 1.3em;
 }
 
 /* Responsive */

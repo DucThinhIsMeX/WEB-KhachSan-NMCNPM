@@ -6,7 +6,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <aside class="admin-sidebar">
     <div class="sidebar-header">
         <h1>
-            🏨 Hotel MS
+            <i class="ph-fill ph-buildings"></i> Hotel MS
             <span class="badge">ADMIN</span>
         </h1>
         <div class="user-info" style="margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px;">
@@ -30,7 +30,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <div class="nav-section">
             <div class="nav-section-title">Main</div>
             <a href="index.php" class="nav-link <?= $current_page === 'index.php' ? 'active' : '' ?>">
-                <span class="icon">📊</span>
+                <i class="ph-fill ph-chart-bar icon"></i>
                 <span>Dashboard</span>
             </a>
         </div>
@@ -38,11 +38,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <div class="nav-section">
             <div class="nav-section-title">Quản Lý</div>
             <a href="phong.php" class="nav-link <?= $current_page === 'phong.php' ? 'active' : '' ?>">
-                <span class="icon">🛏️</span>
+                <i class="ph-fill ph-bed icon"></i>
                 <span>Quản lý Phòng</span>
             </a>
             <a href="phieu-thue.php" class="nav-link <?= $current_page === 'phieu-thue.php' ? 'active' : '' ?>">
-                <span class="icon">📝</span>
+                <i class="ph-fill ph-ticket icon"></i>
                 <span>Phiếu Thuê</span>
                 <?php
                 if (isset($phongDaThue) && $phongDaThue > 0):
@@ -51,7 +51,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <?php endif; ?>
             </a>
             <a href="hoa-don.php" class="nav-link <?= $current_page === 'hoa-don.php' ? 'active' : '' ?>">
-                <span class="icon">💰</span>
+                <i class="ph-fill ph-currency-circle-dollar icon"></i>
                 <span>Hóa Đơn</span>
             </a>
         </div>
@@ -59,7 +59,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <div class="nav-section">
             <div class="nav-section-title">Báo Cáo</div>
             <a href="bao-cao.php" class="nav-link <?= $current_page === 'bao-cao.php' ? 'active' : '' ?>">
-                <span class="icon">📈</span>
+                <i class="ph-fill ph-chart-line-up icon"></i>
                 <span>Báo Cáo Doanh Thu</span>
             </a>
         </div>
@@ -67,11 +67,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <div class="nav-section">
             <div class="nav-section-title">Cài Đặt</div>
             <a href="tham-so.php" class="nav-link <?= $current_page === 'tham-so.php' ? 'active' : '' ?>">
-                <span class="icon">⚙️</span>
+                <i class="ph-fill ph-gear icon"></i>
                 <span>Tham Số Hệ Thống</span>
             </a>
             <a href="tai-khoan.php" class="nav-link <?= $current_page === 'tai-khoan.php' ? 'active' : '' ?>">
-                <span class="icon">👥</span>
+                <i class="ph-fill ph-user icon"></i>
                 <span>Quản Lý Tài Khoản</span>
             </a>
         </div>
@@ -79,15 +79,15 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <div class="nav-section">
             <div class="nav-section-title">Khác</div>
             <a href="../index.php" class="nav-link">
-                <span class="icon">🌐</span>
+                <i class="ph-fill ph-house icon"></i>
                 <span>Trang Đặt Phòng</span>
             </a>
             <a href="../test_database.php" class="nav-link">
-                <span class="icon">🔧</span>
+                <i class="ph-fill ph-wrench icon"></i>
                 <span>Kiểm Tra Database</span>
             </a>
             <a href="logout.php" class="nav-link" style="color: #f44336;">
-                <span class="icon">🚪</span>
+                <i class="ph-fill ph-sign-out icon"></i>
                 <span>Đăng Xuất</span>
             </a>
         </div>

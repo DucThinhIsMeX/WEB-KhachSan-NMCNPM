@@ -41,44 +41,51 @@ if (isset($_GET['search']) && !empty($_GET['keyword'])) {
     <title>Tra Cứu Đặt Phòng</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/datphong.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
     <div class="booking-container">
         <header class="booking-header">
             <div class="header-content">
-                <h1>🔍 Tra Cứu Đặt Phòng</h1>
+                <h1><i class="ph ph-magnifying-glass"></i> Tra Cứu Đặt Phòng</h1>
                 <p>Kiểm tra thông tin đặt phòng của bạn</p>
             </div>
             <nav class="booking-nav">
-                <a href="../index.php">🏠 Trang chủ</a>
-                <a href="tra-cuu-dat-phong.php" class="active">🔍 Tra cứu đặt phòng</a>
+                <a href="../index.php"><i class="ph ph-house"></i> Trang chủ</a>
+                <a href="tra-cuu-dat-phong.php" class="active"><i class="ph ph-magnifying-glass"></i> Tra cứu đặt phòng</a>
             </nav>
         </header>
 
         <main class="booking-main">
             <section class="filter-section">
-                <h2>Nhập Thông Tin Tra Cứu</h2>
+                <h2><i class="ph ph-funnel"></i> Nhập Thông Tin Tra Cứu</h2>
                 <form method="GET">
                     <div class="form-group">
                         <label>Mã phiếu thuê, CMND hoặc Tên khách hàng:</label>
                         <input type="text" name="keyword" placeholder="Nhập để tìm kiếm..." 
                                value="<?= htmlspecialchars($_GET['keyword'] ?? '') ?>" required>
                     </div>
-                    <button type="submit" name="search" class="btn">🔍 Tìm Kiếm</button>
-                    <button type="button" id="exportBtn" class="export-btn" style="margin-left: 10px;">📤 Export JSON</button>
-                    <button type="button" id="printBtn" class="btn-ghost" style="margin-left: 10px;">🖨️ In</button>
+                    <button type="submit" name="search" class="btn">
+                        <i class="ph ph-magnifying-glass"></i> Tìm Kiếm
+                    </button>
+                    <button type="button" id="exportBtn" class="export-btn" style="margin-left: 10px;">
+                        <i class="ph ph-download-simple"></i> Export JSON
+                    </button>
+                    <button type="button" id="printBtn" class="btn-ghost" style="margin-left: 10px;">
+                        <i class="ph ph-printer"></i> In
+                    </button>
                 </form>
                 
                 <?php if ($error): ?>
                 <div class="alert alert-danger" style="margin-top: 15px; padding: 15px; background: #fee; border-left: 4px solid #f00; border-radius: 4px;">
-                    ⚠️ <?= htmlspecialchars($error) ?>
+                    <i class="ph ph-warning"></i> <?= htmlspecialchars($error) ?>
                 </div>
                 <?php endif; ?>
             </section>
 
             <?php if ($ketQua !== null): ?>
             <section class="rooms-section">
-                <h2>📋 Kết Quả Tìm Kiếm (<?= count($ketQua) ?> phiếu)</h2>
+                <h2><i class="ph ph-list-bullets"></i> Kết Quả Tìm Kiếm (<?= count($ketQua) ?> phiếu)</h2>
                 
                 <?php if (count($ketQua) > 0): ?>
                     <?php foreach ($ketQua as $pt): 
@@ -90,16 +97,16 @@ if (isset($_GET['search']) && !empty($_GET['keyword'])) {
                     ?>
                     <div class="room-card">
                         <div class="room-details">
-                            <h3>Phiếu Thuê #<?= htmlspecialchars($pt['MaPhieuThue']) ?></h3>
+                            <h3><i class="ph ph-ticket"></i> Phiếu Thuê #<?= htmlspecialchars($pt['MaPhieuThue']) ?></h3>
                             <div class="room-info">
-                                <p>🛏️ Phòng: <strong><?= htmlspecialchars($pt['SoPhong']) ?> - <?= htmlspecialchars($pt['TenLoai']) ?></strong></p>
-                                <p>📅 Ngày thuê: <strong><?= date('d/m/Y', strtotime($pt['NgayBatDauThue'])) ?></strong></p>
-                                <p>📊 Tình trạng: <strong><?= htmlspecialchars($pt['TinhTrangPhieu']) ?></strong></p>
+                                <p><i class="ph ph-bed"></i> Phòng: <strong><?= htmlspecialchars($pt['SoPhong']) ?> - <?= htmlspecialchars($pt['TenLoai']) ?></strong></p>
+                                <p><i class="ph ph-calendar"></i> Ngày thuê: <strong><?= date('d/m/Y', strtotime($pt['NgayBatDauThue'])) ?></strong></p>
+                                <p><i class="ph ph-chart-bar"></i> Tình trạng: <strong><?= htmlspecialchars($pt['TinhTrangPhieu']) ?></strong></p>
                                 <?php if (count($khachs) > 0): ?>
-                                <p>👥 Danh sách khách:</p>
+                                <p><i class="ph ph-users"></i> Danh sách khách:</p>
                                 <ul>
                                     <?php foreach ($khachs as $k): ?>
-                                    <li><?= htmlspecialchars($k['TenKhach']) ?> (<?= htmlspecialchars($k['LoaiKhach']) ?>) - CMND: <?= htmlspecialchars($k['CMND']) ?></li>
+                                    <li><i class="ph ph-user"></i> <?= htmlspecialchars($k['TenKhach']) ?> (<?= htmlspecialchars($k['LoaiKhach']) ?>) - <i class="ph ph-identification-card"></i> <?= htmlspecialchars($k['CMND']) ?></li>
                                     <?php endforeach; ?>
                                 </ul>
                                 <?php endif; ?>
@@ -109,7 +116,7 @@ if (isset($_GET['search']) && !empty($_GET['keyword'])) {
                     <?php endforeach; ?>
                 <?php else: ?>
                     <div class="no-rooms">
-                        <p>😔 Không tìm thấy thông tin đặt phòng</p>
+                        <p><i class="ph ph-smiley-sad"></i> Không tìm thấy thông tin đặt phòng</p>
                     </div>
                 <?php endif; ?>
             </section>

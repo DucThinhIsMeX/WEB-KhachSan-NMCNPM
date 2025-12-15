@@ -38,6 +38,8 @@ if (isset($_GET['error']) && $_GET['error'] === 'access_denied') {
 <head>
     <meta charset="UTF-8">
     <title>Đăng Nhập Admin</title>
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -138,42 +140,44 @@ if (isset($_GET['error']) && $_GET['error'] === 'access_denied') {
         }
     </style>
 </head>
-<body>
+<body class="login-body">
     <div class="login-container">
-        <div class="login-header">
-            <h1>🔐 Admin Login</h1>
-            <p>Hệ thống quản lý khách sạn</p>
-        </div>
-        
-        <div class="login-body">
-            <?php if ($error): ?>
-            <div class="alert">⚠️ <?= htmlspecialchars($error) ?></div>
-            <?php endif; ?>
-            
-            <form method="POST">
-                <div class="form-group">
-                    <label>👤 Tên đăng nhập</label>
-                    <input type="text" name="username" placeholder="Nhập tên đăng nhập" 
-                           value="<?= htmlspecialchars($_POST['username'] ?? '') ?>" required autofocus>
-                </div>
-                
-                <div class="form-group">
-                    <label>🔑 Mật khẩu</label>
-                    <input type="password" name="password" placeholder="Nhập mật khẩu" required>
-                </div>
-                
-                <button type="submit" class="btn-login">🚀 Đăng Nhập</button>
-            </form>
-            
-            <div class="info-box">
-                <strong>📌 Tài khoản mặc định:</strong><br>
-                Username: <code style="background: #fff; padding: 2px 6px; border-radius: 3px;">admin</code><br>
-                Password: <code style="background: #fff; padding: 2px 6px; border-radius: 3px;">admin123</code>
+        <div class="login-card">
+            <div class="login-header">
+                <i class="ph-fill ph-buildings" style="font-size: 3em; color: #667eea;"></i>
+                <h1><i class="ph ph-lock-key"></i> Đăng Nhập Quản Trị</h1>
+                <p>Hệ thống Quản lý Khách sạn</p>
             </div>
-        </div>
-        
-        <div class="login-footer">
-            <a href="../index.php">← Quay lại trang chủ</a>
+
+            <?php if (isset($_GET['error'])): ?>
+                <div class="alert alert-error">
+                    <i class="ph ph-warning-circle"></i> Tên đăng nhập hoặc mật khẩu không đúng!
+                </div>
+            <?php endif; ?>
+
+            <form method="POST" class="login-form">
+                <div class="form-group">
+                    <label><i class="ph ph-user"></i> Tên đăng nhập</label>
+                    <input type="text" name="username" required 
+                           placeholder="Nhập tên đăng nhập">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="ph ph-lock-key"></i> Mật khẩu</label>
+                    <input type="password" name="password" required 
+                           placeholder="Nhập mật khẩu">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="ph ph-sign-in"></i> Đăng Nhập
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <a href="../index.php">
+                    <i class="ph ph-arrow-left"></i> Quay lại trang chủ
+                </a>
+            </div>
         </div>
     </div>
 </body>

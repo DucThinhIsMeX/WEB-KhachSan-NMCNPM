@@ -62,26 +62,27 @@ $galleryImagesByType = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đặt Phòng Khách Sạn - Hotel Management System</title>
     <link rel="stylesheet" href="assets/css/booking.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-content">
-            <h1>🏨 Khách Sạn Sang Trọng</h1>
+            <h1><i class="ph ph-buildings"></i> Khách Sạn Sang Trọng</h1>
             <p class="subtitle">Trải nghiệm nghỉ dưỡng đẳng cấp - Đặt phòng dễ dàng chỉ trong vài phút</p>
             
             <div class="hero-stats">
                 <div class="hero-stat">
                     <h3><?= count($loaiPhongs) ?></h3>
-                    <p>Loại Phòng</p>
+                    <p><i class="ph ph-tag"></i> Loại Phòng</p>
                 </div>
                 <div class="hero-stat">
                     <h3><?= count($phongsTrong) ?></h3>
-                    <p>Phòng Trống</p>
+                    <p><i class="ph ph-sparkle"></i> Phòng Trống</p>
                 </div>
                 <div class="hero-stat">
                     <h3>24/7</h3>
-                    <p>Hỗ Trợ</p>
+                    <p><i class="ph ph-headset"></i> Hỗ Trợ</p>
                 </div>
             </div>
         </div>
@@ -91,15 +92,15 @@ $galleryImagesByType = [
     <nav class="booking-nav">
         <div class="nav-container">
             <a href="index.php" class="nav-link active">
-                <span>🏠</span>
+                <i class="ph ph-house"></i>
                 <span>Trang Chủ</span>
             </a>
             <a href="pages/tra-cuu-dat-phong.php" class="nav-link">
-                <span>🔍</span>
+                <i class="ph ph-magnifying-glass"></i>
                 <span>Tra Cứu Đặt Phòng</span>
             </a>
             <a href="admin/login.php" class="nav-link">
-                <span>🔐</span>
+                <i class="ph ph-lock-key"></i>
                 <span>Đăng Nhập Admin</span>
             </a>
         </div>
@@ -109,11 +110,13 @@ $galleryImagesByType = [
     <main class="main-content">
         <!-- Filter Section -->
         <section class="filter-section">
-            <h2>📋 Chọn Loại Phòng</h2>
+            <h2><i class="ph ph-list-bullets"></i> Chọn Loại Phòng</h2>
             <form method="GET" class="search-bar" role="search">
                 <input type="hidden" name="loai" value="<?= htmlspecialchars($loaiPhongFilter ?? '') ?>">
                 <input type="text" name="q" class="search-input" placeholder="Tìm phòng theo số phòng hoặc loại..." value="<?= htmlspecialchars($searchQ ?? '') ?>">
-                <button type="submit" class="btn-primary search-btn">🔎 Tìm</button>
+                <button type="submit" class="btn-primary search-btn">
+                    <i class="ph ph-magnifying-glass"></i> Tìm
+                </button>
             </form>
             <div class="filter-grid">
                 <a href="index.php" class="filter-card filter-card--all <?= !$loaiPhongFilter ? 'active' : '' ?>">
@@ -188,18 +191,18 @@ $galleryImagesByType = [
                     
                     <div class="room-features">
                         <div class="feature-item">
-                            <span class="feature-icon">📍</span>
+                            <i class="ph ph-map-pin feature-icon"></i>
                             <span class="feature-label">Số phòng</span>
                             <span class="feature-value"><?= $phong['SoPhong'] ?></span>
                         </div>
                         <div class="feature-item">
-                            <span class="feature-icon">👥</span>
+                            <i class="ph ph-users feature-icon"></i>
                             <span class="feature-label">Sức chứa</span>
                             <span class="feature-value">Tối đa <?= $soKhachToiDa ?> khách</span>
                         </div>
                         <?php if ($phong['GhiChu']): ?>
                         <div class="feature-item">
-                            <span class="feature-icon">📝</span>
+                            <i class="ph ph-note-pencil feature-icon"></i>
                             <span class="feature-label">Ghi chú</span>
                             <span class="feature-value"><?= $phong['GhiChu'] ?></span>
                         </div>
@@ -215,7 +218,7 @@ $galleryImagesByType = [
                     </div>
                     
                     <a href="pages/form-dat-phong.php?phong=<?= $phong['MaPhong'] ?>" class="btn-book">
-                        <span>📝</span>
+                        <i class="ph ph-calendar-check"></i>
                         <span>Đặt Phòng Ngay</span>
                     </a>
                 </div>
@@ -224,7 +227,7 @@ $galleryImagesByType = [
         </div>
         <?php else: ?>
         <div class="empty-state">
-            <div class="empty-icon">😔</div>
+            <i class="ph ph-smiley-sad empty-icon"></i>
             <h3>Không Có Phòng Trống</h3>
             <p>Hiện tại không có phòng trống trong loại này. Vui lòng chọn loại phòng khác.</p>
             <a href="index.php" class="btn btn-primary">Xem Tất Cả Phòng</a>
@@ -233,45 +236,45 @@ $galleryImagesByType = [
 
         <!-- Info Section -->
         <section class="info-section">
-            <h2>🎯 Dịch Vụ & Tiện Ích</h2>
+            <h2><i class="ph ph-sparkle"></i> Dịch Vụ & Tiện Ích</h2>
             <div class="info-grid">
                 <div class="info-card">
-                    <div class="info-icon">⏰</div>
+                    <i class="ph ph-clock-afternoon info-icon"></i>
                     <h3>Nhận Phòng</h3>
                     <p>Từ 14:00</p>
                 </div>
                 <div class="info-card">
-                    <div class="info-icon">🚪</div>
+                    <i class="ph ph-clock info-icon"></i>
                     <h3>Trả Phòng</h3>
                     <p>Trước 12:00</p>
                 </div>
                 <div class="info-card">
-                    <div class="info-icon">💳</div>
+                    <i class="ph ph-credit-card info-icon"></i>
                     <h3>Thanh Toán</h3>
                     <p>Tiền mặt, Thẻ</p>
                 </div>
                 <div class="info-card">
-                    <div class="info-icon">📞</div>
+                    <i class="ph ph-phone info-icon"></i>
                     <h3>Hotline 24/7</h3>
                     <p>1900-xxxx</p>
                 </div>
                 <div class="info-card">
-                    <div class="info-icon">🍽️</div>
+                    <i class="ph ph-fork-knife info-icon"></i>
                     <h3>Nhà Hàng</h3>
                     <p>6:00 - 22:00</p>
                 </div>
                 <div class="info-card">
-                    <div class="info-icon">🏊</div>
+                    <i class="ph ph-swimming-pool info-icon"></i>
                     <h3>Bể Bơi</h3>
                     <p>5:00 - 21:00</p>
                 </div>
                 <div class="info-card">
-                    <div class="info-icon">🚗</div>
+                    <i class="ph ph-car info-icon"></i>
                     <h3>Bãi Đậu Xe</h3>
                     <p>Miễn phí</p>
                 </div>
                 <div class="info-card">
-                    <div class="info-icon">📶</div>
+                    <i class="ph ph-wifi-high info-icon"></i>
                     <h3>WiFi</h3>
                     <p>Tốc độ cao</p>
                 </div>
@@ -282,11 +285,11 @@ $galleryImagesByType = [
     <!-- Footer -->
     <footer class="booking-footer">
         <div class="footer-content">
-            <p style="font-size: 1.2em; margin-bottom: 15px;">&copy; 2024 Khách Sạn Sang Trọng - Hotel Management System</p>
+            <p style="font-size: 1.2em; margin-bottom: 15px;">© 2024 Khách Sạn Sang Trọng - Hotel Management System</p>
             <div class="footer-links">
-                <a href="#" class="footer-link">📍 123 Đường ABC, Quận XYZ, TP.HCM</a>
-                <a href="#" class="footer-link">📞 Hotline: 1900-xxxx</a>
-                <a href="#" class="footer-link">📧 Email: contact@hotel.com</a>
+                <a href="#" class="footer-link"><i class="ph ph-map-pin"></i> 123 Đường ABC, Quận XYZ, TP.HCM</a>
+                <a href="#" class="footer-link"><i class="ph ph-phone"></i> Hotline: 1900-xxxx</a>
+                <a href="#" class="footer-link"><i class="ph ph-envelope"></i> Email: contact@hotel.com</a>
             </div>
         </div>
     </footer>

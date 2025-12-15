@@ -18,6 +18,7 @@ $page_title = 'Dashboard';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Quản lý Khách sạn</title>
     <link rel="stylesheet" href="../assets/css/admin.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
     <?php include 'includes/sidebar.php'; ?>
@@ -43,7 +44,7 @@ $page_title = 'Dashboard';
                             <div class="stat-value"><?= $tongPhong ?></div>
                             <div class="stat-label">Tổng Số Phòng</div>
                         </div>
-                        <div class="stat-icon">🏨</div>
+                        <div class="stat-icon"><i class="ph-fill ph-buildings"></i></div>
                     </div>
                     <div class="stat-change up">
                         <span>↗</span> Hoạt động bình thường
@@ -56,7 +57,7 @@ $page_title = 'Dashboard';
                             <div class="stat-value"><?= $phongTrong ?></div>
                             <div class="stat-label">Phòng Trống</div>
                         </div>
-                        <div class="stat-icon">✅</div>
+                        <div class="stat-icon"><i class="ph-fill ph-check-circle"></i></div>
                     </div>
                     <div class="stat-change">
                         Sẵn sàng cho thuê
@@ -69,7 +70,7 @@ $page_title = 'Dashboard';
                             <div class="stat-value"><?= $phongDaThue ?></div>
                             <div class="stat-label">Phòng Đã Thuê</div>
                         </div>
-                        <div class="stat-icon">🔒</div>
+                        <div class="stat-icon"><i class="ph-fill ph-lock-key"></i></div>
                     </div>
                     <div class="stat-change">
                         Đang hoạt động
@@ -82,7 +83,7 @@ $page_title = 'Dashboard';
                             <div class="stat-value"><?= $tyLeLapDay ?>%</div>
                             <div class="stat-label">Tỷ Lệ Lấp Đầy</div>
                         </div>
-                        <div class="stat-icon">📊</div>
+                        <div class="stat-icon"><i class="ph-fill ph-chart-bar"></i></div>
                     </div>
                     <div class="stat-change <?= $tyLeLapDay >= 70 ? 'up' : 'down' ?>">
                         <span><?= $tyLeLapDay >= 70 ? '↗' : '↘' ?></span> 
@@ -94,26 +95,26 @@ $page_title = 'Dashboard';
             <!-- Quick Actions -->
             <div class="content-section">
                 <div class="section-header">
-                    <h2 class="section-title">⚡ Thao Tác Nhanh</h2>
+                    <h2 class="section-title"><i class="ph ph-lightning"></i> Thao Tác Nhanh</h2>
                 </div>
                 <div class="quick-actions">
                     <a href="phong.php?action=add" class="action-card">
-                        <div class="icon">➕</div>
+                        <div class="icon"><i class="ph-fill ph-plus-circle"></i></div>
                         <h3>Thêm Phòng</h3>
                         <p>Lập danh mục phòng mới</p>
                     </a>
                     <a href="phieu-thue.php?action=add" class="action-card">
-                        <div class="icon">📋</div>
+                        <div class="icon"><i class="ph-fill ph-ticket"></i></div>
                         <h3>Tạo Phiếu Thuê</h3>
                         <p>Cho thuê phòng cho khách</p>
                     </a>
                     <a href="hoa-don.php?action=add" class="action-card">
-                        <div class="icon">💳</div>
+                        <div class="icon"><i class="ph-fill ph-currency-circle-dollar"></i></div>
                         <h3>Lập Hóa Đơn</h3>
                         <p>Thanh toán cho khách</p>
                     </a>
                     <a href="bao-cao.php" class="action-card">
-                        <div class="icon">📈</div>
+                        <div class="icon"><i class="ph-fill ph-chart-line-up"></i></div>
                         <h3>Xem Báo Cáo</h3>
                         <p>Báo cáo doanh thu tháng</p>
                     </a>
@@ -124,9 +125,9 @@ $page_title = 'Dashboard';
             <div class="content-section">
                 <div class="section-header">
                     <h2 class="section-title">
-                        🛏️ Danh Sách Phòng
+                        <i class="ph ph-bed"></i> Danh Sách Phòng
                     </h2>
-                    <a href="phong.php" class="btn btn-primary">Xem Tất Cả →</a>
+                    <a href="phong.php" class="btn btn-primary"><i class="ph ph-arrow-right"></i> Xem Tất Cả</a>
                 </div>
                 
                 <table class="data-table">

@@ -7,12 +7,12 @@
 - Model/DB: `config/database.php` (kết nối SQLite) và `database/init.php` khởi tạo schema.
 
 ## Chức năng chính
-- Quản lý loại phòng và phòng (tạo, xem, cập nhật trạng thái)
-- Đặt phòng (tạo phiếu thuê, liên kết khách)
-- Lập hóa đơn theo quy tắc phụ thu/khách nước ngoài
-- Tra cứu đặt phòng theo mã phiếu/CMND/tên
-- Báo cáo doanh thu theo tháng/năm
-- Quản lý tài khoản người dùng (Admin, Nhân viên)
+- 🛏️ Quản lý loại phòng và phòng (tạo, xem, cập nhật trạng thái)
+- 🎫 Đặt phòng (tạo phiếu thuê, liên kết khách)
+- 💎 Lập hóa đơn theo quy tắc phụ thu/khách nước ngoài
+- 🔎 Tra cứu đặt phòng theo mã phiếu/CMND/tên
+- 📈 Báo cáo doanh thu theo tháng/năm
+- 👤 Quản lý tài khoản người dùng (Admin, Nhân viên)
 
 ## Cấu trúc DB chính
 - LOAIPHONG, PHONG

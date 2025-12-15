@@ -71,6 +71,7 @@ $page_title = 'Quản Lý Tài Khoản';
     <meta charset="UTF-8">
     <title>Quản Lý Tài Khoản</title>
     <link rel="stylesheet" href="../assets/css/admin.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
         .modal-content { background: white; margin: 50px auto; padding: 30px; width: 90%; max-width: 500px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
@@ -98,17 +99,19 @@ $page_title = 'Quản Lý Tài Khoản';
         
         <main class="main-container">
             <?php if ($message): ?>
-            <div class="alert alert-success">✅ <?= htmlspecialchars($message) ?></div>
+            <div class="alert alert-success"><i class="ph ph-check-circle"></i> <?= htmlspecialchars($message) ?></div>
             <?php endif; ?>
             
             <?php if ($error): ?>
-            <div class="alert alert-error">⚠️ <?= htmlspecialchars($error) ?></div>
+            <div class="alert alert-error"><i class="ph ph-warning"></i> <?= htmlspecialchars($error) ?></div>
             <?php endif; ?>
             
             <div class="content-section">
                 <div class="section-header">
-                    <h2 class="section-title">👥 Quản Lý Tài Khoản</h2>
-                    <button onclick="openModal('createModal')" class="btn btn-primary">➕ Thêm Tài Khoản</button>
+                    <h2 class="section-title"><i class="ph ph-users"></i> Quản Lý Tài Khoản</h2>
+                    <button onclick="openModal('createModal')" class="btn btn-primary">
+                        <i class="ph ph-plus-circle"></i> Thêm Tài Khoản
+                    </button>
                 </div>
                 
                 <table class="data-table">
@@ -133,10 +136,16 @@ $page_title = 'Quản Lý Tài Khoản';
                             <td><span class="status-badge <?= $user['TrangThai'] === 'Hoạt động' ? 'available' : 'occupied' ?>"><?= $user['TrangThai'] ?></span></td>
                             <td><?= date('d/m/Y H:i', strtotime($user['NgayTao'])) ?></td>
                             <td>
-                                <button onclick='editUser(<?= json_encode($user) ?>)' class="btn btn-sm btn-primary" title="Sửa">✏️</button>
-                                <button onclick='changePassword(<?= $user['MaNguoiDung'] ?>, "<?= htmlspecialchars($user['TenDangNhap']) ?>")' class="btn btn-sm btn-warning" title="Đổi mật khẩu">🔑</button>
+                                <button onclick='editUser(<?= json_encode($user) ?>)' class="btn btn-sm btn-primary" title="Sửa">
+                                    <i class="ph ph-pencil-simple"></i>
+                                </button>
+                                <button onclick='changePassword(<?= $user['MaNguoiDung'] ?>, "<?= htmlspecialchars($user['TenDangNhap']) ?>")' class="btn btn-sm btn-warning" title="Đổi mật khẩu">
+                                    <i class="ph ph-lock-key"></i>
+                                </button>
                                 <?php if ($user['MaNguoiDung'] != $_SESSION['user_id']): ?>
-                                <button onclick='deleteUser(<?= $user['MaNguoiDung'] ?>, "<?= htmlspecialchars($user['TenDangNhap']) ?>")' class="btn btn-sm btn-danger" title="Xóa">🗑️</button>
+                                <button onclick='deleteUser(<?= $user['MaNguoiDung'] ?>, "<?= htmlspecialchars($user['TenDangNhap']) ?>")' class="btn btn-sm btn-danger" title="Xóa">
+                                    <i class="ph ph-trash"></i>
+                                </button>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -151,33 +160,37 @@ $page_title = 'Quản Lý Tài Khoản';
     <div id="createModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>➕ Thêm Tài Khoản Mới</h2>
+                <h2><i class="ph ph-user-plus"></i> Thêm Tài Khoản Mới</h2>
                 <span class="close" onclick="closeModal('createModal')">&times;</span>
             </div>
             <form method="POST">
                 <input type="hidden" name="action" value="create">
                 <div class="form-group">
-                    <label>Tên Đăng Nhập *</label>
+                    <label><i class="ph ph-user"></i> Tên Đăng Nhập *</label>
                     <input type="text" name="username" required>
                 </div>
                 <div class="form-group">
-                    <label>Mật Khẩu *</label>
+                    <label><i class="ph ph-lock-key"></i> Mật Khẩu *</label>
                     <input type="password" name="password" required minlength="6">
                 </div>
                 <div class="form-group">
-                    <label>Họ Tên *</label>
+                    <label><i class="ph ph-identification-card"></i> Họ Tên *</label>
                     <input type="text" name="fullname" required>
                 </div>
                 <div class="form-group">
-                    <label>Vai Trò *</label>
+                    <label><i class="ph ph-user-circle"></i> Vai Trò *</label>
                     <select name="role" required>
                         <option value="NhanVien">Nhân Viên</option>
                         <option value="Admin">Admin</option>
                     </select>
                 </div>
                 <div class="btn-group">
-                    <button type="button" onclick="closeModal('createModal')" class="btn btn-secondary">Hủy</button>
-                    <button type="submit" class="btn btn-primary">✅ Tạo Tài Khoản</button>
+                    <button type="button" onclick="closeModal('createModal')" class="btn btn-secondary">
+                        <i class="ph ph-x"></i> Hủy
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ph ph-check-circle"></i> Tạo Tài Khoản
+                    </button>
                 </div>
             </form>
         </div>
@@ -187,7 +200,7 @@ $page_title = 'Quản Lý Tài Khoản';
     <div id="editModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>✏️ Sửa Tài Khoản</h2>
+                <h2><i class="ph ph-pencil-simple"></i> Sửa Tài Khoản</h2>
                 <span class="close" onclick="closeModal('editModal')">&times;</span>
             </div>
             <form method="POST">
@@ -216,8 +229,12 @@ $page_title = 'Quản Lý Tài Khoản';
                     </select>
                 </div>
                 <div class="btn-group">
-                    <button type="button" onclick="closeModal('editModal')" class="btn btn-secondary">Hủy</button>
-                    <button type="submit" class="btn btn-primary">💾 Lưu Thay Đổi</button>
+                    <button type="button" onclick="closeModal('editModal')" class="btn btn-secondary">
+                        <i class="ph ph-x"></i> Hủy
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ph ph-floppy-disk"></i> Lưu Thay Đổi
+                    </button>
                 </div>
             </form>
         </div>
@@ -227,7 +244,7 @@ $page_title = 'Quản Lý Tài Khoản';
     <div id="passwordModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>🔑 Đổi Mật Khẩu</h2>
+                <h2><i class="ph ph-lock-key"></i> Đổi Mật Khẩu</h2>
                 <span class="close" onclick="closeModal('passwordModal')">&times;</span>
             </div>
             <form method="POST">
@@ -242,8 +259,12 @@ $page_title = 'Quản Lý Tài Khoản';
                     <input type="password" name="new_password" required minlength="6">
                 </div>
                 <div class="btn-group">
-                    <button type="button" onclick="closeModal('passwordModal')" class="btn btn-secondary">Hủy</button>
-                    <button type="submit" class="btn btn-primary">🔐 Đổi Mật Khẩu</button>
+                    <button type="button" onclick="closeModal('passwordModal')" class="btn btn-secondary">
+                        <i class="ph ph-x"></i> Hủy
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ph ph-key"></i> Đổi Mật Khẩu
+                    </button>
                 </div>
             </form>
         </div>

@@ -780,6 +780,8 @@ body {
     box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     transition: 0.3s;
     animation: fadeIn 0.6s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 @keyframes fadeIn {
@@ -906,6 +908,9 @@ body {
 
 .room-body {
     padding: 30px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .room-title {
@@ -947,11 +952,71 @@ body {
 }
 
 .room-price {
-    background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
-    padding: 20px;
-    border-radius: 15px;
-    margin: 20px 0;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    padding: 18px 20px;
+    border-radius: 12px;
+    margin: 18px 0;
     text-align: center;
+    border: 1.5px solid #bfdbfe;
+}
+
+.price-label {
+    color: #6b7280;
+    font-size: 0.85em;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.price-value {
+    font-size: 2em;
+    font-weight: 800;
+    color: #dc2626;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.price-unit {
+    font-size: 0.45em;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.btn-book {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    color: white;
+    margin-top: auto;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    margin-top: 20px;
+}
+
+.btn-book i {
+    font-size: 1.2em;
+}
+
+.btn-book:hover {
+    background: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+}
+
+.btn-book:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
 }
 
 /* Buttons */
@@ -963,6 +1028,7 @@ body {
     font-weight: 700;
     box-shadow: 0 8px 20px rgba(102,126,234,0.2);
 }
+
 .btn-ghost {
     background: transparent;
     border: 1px solid rgba(0,0,0,0.06);
@@ -997,51 +1063,6 @@ body {
 /* Tra cứu cards */
 .search-results .room-card { border-left: 6px solid var(--primary); padding: 10px; }
 .export-btn { background: linear-gradient(90deg, #ffd166, #f97316); color: white; padding: 8px 12px; border-radius: 8px; }
-
-.price-label {
-    color: #6c757d;
-    font-size: 0.9em;
-    margin-bottom: 5px;
-}
-
-.price-value {
-    font-size: 2.2em;
-    font-weight: 800;
-    color: var(--danger);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-
-.price-unit {
-    font-size: 0.5em;
-    color: #6c757d;
-    font-weight: 500;
-}
-
-.btn-book {
-    width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 1.1em;
-    cursor: pointer;
-    transition: 0.3s;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.btn-book:hover {
-    transform: scale(1.02);
-    box-shadow: 0 8px 20px rgba(102,126,234,0.4);
-}
 
 /* Info Section */
 .info-section {

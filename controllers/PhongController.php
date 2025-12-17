@@ -10,23 +10,29 @@ class PhongController {
     }
     
     // Tra cứu phòng (YCC 3)
-    public function traCuuPhong($loaiPhong = null, $tinhTrang = 'Trống') {
-        $sql = "SELECT P.*, L.TenLoai, L.DonGiaCoBan 
-                FROM PHONG P 
-                JOIN LOAIPHONG L ON P.MaLoaiPhong = L.MaLoaiPhong 
-                WHERE P.TinhTrang = ?";
-        
-        $params = [$tinhTrang];
-        
-        if ($loaiPhong) {
-            $sql .= " AND P.MaLoaiPhong = ?";
-            $params[] = $loaiPhong;
-        }
-        
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute($params);
-        return $stmt->fetchAll();
+public function traCuuPhong($loaiPhong = null, $tinhTrang = null) {
+    $sql = "SELECT P.*, L.TenLoai, L.DonGiaCoBan
+            FROM PHONG P
+            JOIN LOAIPHONG L ON P.MaLoaiPhong = L.MaLoaiPhong
+            WHERE 1=1";
+
+    $params = [];
+
+    if ($tinhTrang !== null && $tinhTrang !== '') {
+        $sql .= " AND P.TinhTrang = ?";
+        $params[] = $tinhTrang;
     }
+
+    if ($loaiPhong !== null && $loaiPhong !== '') {
+        $sql .= " AND P.MaLoaiPhong = ?";
+        $params[] = $loaiPhong;
+    }
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+}
+
     
     // Lấy tất cả phòng
     public function getAllPhong() {

@@ -20,6 +20,8 @@ $customerAuth = new CustomerAuthController();
 $result = $customerAuth->handleGoogleCallback($code);
 
 if ($result) {
+$customerInfo = $customerAuth->getCustomerInfo();
+$_SESSION['customer_id'] = $customerInfo['id'];
     error_log("Google login successful, redirecting to index.php");
     // Redirect về trang chủ với đường dẫn tuyệt đối
     header('Location: /index.php');

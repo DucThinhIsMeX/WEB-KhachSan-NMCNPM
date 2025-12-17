@@ -18,6 +18,8 @@ $error = '';
 // Khởi tạo biến filter để tránh lỗi undefined
 $loaiFilter = isset($_GET['loai']) ? $_GET['loai'] : null;
 $tinhTrangFilter = isset($_GET['tinhtrang']) ? $_GET['tinhtrang'] : null;
+if ($loaiFilter === '') $loaiFilter = null;
+if ($tinhTrangFilter === '') $tinhTrangFilter = null;
 
 // Xử lý thêm phòng
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
@@ -91,7 +93,7 @@ $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
                     <h2 class="section-title">
                         <i class="ph ph-bed"></i> Danh Sách Phòng
                     </h2>
-                    <button onclick="openModal()" class="btn btn-primary">
+                    <button type="button" onclick="openModal()" class="btn btn-primary">
                         <i class="ph ph-plus-circle"></i> Thêm Phòng
                     </button>
                 </div>
@@ -170,7 +172,7 @@ $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
     </div>
 
     <!-- Modal Thêm/Sửa Phòng -->
-    <div id="phongModal" class="modal" style="display: none;">
+<div id="phongModal" class="modal-overlay" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modalTitle"><i class="ph ph-plus-circle"></i> Thêm Phòng Mới</h2>
@@ -215,7 +217,7 @@ $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
 
     <script>
         function openModal() {
-            document.getElementById('phongModal').style.display = 'block';
+            document.getElementById('phongModal').style.display = 'flex';
             document.getElementById('modalTitle').innerHTML = '<i class="ph ph-plus-circle"></i> Thêm Phòng Mới';
             document.getElementById('formAction').value = 'create';
             document.getElementById('phongForm').reset();
@@ -226,7 +228,7 @@ $phongDaThue = count($controller->traCuuPhong(null, 'Đã thuê'));
         }
 
         function editPhong(phong) {
-            document.getElementById('phongModal').style.display = 'block';
+            document.getElementById('phongModal').style.display = 'flex';
             document.getElementById('modalTitle').innerHTML = '<i class="ph ph-pencil-simple"></i> Sửa Phòng';
             document.getElementById('formAction').value = 'update';
             document.getElementById('maPhong').value = phong.MaPhong;

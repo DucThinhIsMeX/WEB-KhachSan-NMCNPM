@@ -16,7 +16,7 @@ define('GOOGLE_USERINFO_URL', 'https://www.googleapis.com/oauth2/v2/userinfo');
 // Facebook OAuth Configuration (optional)
 define('FACEBOOK_APP_ID', '851970674092651');
 define('FACEBOOK_APP_SECRET', '19c7a3b759084aa9d821cc6d5346361e');
-define('FACEBOOK_REDIRECT_URI', 'http://localhost:8000/customer/oauth-callback.php');
+define('FACEBOOK_REDIRECT_URI', 'http://localhost:8000/customer/oauth-callback.php'); // ✅ Đổi thành oauth-callback.php
 define('FACEBOOK_AUTH_URL', 'https://www.facebook.com/v18.0/dialog/oauth');
 define('FACEBOOK_TOKEN_URL', 'https://graph.facebook.com/v18.0/oauth/access_token');
 define('FACEBOOK_USERINFO_URL', 'https://graph.facebook.com/v18.0/me');
@@ -39,7 +39,7 @@ function getFacebookAuthUrl() {
         'redirect_uri' => FACEBOOK_REDIRECT_URI,
         'response_type' => 'code',
         'scope' => 'email',
-        'state' => 'facebook'
+        'state' => 'facebook' // ✅ Thêm state để phân biệt với Google
     ]);
 }
 ?>

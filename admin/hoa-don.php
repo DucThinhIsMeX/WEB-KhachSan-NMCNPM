@@ -92,15 +92,17 @@ $error = "Lỗi: " . $e->getMessage();
 
 // Xử lý lập hóa đơn
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'confirm') {
-try {
-$maHoaDon = $hoaDonCtrl->lapHoaDon(
-$_POST['maPhieuThue'],
-$_POST['tenKH']
-);
-$message = "✅ Lập hóa đơn #$maHoaDon thành công!";
-} catch (Exception $e) {
-$error = "❌ Lỗi: " . $e->getMessage();
-}
+    try {
+        $maHoaDon = $hoaDonCtrl->lapHoaDon(
+            $_POST['maPhieuThue'],
+            $_POST['tenKH']
+        );
+        // Redirect đến trang VietQR để thanh toán
+        header("Location: vietqr-payment.php?hoadon=$maHoaDon&success=1");
+        exit;
+    } catch (Exception $e) {
+        $error = "❌ Lỗi: " . $e->getMessage();
+    }
 }
 
 $phieuThuesDangThue = $phieuThueCtrl->getPhieuThue('Đang thuê');
@@ -359,4 +361,3 @@ Số ngày: <strong><?= $previewData['soNgay'] ?> ngày</strong>
 </div>
 </body>
 </html>
- 

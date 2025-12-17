@@ -804,6 +804,39 @@ if (isset($_GET['search']) && !empty($_GET['keyword'])) {
                         <?php endforeach; ?>
                     </div>
                     <?php endif; ?>
+                    
+                    <?php
+                    // Kiểm tra xem có hóa đơn chưa
+                    try {
+                        $stmtHD = $db->prepare("SELECT MaHoaDon, TriGia FROM HOADON WHERE MaPhieuThue = ?");
+                        $stmtHD->execute([$pt['MaPhieuThue']]);
+                        $hoaDon = $stmtHD->fetch();
+                        
+                        if ($hoaDon && $pt['TinhTrangPhieu'] === 'Đã thanh toán'): ?>
+                            <div style="margin-top: 20px; padding: 20px; background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-radius: 12px; border-left: 4px solid #28a745;">
+                                <h4 style="margin: 0 0 15px 0; color: #155724; display: flex; align-items: center; gap: 8px;">
+                                    <i class="ph ph-check-circle" style="font-size: 1.5em;"></i>
+                                    Đã có hóa đơn thanh toán
+                                </h4>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <p style="margin: 5px 0; color: #155724;"><strong>Mã hóa đơn:</strong> #<?= $hoaDon['MaHoaDon'] ?></p>
+                                        <p style="margin: 5px 0; color: #155724;"><strong>Số tiền:</strong> <?= number_format($hoaDon['TriGia']) ?>đ</p>
+                                    </div>
+                                    <a href="../admin/vietqr-payment.php?hoadon=<?= $hoaDon['MaHoaDon'] ?>" 
+                                       style="padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s;"
+                                       onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(102,126,234,0.4)'"
+                                       onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                                        <i class="ph ph-qr-code" style="font-size: 1.2em;"></i>
+                                        Xem QR Thanh Toán
+                                    </a>
+                                </div>
+                            </div>
+                        <?php endif;
+                    } catch (Exception $e) {
+                        // Ignore error
+                    }
+                    ?>
                 </div>
             </div>
             <?php endforeach; ?>

@@ -41,6 +41,7 @@ http://localhost:8000/troubleshoot.php
 - ✅ Cho thuê phòng (YCC 2)
 - ✅ Tra cứu phòng (YCC 3)
 - ✅ Lập hóa đơn (YCC 4, QĐ4)
+- ✅ **Thanh toán VietQR** - Tích hợp mã QR thanh toán tự động
 - ✅ Báo cáo doanh thu (YCC 5)
 - ✅ Quản lý tham số (YCC 6, QĐ6)
 
@@ -110,3 +111,26 @@ http://localhost:8000/customer/login.php
 ### Tài khoản Quản trị viên (Admin)
 
 **Truy cập:** http://localhost:8000/admin/login.php
+
+## 💳 THANH TOÁN VIETQR
+
+### Tính năng mới:
+Sau khi lập hóa đơn, hệ thống tự động tạo mã QR thanh toán VietQR để khách hàng có thể:
+- Quét mã QR bằng app ngân hàng
+- Thanh toán nhanh chóng, chính xác
+- Tự động điền số tiền và nội dung chuyển khoản
+
+### Cấu hình:
+1. Mở file `config/vietqr.php`
+2. Thay đổi thông tin ngân hàng:
+```php
+define('VIETQR_BANK_ID', 'VCB'); // Mã ngân hàng
+define('VIETQR_ACCOUNT_NO', '1234567890'); // Số tài khoản thực
+define('VIETQR_ACCOUNT_NAME', 'TEN KHACH SAN'); // Tên tài khoản
+```
+
+### Sử dụng:
+1. Admin lập hóa đơn tại `admin/hoa-don.php`
+2. Sau khi xác nhận, hệ thống tự động chuyển đến trang VietQR
+3. Khách hàng quét mã QR để thanh toán
+4. Hoặc xem lại QR code tại trang tra cứu đặt phòng

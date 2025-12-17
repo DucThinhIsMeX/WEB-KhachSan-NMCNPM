@@ -84,8 +84,20 @@
      - = Đơn giá điều chỉnh
      - × Số ngày thuê
      - = THÀNH TIỀN
-5. Nhập **👤 Khách hàng/Cơ quan** và **📍 Địa chỉ**
+5. Nhập **👤 Khách hàng/Cơ quan**
 6. Click **✅ Lưu Hóa Đơn**
+7. **🆕 Hệ thống tự động chuyển đến trang thanh toán VietQR**
+
+**Thanh toán VietQR:**
+1. Sau khi lập hóa đơn, trang VietQR hiển thị:
+   - Mã QR code để quét
+   - Thông tin chuyển khoản chi tiết
+   - Nút copy nhanh các thông tin
+2. Khách hàng có thể:
+   - **Quét QR** bằng app ngân hàng → Thanh toán tự động
+   - **Chuyển khoản thủ công** với thông tin hiển thị
+   - **In hóa đơn** hoặc **Tải QR code** về
+3. Xem lại QR code: Tra cứu đặt phòng → Click "Xem QR Thanh Toán"
 
 **Quy định (QĐ4):**
 - ⚠️ Phụ thu 25% cho khách thứ 3

@@ -157,7 +157,11 @@ value="<?= date('Y-m-d') ?>"
 min="<?= date('Y-m-d') ?>"
 required class="form-control">
 </div>
-
+<div class="form-group">
+  <label><i class="ph ph-moon"></i> Số đêm:</label>
+  <input type="number" name="soDem" value="1" min="1" max="14" required class="form-control">
+  <small style="color:#666;">Tối đa 14 đêm</small>
+</div>
 <hr style="margin: 30px 0;">
 <h3 style="color: #667eea;">
 <i class="ph ph-users"></i> Thông Tin Khách Hàng
@@ -344,14 +348,23 @@ document.getElementById('khach3Section').classList.add('hidden');
 }
 
 document.getElementById('formPhieuThue').addEventListener('submit', function(e) {
-const ngay = document.querySelector('input[name="ngayBatDau"]').value;
-if (!ngay) {
-e.preventDefault();
-alert('Vui lòng chọn ngày bắt đầu thuê!');
-return false;
-}
-return confirm('Xác nhận tạo phiếu thuê?');
+  const ngay = document.querySelector('input[name="ngayBatDau"]').value;
+  const soDemEl = document.querySelector('input[name="soDem"]');
+  const soDem = parseInt(soDemEl?.value || '1', 10);
+
+  if (!ngay) {
+    e.preventDefault();
+    alert('Vui lòng chọn ngày bắt đầu thuê!');
+    return false;
+  }
+  if (isNaN(soDem) || soDem < 1 || soDem > 14) {
+    e.preventDefault();
+    alert('Số đêm phải từ 1 đến 14!');
+    return false;
+  }
+  return confirm('Xác nhận tạo phiếu thuê?');
 });
+
 </script>
 </body>
 </html>

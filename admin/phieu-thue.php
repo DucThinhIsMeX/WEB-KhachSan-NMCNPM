@@ -275,41 +275,40 @@ Khách thứ 3 sẽ phụ thu <?= $database->getThamSo('TL_PHU_THU_KHACH_3') * 1
 <tr>
 <th>Mã PT</th>
 <th>Phòng</th>
+<th>Số Khách</th>
 <th>Ngày Thuê</th>
-<th>Khách</th>
-<th>Trạng Thái</th>
+<th>Số Đêm</th>
+<th>Tình Trạng</th>
 <th>Thao Tác</th>
 </tr>
 </thead>
 <tbody>
 <?php foreach ($phieuThues as $pt): 
 $khachs = $phieuThueCtrl->getChiTietKhach($pt['MaPhieuThue']);
+$statusClass = match($pt['TinhTrangPhieu']) {
+'Đang thuê' => 'badge-warning',
+'Đã thanh toán' => 'badge-success',
+'Đã hủy' => 'badge-danger',
+default => 'badge-secondary'
+};
 ?>
 <tr>
 <td><strong>#<?= $pt['MaPhieuThue'] ?></strong></td>
-<td>Phòng <?= htmlspecialchars($pt['SoPhong']) ?></td>
+<td><?= htmlspecialchars($pt['SoPhong']) ?></td>
+<td><?= count($khachs) ?> khách</td>
 <td><?= date('d/m/Y', strtotime($pt['NgayBatDauThue'])) ?></td>
+<td><?= $pt['SoDem'] ?? 1 ?> đêm</td>
+<td><span class="badge <?= $statusClass ?>"><?= htmlspecialchars($pt['TinhTrangPhieu']) ?></span></td>
 <td>
-<?php foreach ($khachs as $k): ?>
-<div><i class="ph ph-user"></i> <?= htmlspecialchars($k['TenKhach']) ?> 
-<small>(<?= htmlspecialchars($k['LoaiKhach']) ?>)</small>
-</div>
-<?php endforeach; ?>
-</td>
-<td>
-<span class="status-badge <?= $pt['TinhTrangPhieu'] === 'Đang thuê' ? 'occupied' : 'available' ?>">
-<?= htmlspecialchars($pt['TinhTrangPhieu']) ?>
-</span>
-</td>
-<td>
-<?php if ($pt['TinhTrangPhieu'] === 'Đang thuê'): ?>
-<a href="?action=cancel&id=<?= $pt['MaPhieuThue'] ?>" 
-class="btn btn-sm btn-danger"
-onclick="return confirm('Xác nhận hủy phiếu thuê?')">
-<i class="ph ph-x-circle"></i> Hủy
+<a href="chi-tiet-phieu-thue.php?id=<?= $pt['MaPhieuThue'] ?>" 
+class="btn btn-sm btn-info" title="Xem chi tiết">
+<i class="ph ph-eye"></i>
 </a>
-<?php else: ?>
-<span style="color: #999;">-</span>
+<?php if ($pt['TinhTrangPhieu'] === 'Đang thuê'): ?>
+<a href="sua-phieu-thue.php?id=<?= $pt['MaPhieuThue'] ?>" 
+class="btn btn-sm btn-primary" title="Sửa">
+<i class="ph ph-pencil"></i>
+</a>
 <?php endif; ?>
 </td>
 </tr>
